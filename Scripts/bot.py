@@ -1,8 +1,14 @@
 from ast import ExceptHandler
-import requests
-import discord
+import requests #pip install requests
+import discord #pip install discord.py
 from discord.ext import commands
 from discord import app_commands
+
+# NOTES ABOUT PROGRAM:
+# TAKES ~ 30s TO LAUNCH, GIVE IT TIME
+# ONCE DONE, STOP YOUR PROGRAM
+# NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
+# IF TOKEN LEAKED, GENERATE NEW ONE
 
 ## Initialize client
 class Client(commands.Bot):
@@ -16,8 +22,8 @@ class Client(commands.Bot):
         super().__init__(command_prefix = "$",intents = intents)
 
     async def setup_hook(self):
-        await self.tree.sync(guild = discord.Object(id=1020055030247727155))
-        print("Synced tree")
+        await self.tree.sync(guild = discord.Object(id=1020055030247727155)) # Only will work on this server (guild)
+        print("Synced tree") # If you don't see this, it didn't work
 
     async def on_command_error(self,ctx,error):
         await ctx.reply(error,ephemeral = True)
@@ -47,17 +53,20 @@ stats['data']['segments'] += jpn_stats.json()['data']['segments']
 stats['data']['segments'] += ocea_stats.json()['data']['segments']
 stats['data']['segments'] += mena_stats.json()['data']['segments']
  
-## Prints message in console if bot launches successfullylemme switch smt rq
-
+## Prints message in console if bot launches successfully
 @client.event
 async def on_ready():
-    print("I got cash. Anyone need something?")
+    print("I got cash. Anyone need something?") # If you don't see this, the bot ain't online
 
 # Sends player info to channel
 @client.hybrid_command(name = "player", with_app_command = True, description = "Obtain player statistics",aliases = ['p'])
+# Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining player command
+# Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
-    await ctx.defer(ephemeral = True)
+    # Reply with a private message (command) or public message (using prefix)
+    await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     await ctx.reply(printPlayerInfo(player))
 
 ## Player info method
@@ -72,9 +81,9 @@ def printPlayerInfo(player_name):
 ## Kills/one taps the bot so we can work on it
 ### VERY VERY FUCKING IMPORTANT DELETE THIS SHIT BEFORE THIS GOES PUBLIC
 @client.command(aliases=['onetap','mavenawpshot'])
-@commands.has_permissions(administrator=True)
+@commands.has_permissions(administrator=True) # Online usable by a server admin
 async def shutdown(ctx):
-    exit()
+    exit() # Ends the program, bot will go offline
 
 # Runs bot
 client.run(TOKEN)
