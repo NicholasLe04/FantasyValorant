@@ -1,14 +1,30 @@
+from ast import ExceptHandler
 import requests
 import discord
 from discord.ext import commands
+from discord import app_commands
 
-# Intents
-intents = discord.Intents.default()
-intents.members = True
-intents.presences = True
-intents.reactions = True
 ## Initialize client
-client = commands.Bot(command_prefix='$', intents=discord.Intents.all())
+class Client(commands.Bot):
+    def __init__(self):
+        # Intents
+        intents = discord.Intents.default()
+        intents.message_content = True
+        # intents.members = True
+        # intents.presences = True
+        # intents.reactions = True
+        super().__init__(command_prefix = "$",intents = intents)
+
+    async def setup_hook(self):
+        await self.tree.sync(guild = discord.Object(id=1020055030247727155))
+        print("Synced tree")
+
+    async def on_command_error(self,ctx,error):
+        await ctx.reply(error,ephemeral = True)
+
+client = Client()
+
+# client = commands.Bot(command_prefix='$', intents=discord.Intents.all())
 ## TOKEN DO NOT LEAK
 TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
 
@@ -38,9 +54,11 @@ async def on_ready():
     print("I got cash. Anyone need something?")
 
 # Sends player info to channel
-@client.command(pass_content=True,aliases=['p', 'getplayer'])
-async def player(ctx, player_name = ""):
-    await ctx.channel.send(printPlayerInfo(player_name))
+@client.hybrid_command(name = "player", with_app_command = True, description = "Obtain player statistics",aliases = ['p'])
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+async def player(ctx: commands.Context, player = ""):
+    await ctx.defer(ephemeral = True)
+    await ctx.reply(printPlayerInfo(player))
 
 ## Player info method
 def printPlayerInfo(player_name):
