@@ -1,3 +1,4 @@
+from doctest import script_from_examples
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,8 +10,7 @@ class Scrapper():
             "User_Agent": ""
         }
 
-    def gameStats(self, number: int, match: str):
-        url = f'https://www.vlr.gg/{number}/{match}/?game=all&tab=overview'
+    def getStats(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
         stat_tables = soup.find_all('tbody')
@@ -96,7 +96,15 @@ class Scrapper():
         return info
 
 
+    def getRecentMatch(self):
+        html = requests.get('https://www.vlr.gg/matches/results')
+        soup = BeautifulSoup(html.content, 'lxml')
 
+        #self.getStats(soup.find('a')['href'])
+        url = 'https://www.vlr.gg' + soup.find('a', {'class': 'match-item'}).get('href')
+        return self.getStats(url)
+        
 
-
+match = Scrapper()
+print(match.getRecentMatch())
 
