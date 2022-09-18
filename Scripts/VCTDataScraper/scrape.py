@@ -98,17 +98,17 @@ class Scrapper():
 
         output = []
 
-        container = soup.find("div", attrs={'class': 'vm-stats-container'})  ## Access stat container
-        tables = container.find_all("div", {'class': 'vm-stats-game'})       ## Access all stat tables
-        all_map_stat_table = tables[1]                                       ## Access stat table for all maps
-        all_map_stats_rows = all_map_stat_table.find_all('tr')               ## Access rows in stat table                 
+        container = soup.find("div", attrs={'class': 'vm-stats-container'})  # Access stat container
+        tables = container.find_all("div", {'class': 'vm-stats-game'})       # Access all stat tables
+        all_map_stat_table = tables[1]                                       # Access stat table for all maps
+        all_map_stats_rows = all_map_stat_table.find_all('tr')               # Access rows in stat table                 
 
         for tr in all_map_stats_rows:
 
-            acs_kills_rows = tr.find_all('span', {"class": "side mod-side mod-both"})   ## Finds 'acs' and 'kills' stats 
-            deaths_assists_rows = tr.find_all('span', {"class": "side mod-both"})       ## Finds 'deaths' and 'assists' stats
-            team_1 = stat_tables[0].find_all('tr')
-            team_2 = stat_tables[1].find_all('tr')
+            acs_kills_rows = tr.find_all('span', {"class": "side mod-side mod-both"})   # Finds 'acs' and 'kills' stats 
+            deaths_assists_rows = tr.find_all('span', {"class": "side mod-both"})       # Finds 'deaths' and 'assists' stats
+            team_1 = stat_tables[2].find_all('tr')
+            team_2 = stat_tables[3].find_all('tr')
 
             player_stats = {}
 
