@@ -3,6 +3,7 @@ import requests #pip install requests
 import discord #pip install discord.py
 from discord.ext import commands
 from discord import app_commands
+from VCTDataScraper.scrape import Scrapper
 
 # NOTES ABOUT PROGRAM:
 # TAKES ~ 30s TO LAUNCH, GIVE IT TIME
@@ -52,6 +53,7 @@ stats['data']['segments'] += sa_stats.json()['data']['segments']
 stats['data']['segments'] += jpn_stats.json()['data']['segments']
 stats['data']['segments'] += ocea_stats.json()['data']['segments']
 stats['data']['segments'] += mena_stats.json()['data']['segments']
+
  
 ## Prints message in console if bot launches successfully
 @client.event
