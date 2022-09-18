@@ -10,8 +10,9 @@ class Scrapper():
         }
 
 
-    ## Gets and returns ARRAY of team names (ex: ['OpTic Gaming', 'Sentinels'])
-    #  'ScrapperObject'.getTeams(url)[0] = 'Optic Gaming'
+    ## Gets and returns ARRAY of team names 
+    #  example output: ['OpTic Gaming', 'Sentinels']
+    #  example usage: 'ScrapperObject'.getTeams(url)[0] = 'OpTic Gaming'
     def getTeams(self, url):    
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -20,18 +21,20 @@ class Scrapper():
         return [teams[0].text.strip(), teams[1].text.strip()]       
 
 
-    ## Gets and returns ARRAY of score from match (ex: [2,1])
-    #  'ScrapperObject'.getScore(url)[0] = 2
+    ## Gets and returns ARRAY of score from match 
+    #  example output: [2,1]
+    #  example usage: ScrapperObject'.getScore(url)[0] = 2
     def getScore(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
-
         
-        return [int(soup.find('span', {'class': 'match-header-vs-score-winner'}).text.strip()), int(soup.find('span', {'class': 'match-header-vs-score-loser'}).text.strip())]
+        return [int(soup.find('span', {'class': 'match-header-vs-score-winner'}).text.strip()), 
+                int(soup.find('span', {'class': 'match-header-vs-score-loser'}).text.strip())]
 
 
-    ## Gets and returns ARRAY of team 1 players (ex: ['yay', 'crashies', 'FNS, 'Victor', 'Marved'])
-    #  'ScrapperObject'.getTeam1Players(url)[0] = 'yay'
+    ## Gets and returns ARRAY of team 1 players 
+    #  example output: ['yay', 'crashies', 'FNS, 'Victor', 'Marved']
+    #  example usage: 'ScrapperObject'.getTeam1Players(url)[0] = 'yay'
     def getTeam1Players(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -49,8 +52,9 @@ class Scrapper():
         return output
 
 
-    ## Gets and returns ARRAY of team 1 players (ex: ['Sacy', 'aspas', 'pancada, 'Less', 'saadhak'])
-    #  'ScrapperObject'.getTeam2Players(url)[0] = 'Sacy'
+    ## Gets and returns ARRAY of team 1 players 
+    #  example output: ['Sacy', 'aspas', 'pancada, 'Less', 'saadhak']
+    #  example usage: 'ScrapperObject'.getTeam2Players(url)[0] = 'Sacy'
     def getTeam2Players(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -68,8 +72,9 @@ class Scrapper():
         return output
         
 
-    ## Gets and returns DICTIONARY filled with ARRAYS of map scores (ex: {'map-1': [15, 13], 'map-2': [6, 13], 'map-3': [16, 14], 'map-4': [13, 5]})
-    #  'ScrapperObject'.getMapScores(url).get('map-1') = [15, 13]
+    ## Gets and returns DICTIONARY filled with ARRAYS of map scores 
+    #  example ouput: {'map-1': [15, 13], 'map-2': [6, 13], 'map-3': [16, 14], 'map-4': [13, 5]}
+    #  example usage: 'ScrapperObject'.getMapScores(url).get('map-1') = [15, 13]
     def getMapScores(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -82,6 +87,9 @@ class Scrapper():
         
         return output
 
+    ## Gets and returns ARRAY filled with DICTIONARIES for each player's info/stats 
+    #  example output: [{'name': 'Sacy', 'acs': 214, 'kills': 71, 'deaths': 68, 'assists': 15}, etc..]
+    #  example usage: 'ScrapperObject'.getPlayerStats(url)[0].get('name') = 'Sacy'
     def getPlayerStats(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -128,16 +136,16 @@ class Scrapper():
 
         info={}
 
-        ## Get team name
+        ## Get team names
         info['teams'] = self.getTeams(url)
 
-        ## Gets the score
+        ## Gets the final score
         info['score'] = self.getScore(url)
 
         ## Gets individual map scores
         info['map-scores'] = self.getMapScores(url)
 
-        ## Get ACS, Kills, Deaths, and Assists for each player from Team 1 
+        ## Get ACS, Kills, Deaths, and Assists for each player
         info['player-stats'] = self.getPlayerStats(url)
                 
 
@@ -156,4 +164,6 @@ class Scrapper():
 scrapper = Scrapper()
 url = scrapper.getRecentUrl()
 print(scrapper.getStats(url))
+
+
 
