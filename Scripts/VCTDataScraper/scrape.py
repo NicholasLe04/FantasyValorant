@@ -1,14 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
-
+import json
 class Scrapper():
     
+    ## Loads team page ID's to access team page urls
+    with open('Scripts/VCTDataScraper/teamids.json') as ids:
+        teamIDs = json.load(ids)
+
     ## 'Scrapper' object constructor
     def __init__(self):
         self.headers = {
             "User_Agent": ""
         }
 
+    ### MATCH DATA
 
     ## Gets and returns ARRAY of team names 
     #  example output: ['OpTic Gaming', 'Sentinels']
@@ -17,6 +22,7 @@ class Scrapper():
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
 
+        # Finds the div's holding team names
         teams = soup.find_all('div', {"class": "wf-title-med"})
         return [teams[0].text.strip(), teams[1].text.strip()]       
 
@@ -32,44 +38,49 @@ class Scrapper():
                 int(soup.find('span', {'class': 'match-header-vs-score-loser'}).text.strip())]
 
 
+    ## ~~~~
+    ### OBSELETE
+    ## ~~~~
     ## Gets and returns ARRAY of team 1 players 
     #  example output: ['yay', 'crashies', 'FNS, 'Victor', 'Marved']
     #  example usage: 'ScrapperObject'.getTeam1Players(url)[0] = 'yay'
-    def getTeam1Players(self, url):
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml')
-        stat_tables = soup.find('tbody')
-        output = []
+    # def getTeam1Players(self, url):
+    #     html = requests.get(url)
+    #     soup = BeautifulSoup(html.content, 'lxml')
+    #     stat_tables = soup.find('tbody')
+    #     output = []
 
-        containers = stat_tables.find_all('tr')
-        for container in containers:
-            player = container.find("div", {"class": "text-of"}).text.strip()
+    #     containers = stat_tables.find_all('tr')
+    #     for container in containers:
+    #         player = container.find("div", {"class": "text-of"}).text.strip()
 
-            output.append(
-                player
-            )
+    #         output.append(
+    #             player
+    #         )
 
-        return output
+    #     return output
 
-
+    ## ~~~~
+    ### OBSELETE
+    ## ~~~~
     ## Gets and returns ARRAY of team 1 players 
     #  example output: ['Sacy', 'aspas', 'pancada, 'Less', 'saadhak']
     #  example usage: 'ScrapperObject'.getTeam2Players(url)[0] = 'Sacy'
-    def getTeam2Players(self, url):
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml')
-        stat_tables = soup.find_all('tbody')
-        output = []
+    # def getTeam2Players(self, url):
+    #     html = requests.get(url)
+    #     soup = BeautifulSoup(html.content, 'lxml')
+    #     stat_tables = soup.find_all('tbody')
+    #     output = []
 
-        containers = stat_tables[1].find_all('tr')
-        for container in containers:
-            player = container.find("div", {"class": "text-of"}).text.strip()
+    #     containers = stat_tables[1].find_all('tr')
+    #     for container in containers:
+    #         player = container.find("div", {"class": "text-of"}).text.strip()
 
-            output.append(
-                player
-            )
+    #         output.append(
+    #             player
+    #         )
 
-        return output
+    #     return output
         
 
     ## Gets and returns DICTIONARY filled with ARRAYS of map scores 
@@ -93,7 +104,7 @@ class Scrapper():
     def getPlayerStats(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
-        stat_tables = soup.find_all('tbody')
+        stat_tables = soup.find_all('tbody')    # Gets all table body elements
         player_index = 0
 
         output = []
@@ -129,8 +140,8 @@ class Scrapper():
         return output
 
 
-    ### Gets all game stats (Teams, score, players, acs, K/D/A)
-    def getStats(self, url):
+    ## Gets all game stats (Teams, score, players, acs, K/D/A)
+    def getMatchStats(self, url):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
 
@@ -151,7 +162,7 @@ class Scrapper():
 
         return info
 
-
+    ## Gets and returns url to the overview page of the most recent match on vlr.gg/matches/results
     def getRecentUrl(self):
         html = requests.get('https://www.vlr.gg/matches/results')
         soup = BeautifulSoup(html.content, 'lxml')
@@ -160,10 +171,47 @@ class Scrapper():
         return url
 
 
+
+    ### INDIVIDUAL TEAM DATA
+
+    ##  Returns an ARRAY filled with DICTIONARIES of all the players IGNs and url's to their images
+    #   example output: [{'name 1': 'vanity', 'image 1': 'https://owcdn.net/img/6224a530d0113.png'}, 'name 2': 'curry', 'image 2': 'https:/img/base/ph/sil.png'}, etc.]
+    #   example usage: 'ScrapperObject'.getPlayers('cloud9') = [{'name 1': 'vanity', 'image 1': 'https://owcdn.net/img/6224a530d0113.png'}, etc.]
+    def getPlayers(self, team: str):
+        url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml')
+        player_table = soup.find_all('div', {'class': 'wf-card'})
+        player_names = player_table[1].find_all('div', {'class': 'team-roster-item-name-alias'})
+
+        output = []
+        
+        # player_names = player_table.find_all('div', {'class': 'team-roster-item-name-alias'})
+        player_image_urls = player_table[1].find_all('img')
+        
+        player_data = {}
+
+        for i in range(5):  # player_data['name ' + str(i)] = player_images[i].get('src')
+            output.append(
+                {'name ' + str(i+1): player_names[i].text.strip(),
+                'image ' + str(i+1): 'https:' + player_image_urls[i].get('src')}
+            )
+
+        return output
+
 # TESTING 
 scrapper = Scrapper()
 url = scrapper.getRecentUrl()
-print(scrapper.getStats(url))
+
+print(scrapper.getMatchStats(url))
+
+## HOW TO OPEN AN IMAGE FROM URL
+# urllib.request.urlretrieve(
+#  'https://owcdn.net/img/6207470ac0601.png',
+#   "fns.png")
+  
+# img = Image.open("fns.png")
+# img.show()
 
 
 
