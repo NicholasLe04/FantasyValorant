@@ -79,6 +79,81 @@ def printPlayerInfo(player_name):
             # Name: {player} | Team: {org} | ACS: {acs}
             return (f"Name: {player['player']}  |  Team: {player['org']}  |  ACS: {player['average_combat_score']}")
 
+## Getter methods
+## Method returns player kills over course of match
+## Pulled from player
+def globalGetPlayerKills(match,player_name):
+    None
+
+## Method returns player deaths over course of match
+## Pulled from player
+def globalGetPlayerDeaths(match,player_name):
+    None
+
+## Method returns player assists over course of match
+## Pulled from player
+def globalGetPlayerAssists(match,player_name):
+    None
+
+## Method returns player headshot % overall statistic
+## Pulled from player
+def globalGetPlayerHeadshot(player_name):
+    None
+
+## Method returns player KD % overall statistic
+## Pulled from player
+def globalGetPlayerKD(player_name):
+    None
+
+## Method returns player ACS % overall statistic
+## Pulled from player
+def globalGetPlayerACS(player_name):
+    None
+
+## Method returns player most played agent overall statistic
+## Pulled from player
+def globalGetPlayerAgent(player_name):
+    None
+
+## Method returns player team
+## Pulled from team
+def getPlayerTeam(player_name):
+    None
+
+## Method returns average player ACS over course of match
+## Pulled from match
+def getPlayerACS(match,player_name):
+    None
+
+## Method returns player name
+## Pulled from team
+def getPlayerName(player_name):
+    None
+
+## Method returns player username
+## Pulled from team
+def getPlayerUsername(player_name):
+    None
+
+## Method returns player username (.png link)
+## Pulled from team
+def getPlayerPicture(player_name):
+    None
+
+## Method returns player region
+## Pulled from team
+def getPlayerRegion(player_name):
+    None
+
+## Method returns team logo (.png link)
+## Pulled from team
+def getTeamLogo(team):
+    None
+
+## Method returns team name
+## Pulled from team
+def getTeamName(team):
+    None
 
 ## Kills/one taps the bot so we can work on it
 ### VERY VERY FUCKING IMPORTANT DELETE THIS SHIT BEFORE THIS GOES PUBLIC
