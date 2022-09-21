@@ -35,24 +35,9 @@ client = Client()
 ## TOKEN DO NOT LEAK
 TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
 
-
-## Access each regions' players and grabs their stats
-na_stats = requests.get('https://vlrggapi.vercel.app/stats/na/90')
-emea_stats = requests.get("https://vlrggapi.vercel.app/stats/eu/90")
-apac_stats = requests.get("https://vlrggapi.vercel.app/stats/ap/90")
-sa_stats = requests.get("https://vlrggapi.vercel.app/stats/sa/90")
-jpn_stats = requests.get("https://vlrggapi.vercel.app/stats/jp/90")
-ocea_stats = requests.get("https://vlrggapi.vercel.app/stats/oce/90")
-mena_stats = requests.get("https://vlrggapi.vercel.app/stats/mn/90")
-
-## Creates 'stats' variable to hold stats from all regions
-stats = na_stats.json()
-stats['data']['segments'] += emea_stats.json()['data']['segments']
-stats['data']['segments'] += apac_stats.json()['data']['segments']
-stats['data']['segments'] += sa_stats.json()['data']['segments']
-stats['data']['segments'] += jpn_stats.json()['data']['segments']
-stats['data']['segments'] += ocea_stats.json()['data']['segments']
-stats['data']['segments'] += mena_stats.json()['data']['segments']
+## Create scrapper object
+scrapper = Scrapper()
+recentMatchUrl = scrapper.getRecentUrl()
 
  
 ## Prints message in console if bot launches successfully
@@ -73,87 +58,87 @@ async def player(ctx: commands.Context, player = ""):
 
 ## Player info method
 def printPlayerInfo(player_name):
-    for player in stats['data']['segments']:
-        # If player name == user input
-        if player['player'].lower() == player_name.lower():
-            # Name: {player} | Team: {org} | ACS: {acs}
-            return (f"Name: {player['player']}  |  Team: {player['org']}  |  ACS: {player['average_combat_score']}")
+    return (f"Username: {getPlayerUsername(player_name)}  |  Name: {getPlayerName(player_name)}  |  Team: {getPlayerTeam(player_name)}  |  ACS: {globalGetPlayerACS(player_name)}")
 
 ## Getter methods
-## Method returns player kills over course of match
-## Pulled from player
-def globalGetPlayerKills(match,player_name):
-    None
 
-## Method returns player deaths over course of match
+## Method returns player team
 ## Pulled from player
-def globalGetPlayerDeaths(match,player_name):
-    None
+## EX: getPlayerTeam('tenz') = 'Sentinels'
+def getPlayerTeam(player_name: str):
+    return scrapper.playerGetTeam(player_name)
 
-## Method returns player assists over course of match
+## Method returns player name
 ## Pulled from player
-def globalGetPlayerAssists(match,player_name):
-    None
+## EX: getPlayerName('tenz') = 'Tyson Ngo'
+def getPlayerName(player_name: str):
+    return scrapper.playerGetName(player_name)
 
-## Method returns player headshot % overall statistic
+## Method returns player username
 ## Pulled from player
-def globalGetPlayerHeadshot(player_name):
-    None
+## EX: getPlayerTeam('tenz') = 'TenZ'
+def getPlayerUsername(player_name: str):
+    return scrapper.playerGetUsername(player_name)
 
-## Method returns player KD % overall statistic
+## Method returns player image (.png link)
 ## Pulled from player
-def globalGetPlayerKD(player_name):
-    None
+## EX: getPlayerPicture('tenz') = 'https:/img/base/ph/sil.png'
+def getPlayerPicture(player_name: str):
+    return scrapper.playerGetPicture(player_name)
 
-## Method returns player ACS % overall statistic
+## Method returns player region
+## Pulled from player 
+## EX: getPlayerRegion('tenz') = 'CANADA'
+def getPlayerRegion(player_name: str):
+    return scrapper.playerGetRegion(player_name)
+
+## Method returns player ACS overall statistic
 ## Pulled from player
-def globalGetPlayerACS(player_name):
-    None
+## EX: globalGetPlayerACS('tenz') = 261.3
+def globalGetPlayerACS(player_name: str):
+    return scrapper.playerGetGlobalACS(player_name)
+
+## Method returns player KD overall statistic
+## Pulled from player
+## EX: globalGetPlayerKD('tenz') = 1.53
+def globalGetPlayerKD(player_name: str):
+    return scrapper.playerGetGlobalKD(player_name)
+
+## Method returns player kills per round overall statistic
+## Pulled from player
+## EX: globalGetPlayerKPR('tenz') = 0.87
+def globalGetPlayerKPR(player_name):
+    return scrapper.playerGetGlobalKPR(player_name)
+
+## Method returns player assists per round overall statistic
+## Pulled from player
+## EX: globalGetPlayerKPR('tenz') = 0.63
+def globalGetPlayerAPR(player_name):
+    return scrapper.playerGetGlobalAPR(player_name)
 
 ## Method returns player most played agent overall statistic
 ## Pulled from player
+## EX: globalGetPlayerKPR('tenz') = 'chamber'
 def globalGetPlayerAgent(player_name):
-    None
-
-## Method returns player team
-## Pulled from team
-def getPlayerTeam(player_name):
-    None
+    return scrapper.playerGetAgent(player_name)
 
 ## Method returns average player ACS over course of match
 ## Pulled from match
-def getPlayerACS(match,player_name):
-    None
-
-## Method returns player name
-## Pulled from team
-def getPlayerName(player_name):
-    None
-
-## Method returns player username
-## Pulled from team
-def getPlayerUsername(player_name):
-    None
-
-## Method returns player username (.png link)
-## Pulled from team
-def getPlayerPicture(player_name):
-    None
-
-## Method returns player region
-## Pulled from team
-def getPlayerRegion(player_name):
-    None
+## EX: getPlayerMatchACS()
+def getPlayerMatchACS(match ,player_name):
+    for player_stats in scrapper.getPlayerStats(match):
+        if player_stats[0].lower() == player_name.lower():
+            return player_stats[1]
 
 ## Method returns team logo (.png link)
 ## Pulled from team
-def getTeamLogo(team):
-    None
+def getTeamLogo(team: str):
+    return scrapper.teamGetLogo(team)
 
 ## Method returns team name
 ## Pulled from team
-def getTeamName(team):
-    None
+def getTeamName(team: str):
+    return scrapper.teamGetName(team)
 
 ## Kills/one taps the bot so we can work on it
 ### VERY VERY FUCKING IMPORTANT DELETE THIS SHIT BEFORE THIS GOES PUBLIC
