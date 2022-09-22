@@ -235,13 +235,44 @@ class Scrapper():
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return 'https:' + soup.find('div', {'class': 'wf-avatar'}).find('img').get('src')
-    
+        image = 'https:' + soup.find('div', {'class': 'wf-avatar'}).find('img').get('src')
+        if image == "https:/img/base/ph/sil.png":
+            image = "https://www.vlr.gg/img/base/ph/sil.png"
+        return image
+
     def playerGetRegion(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('div', {'class': 'ge-text-light'}).text.strip()
+
+    def playerGetRegionFlag(self, player_name: str):
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml') 
+        region = soup.find('div', {'class': 'ge-text-light'}).text.strip()
+        if region == "UNITED STATES":
+            return "🇺🇸"
+        elif region == "CANADA":
+            return "🇨🇦"
+        elif region == "FRANCE":
+            return "🇫🇷"
+        elif region == "UNITED KINGDOM":
+            return "🇬🇧"
+        elif region == "FINLAND":
+            return "🇫🇮"
+        elif region == "BELGIUM":
+            return "🇧🇪"
+        elif region == "TURKEY":
+            return "🇹🇷"
+        elif region == "KAZAKHSTAN":
+            return "🇰🇿"
+        elif region == "BRAZIL":
+            return "🇧🇷"
+        elif region == "ARGENTINA":
+            return "🇦🇷"
+        else:
+            return None
 
     def playerGetGlobalACS(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 

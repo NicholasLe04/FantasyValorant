@@ -54,11 +54,34 @@ async def on_ready():
 async def player(ctx: commands.Context, player = ""):
     # Reply with a private message (command) or public message (using prefix)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-    await ctx.reply(printPlayerInfo(player))
+    await ctx.reply(embed=embedPlayerInfo(player))
+
+# Methods that interface with discord.py
+
+## Team info method
+## Returns an embed with respective team information
+## Usage: await ctx.reply(embed = embedTeamInfo(team_name))
+## embedTeamInfo(team_name) will return embed
+# def embedTeamInfo(team_name):
+#     embed=discord.Embed(title=f"{getTeamName(team_name)}",description=f"**{getTeamAbbreviation(team_name)}**\n{getTeamRegionFlag(team_name)} {getTeamRegion(team_name).lower().title()}") # This cannot be implemented until these methods are added
+#     embed.set_thumbnail(url=getTeamLogo(team_name))
+#     # For loop here for each player to be listed, inline 2 wide
+#     return (embed)
 
 ## Player info method
-def printPlayerInfo(player_name):
-    return (f"Username: {getPlayerUsername(player_name)}  |  Name: {getPlayerName(player_name)}  |  Team: {getPlayerTeam(player_name)}  |  ACS: {globalGetPlayerACS(player_name)}")
+## Returns an embed with respective player information
+## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
+## embedPlayerInfo(player_name) will return embed
+def embedPlayerInfo(player_name):
+    embed=discord.Embed(title=f"{getPlayerUsername(player_name)}",description=f"**{getPlayerName(player_name)}**\n{getPlayerRegionFlag(player_name)} {getPlayerRegion(player_name).lower().title()}")
+    embed.set_author(name=getPlayerTeam(player_name), icon_url=getTeamLogo(getPlayerTeam(player_name)))
+    embed.set_thumbnail(url=getPlayerPicture(player_name))
+    embed.add_field(name="ACS", value=globalGetPlayerACS(player_name), inline=True)
+    embed.add_field(name="K/D", value=globalGetPlayerKD(player_name), inline=True)
+    embed.add_field(name="KPR", value=globalGetPlayerKPR(player_name))
+    embed.add_field(name="APR", value=globalGetPlayerAPR(player_name), inline=True)
+    embed.add_field(name="AGENT", value=globalGetPlayerAgent(player_name).capitalize())
+    return (embed)
 
 ## Getter methods
 
@@ -91,6 +114,12 @@ def getPlayerPicture(player_name: str):
 ## EX: getPlayerRegion('tenz') = 'CANADA'
 def getPlayerRegion(player_name: str):
     return scrapper.playerGetRegion(player_name)
+
+## Method returns player region flag
+## Pulled from player 
+## EX: getPlayerRegionFlag('tenz') = '🇨🇦'
+def getPlayerRegionFlag(player_name: str):
+    return scrapper.playerGetRegionFlag(player_name)
 
 ## Method returns player ACS overall statistic
 ## Pulled from player
