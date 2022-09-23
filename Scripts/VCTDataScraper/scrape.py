@@ -217,7 +217,10 @@ class Scrapper():
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return soup.find_all('div', {'class': 'wf-card'})[2].find('div', {'style': 'font-weight: 500;'}).text.strip()
+        try:
+            return soup.find_all('div', {'class': 'wf-card'})[2].find('div', {'style': 'font-weight: 500;'}).text.strip()
+        except:
+            return 'noteam' 
 
     def playerGetName(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
@@ -236,9 +239,10 @@ class Scrapper():
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         image = 'https:' + soup.find('div', {'class': 'wf-avatar'}).find('img').get('src')
-        if image == "https:/img/base/ph/sil.png":
-            image = "https://www.vlr.gg/img/base/ph/sil.png"
-        return image
+        if image != "https:/img/base/ph/sil.png":
+            return image
+        else:
+            return "https:/img/base/ph/sil.png"
 
     def playerGetRegion(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
@@ -278,32 +282,47 @@ class Scrapper():
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return float(soup.find('tbody').find('tr').find_all('td')[4].text.strip())
+        try:
+            return float(soup.find('tbody').find('tr').find_all('td')[4].text.strip())
+        except: 
+            return 0.0
 
     def playerGetGlobalKD(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return float(soup.find('tbody').find('tr').find_all('td')[5].text.strip())
+        try:
+            return float(soup.find('tbody').find('tr').find_all('td')[5].text.strip())
+        except:
+            return 0.0
     
     def playerGetGlobalKPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return float(soup.find('tbody').find('tr').find_all('td')[8].text.strip())
+        try:
+            return float(soup.find('tbody').find('tr').find_all('td')[8].text.strip())
+        except:
+            return 0.0
 
     def playerGetGlobalAPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return float(soup.find('tbody').find('tr').find_all('td')[9].text.strip())
+        try:
+            return float(soup.find('tbody').find('tr').find_all('td')[9].text.strip())
+        except:
+            return 0.0
 
     def playerGetAgent(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        agent_url = soup.find('tbody').find('tr').find('td').find('img').get('src')
-        return agent_url[21:len(agent_url)-4]
+        try:
+            agent_url = soup.find('tbody').find('tr').find('td').find('img').get('src')
+            return agent_url[21:len(agent_url)-4]
+        except:
+            return 'no agent'
 
     
 
