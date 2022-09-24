@@ -27,6 +27,10 @@ class User:
     # returns the roster array
     def returnRoster(self):
         return (self.roster)
+
+    # clears the roster array
+    def clearRoster(self):
+        self.roster = []
         
 
 # testing
@@ -34,6 +38,13 @@ user = User()
 user.addPlayer(3232)
 user.addPlayer(323)
 user.addPlayer(32)
+user.addPlayer(32)
+user.addPlayer(32)
+user.addPlayer(32)
+user.addPlayer(32)
+
 print(user.returnRoster())
 user.removePlayer(2)
+print(user.returnRoster())
+user.clearRoster()
 print(user.returnRoster())
