@@ -22,7 +22,11 @@ class Scrapper():
             "User_Agent": ""
         }
 
-    ### MATCH DATA
+    #############################
+    #                           #
+    #         MATCH DATA        #
+    #                           #
+    #############################
 
     ## Gets and returns ARRAY of team names 
     #  example output: ['OpTic Gaming', 'Sentinels']
@@ -223,7 +227,7 @@ class Scrapper():
         try:
             return soup.find_all('div', {'class': 'wf-card'})[2].find('div', {'style': 'font-weight: 500;'}).text.strip()
         except:
-            return 'noteam' 
+            return 'no team' 
 
     def playerGetName(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
@@ -309,19 +313,10 @@ class Scrapper():
 
     
 
-# # TESTING 
+## TESTING 
 scrapper = Scrapper()
 url = scrapper.getRecentUrl()
 
-print(scrapper.playerGetRegionFlag('hellranger'))
-
-## HOW TO OPEN AN IMAGE FROM URL
-# urllib.request.urlretrieve(
-#  'https://owcdn.net/img/6207470ac0601.png',
-#   "fns.png")
-  
-# img = Image.open("fns.png") 
-# img.show()
 
 
 
