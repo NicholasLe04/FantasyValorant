@@ -170,8 +170,8 @@ def getTeamName(team: str):
     return scrapper.teamGetName(team)
 
 ## Kills/one taps the bot so we can work on it
-### VERY VERY FUCKING IMPORTANT DELETE THIS SHIT BEFORE THIS GOES PUBLIC
-@client.command(aliases=['onetap','mavenawpshot'])
+### VERY VERY IMPORTANT DELETE THIS BEFORE THIS GOES PUBLIC
+@client.command(aliases=['onetap','mavenawpshot', 'stirfriedsatchelpeak'])
 @commands.has_permissions(administrator=True) # Online usable by a server admin
 async def shutdown(ctx):
     exit() # Ends the program, bot will go offline

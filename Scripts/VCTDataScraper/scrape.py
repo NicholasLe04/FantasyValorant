@@ -13,6 +13,9 @@ class Scrapper():
     with open('Scripts/VCTDataScraper/JsonFiles/playerids.json') as ids:
         playerIDs = json.load(ids)
 
+    with open('Scripts/VCTDataScraper/JsonFiles/flags.json') as flags:
+        flagEmojis = json.load(flags)
+
     ## 'Scrapper' object constructor
     def __init__(self):
         self.headers = {
@@ -239,10 +242,10 @@ class Scrapper():
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         image = 'https:' + soup.find('div', {'class': 'wf-avatar'}).find('img').get('src')
-        if image != "https:/img/base/ph/sil.png":
-            return image
+        if image == "https:/img/base/ph/sil.png":
+            return  "https://www.vlr.gg/img/base/ph/sil.png"
         else:
-            return "https:/img/base/ph/sil.png"
+            return image
 
     def playerGetRegion(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
@@ -255,28 +258,8 @@ class Scrapper():
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         region = soup.find('div', {'class': 'ge-text-light'}).text.strip()
-        if region == "UNITED STATES":
-            return "🇺🇸"
-        elif region == "CANADA":
-            return "🇨🇦"
-        elif region == "FRANCE":
-            return "🇫🇷"
-        elif region == "UNITED KINGDOM":
-            return "🇬🇧"
-        elif region == "FINLAND":
-            return "🇫🇮"
-        elif region == "BELGIUM":
-            return "🇧🇪"
-        elif region == "TURKEY":
-            return "🇹🇷"
-        elif region == "KAZAKHSTAN":
-            return "🇰🇿"
-        elif region == "BRAZIL":
-            return "🇧🇷"
-        elif region == "ARGENTINA":
-            return "🇦🇷"
-        else:
-            return None
+        return self.flagEmojis.get(region)
+        
 
     def playerGetGlobalACS(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
@@ -327,8 +310,10 @@ class Scrapper():
     
 
 # # TESTING 
-# scrapper = Scrapper()
-# url = scrapper.getRecentUrl()
+scrapper = Scrapper()
+url = scrapper.getRecentUrl()
+
+print(scrapper.playerGetRegionFlag('hellranger'))
 
 ## HOW TO OPEN AN IMAGE FROM URL
 # urllib.request.urlretrieve(
