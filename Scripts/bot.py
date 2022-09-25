@@ -73,83 +73,18 @@ async def player(ctx: commands.Context, player = ""):
 ## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
 ## embedPlayerInfo(player_name) will return embed
 def embedPlayerInfo(player_name):
-    embed=discord.Embed(title=f"{getPlayerUsername(player_name)}",description=f"**{getPlayerName(player_name)}**\n{getPlayerRegionFlag(player_name)} {getPlayerRegion(player_name).lower().title()}")
-    embed.set_author(name=getPlayerTeam(player_name), icon_url=getTeamLogo(getPlayerTeam(player_name)))
-    embed.set_thumbnail(url=getPlayerPicture(player_name))
-    embed.add_field(name="ACS", value=globalGetPlayerACS(player_name), inline=True)
-    embed.add_field(name="K/D", value=globalGetPlayerKD(player_name), inline=True)
-    embed.add_field(name="KPR", value=globalGetPlayerKPR(player_name))
-    embed.add_field(name="APR", value=globalGetPlayerAPR(player_name), inline=True)
-    embed.add_field(name="AGENT", value=globalGetPlayerAgent(player_name).capitalize())
+    embed=discord.Embed(title=f"{scrapper.playerGetUsername(player_name)}",description=f"**{scrapper.playerGetName(player_name)}**\n{scrapper.playerGetRegionFlag(player_name)} {scrapper.playerGetRegion(player_name).lower().title()}")
+    embed.set_author(name=scrapper.playerGetTeam(player_name), icon_url=scrapper.teamGetLogo(scrapper.playerGetTeam(player_name)))
+    embed.set_thumbnail(url=scrapper.playerGetPicture(player_name))
+    embed.add_field(name="ACS", value=scrapper.playerGetGlobalACS(player_name), inline=True)
+    embed.add_field(name="K/D", value=scrapper.playerGetGlobalKD(player_name), inline=True)
+    embed.add_field(name="KPR", value=scrapper.playerGetGlobalKPR(player_name))
+    embed.add_field(name="APR", value=scrapper.playerGetGlobalAPR(player_name), inline=True)
+    embed.add_field(name="AGENT", value=scrapper.playerGetAgent(player_name).capitalize())
     return (embed)
 
-## Getter methods
 
-## Method returns player team
-## Pulled from player
-## EX: getPlayerTeam('tenz') = 'Sentinels'
-def getPlayerTeam(player_name: str):
-    return scrapper.playerGetTeam(player_name)
-
-## Method returns player name
-## Pulled from player
-## EX: getPlayerName('tenz') = 'Tyson Ngo'
-def getPlayerName(player_name: str):
-    return scrapper.playerGetName(player_name)
-
-## Method returns player username
-## Pulled from player
-## EX: getPlayerTeam('tenz') = 'TenZ'
-def getPlayerUsername(player_name: str):
-    return scrapper.playerGetUsername(player_name)
-
-## Method returns player image (.png link)
-## Pulled from player
-## EX: getPlayerPicture('tenz') = 'https:/img/base/ph/sil.png'
-def getPlayerPicture(player_name: str):
-    return scrapper.playerGetPicture(player_name)
-
-## Method returns player region
-## Pulled from player 
-## EX: getPlayerRegion('tenz') = 'CANADA'
-def getPlayerRegion(player_name: str):
-    return scrapper.playerGetRegion(player_name)
-
-## Method returns player region flag
-## Pulled from player 
-## EX: getPlayerRegionFlag('tenz') = '🇨🇦'
-def getPlayerRegionFlag(player_name: str):
-    return scrapper.playerGetRegionFlag(player_name)
-
-## Method returns player ACS overall statistic
-## Pulled from player
-## EX: globalGetPlayerACS('tenz') = 261.3
-def globalGetPlayerACS(player_name: str):
-    return scrapper.playerGetGlobalACS(player_name)
-
-## Method returns player KD overall statistic
-## Pulled from player
-## EX: globalGetPlayerKD('tenz') = 1.53
-def globalGetPlayerKD(player_name: str):
-    return scrapper.playerGetGlobalKD(player_name)
-
-## Method returns player kills per round overall statistic
-## Pulled from player
-## EX: globalGetPlayerKPR('tenz') = 0.87
-def globalGetPlayerKPR(player_name):
-    return scrapper.playerGetGlobalKPR(player_name)
-
-## Method returns player assists per round overall statistic
-## Pulled from player
-## EX: globalGetPlayerKPR('tenz') = 0.63
-def globalGetPlayerAPR(player_name):
-    return scrapper.playerGetGlobalAPR(player_name)
-
-## Method returns player most played agent overall statistic
-## Pulled from player
-## EX: globalGetPlayerKPR('tenz') = 'chamber'
-def globalGetPlayerAgent(player_name):
-    return scrapper.playerGetAgent(player_name)
+### Getter Methods
 
 ## Method returns average player ACS over course of match
 ## Pulled from match
@@ -159,15 +94,6 @@ def getPlayerMatchACS(match ,player_name):
         if player_stats[0].lower() == player_name.lower():
             return player_stats[1]
 
-## Method returns team logo (.png link)
-## Pulled from team
-def getTeamLogo(team: str):
-    return scrapper.teamGetLogo(team)
-
-## Method returns team name
-## Pulled from team
-def getTeamName(team: str):
-    return scrapper.teamGetName(team)
 
 ## Kills/one taps the bot so we can work on it
 ### VERY VERY IMPORTANT DELETE THIS BEFORE THIS GOES PUBLIC
