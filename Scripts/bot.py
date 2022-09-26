@@ -54,6 +54,9 @@ async def on_ready():
 async def player(ctx: commands.Context, player = ""):
     # Reply with a private message (command) or public message (using prefix)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
+    if embedPlayerInfo(player) == "No player found":
+        await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
+        return None
     await ctx.reply(embed=embedPlayerInfo(player))
 
 # Methods that interface with discord.py
@@ -73,6 +76,10 @@ async def player(ctx: commands.Context, player = ""):
 ## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
 ## embedPlayerInfo(player_name) will return embed
 def embedPlayerInfo(player_name):
+    try:
+        scrapper.playerGetUsername(player_name)
+    except AttributeError:
+        return "No player found"
     embed=discord.Embed(title=f"{scrapper.playerGetUsername(player_name)}",description=f"**{scrapper.playerGetName(player_name)}**\n{scrapper.playerGetRegionFlag(player_name)} {scrapper.playerGetRegion(player_name).lower().title()}")
     embed.set_author(name=scrapper.playerGetTeam(player_name), icon_url=scrapper.teamGetLogo(scrapper.playerGetTeam(player_name)))
     embed.set_thumbnail(url=scrapper.playerGetPicture(player_name))
