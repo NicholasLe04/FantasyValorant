@@ -1,5 +1,4 @@
 from ast import ExceptHandler
-import requests #pip install requests
 import discord #pip install discord.py
 from discord.ext import commands
 from discord import app_commands

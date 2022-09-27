@@ -1,4 +1,4 @@
-import random
+import os
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -6,14 +6,18 @@ import json
 
 class Scrapper():
     
+    file_dir = os.path.dirname(__file__)
+    teamid_file_name = os.path.join(file_dir, 'JsonFiles/teamids.json')
+    playerid_file_name = os.path.join(file_dir, 'JsonFiles/playerids.json')
+    flags_file_name = os.path.join(file_dir, 'JsonFiles/flags.json')
     ## Loads team page ID's to access team page urls
-    with open('Scripts/VCTDataScraper/JsonFiles/teamids.json') as ids:
+    with open(teamid_file_name) as ids:
         teamIDs = json.load(ids)
 
-    with open('Scripts/VCTDataScraper/JsonFiles/playerids.json') as ids:
+    with open(playerid_file_name) as ids:
         playerIDs = json.load(ids)
 
-    with open('Scripts/VCTDataScraper/JsonFiles/flags.json') as flags:
+    with open(flags_file_name) as flags:
         flagEmojis = json.load(flags)
 
     ## 'Scrapper' object constructor
@@ -220,6 +224,8 @@ class Scrapper():
     #                            #
     ##############################
 
+    ## Returns player_name's team
+    #  Example: scrapper.playerGetTeam('tenz') = 'Sentinels'
     def playerGetTeam(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
@@ -229,18 +235,24 @@ class Scrapper():
         except:
             return 'no team' 
 
+    ## Returns 'player_name''s real name 
+    #  Example: scrapper.playerGetName('tenz') = 'Tyson Ngo'
     def playerGetName(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('h2', {'class': 'player-real-name'}).text.strip()
 
+    ## Returns player_name's username witch correct capitalization
+    #  Example: scrapper.playerGetTeam('tenz') = 'TenZ'
     def playerGetUsername(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
+    ## Returns player_name's picture or default image url
+    #  Example: scrapper.playerGetPicture('tenz') = 'https://www.vlr.gg/img/base/ph/sil.png'
     def playerGetPicture(self, player_name:str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
@@ -251,12 +263,16 @@ class Scrapper():
         else:
             return image
 
+    ## Returns player_name's country/region
+    #  Example: scrapper.playerGetRegion('tenz') = 'CANADA'
     def playerGetRegion(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('div', {'class': 'ge-text-light'}).text.strip()
 
+    ## Returns player_name's country/region flag emoji
+    #  Example: scrapper.playerGetPicture('tenz') = ':flag_ca:'
     def playerGetRegionFlag(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
@@ -264,7 +280,8 @@ class Scrapper():
         region = soup.find('div', {'class': 'ge-text-light'}).text.strip()
         return self.flagEmojis.get(region)
         
-
+    ## Returns player_name's average ACS over the past 90 days
+    #  Example: scrapper.playerGetPicture('tenz') = '229.6'
     def playerGetGlobalACS(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
@@ -274,6 +291,8 @@ class Scrapper():
         except: 
             return 0.0
 
+    ## Returns player_name's average K/D over the past 90 days
+    #  Example: scrapper.playerGetPicture('tenz') = '1.2'
     def playerGetGlobalKD(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
@@ -283,6 +302,8 @@ class Scrapper():
         except:
             return 0.0
     
+    ## Returns player_name's average kills per round over the past 90 days
+    #  Example: scrapper.playerGetPicture('tenz') = '0.84'
     def playerGetGlobalKPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
@@ -292,6 +313,8 @@ class Scrapper():
         except:
             return 0.0
 
+    ## Returns player_name's average assists per round over the past 90 days
+    #  Example: scrapper.playerGetPicture('tenz') = '0.11'
     def playerGetGlobalAPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
@@ -301,6 +324,8 @@ class Scrapper():
         except:
             return 0.0
 
+    ## Returns player_name's most played agent over the past 90 days
+    #  Example: scrapper.playerGetPicture('tenz') = 'Chamber'
     def playerGetAgent(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
@@ -316,6 +341,8 @@ class Scrapper():
 ## TESTING 
 scrapper = Scrapper()
 url = scrapper.getRecentUrl()
+
+print(scrapper.playerGetTeam('xeppaa'))
 
 
 
