@@ -2,7 +2,8 @@ from ast import ExceptHandler
 import discord #pip install discord.py
 from discord.ext import commands
 from discord import app_commands
-from VCTDataScraper.scrape import Scrapper
+'''from VCTDataScraper.scrape import Scraper '''#                                            ***TO BE ADDED TO DB.PY***
+from VCTDataScraper.db import Database
 
 # NOTES ABOUT PROGRAM:
 # TAKES ~ 30s TO LAUNCH, GIVE IT TIME
@@ -34,9 +35,10 @@ client = Client()
 ## TOKEN DO NOT LEAK
 TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
 
-## Create scrapper object
-scrapper = Scrapper()
-recentMatchUrl = scrapper.getRecentUrl()
+## Create scraper object                                                                                                          ***TO BE ADDED TO DB.PY***
+''' scraper = Scraper()'''
+database = Database()
+'''recentMatchUrl = scraper.getRecentUrl()'''                                                                                 ##  ***TO BE ADDED TO DB.PY***
 
  
 ## Prints message in console if bot launches successfully
@@ -44,14 +46,14 @@ recentMatchUrl = scrapper.getRecentUrl()
 async def on_ready():
     print("I got cash. Anyone need something?") # If you don't see this, the bot ain't online
 
-# Sends player info to channel
+# Sends player info to channel 
 @client.hybrid_command(name = "player", with_app_command = True, description = "Obtain player statistics",aliases = ['p'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining player command
 # Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
-    # Reply with a private message (command) or public message (using prefix)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if embedPlayerInfo(player) == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
@@ -70,33 +72,33 @@ async def player(ctx: commands.Context, player = ""):
 #     # For loop here for each player to be listed, inline 2 wide
 #     return (embed)
 
-## Player info method
+## Player info method                                                                                                          ***TO BE ADDED TO DB.PY***
 ## Returns an embed with respective player information
 ## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
-## embedPlayerInfo(player_name) will return embed
+## embedPlayerInfo(player_name) will return embed 
 def embedPlayerInfo(player_name):
     try:
-        scrapper.playerGetUsername(player_name)
+        database.playerGetUsername()
     except AttributeError:
         return "No player found"
-    embed=discord.Embed(title=f"{scrapper.playerGetUsername(player_name)}",description=f"**{scrapper.playerGetName(player_name)}**\n{scrapper.playerGetRegionFlag(player_name)} {scrapper.playerGetRegion(player_name).lower().title()}")
-    embed.set_author(name=scrapper.playerGetTeam(player_name), icon_url=scrapper.teamGetLogo(scrapper.playerGetTeam(player_name)))
-    embed.set_thumbnail(url=scrapper.playerGetPicture(player_name))
-    embed.add_field(name="ACS", value=scrapper.playerGetGlobalACS(player_name), inline=True)
-    embed.add_field(name="K/D", value=scrapper.playerGetGlobalKD(player_name), inline=True)
-    embed.add_field(name="KPR", value=scrapper.playerGetGlobalKPR(player_name))
-    embed.add_field(name="APR", value=scrapper.playerGetGlobalAPR(player_name), inline=True)
-    embed.add_field(name="AGENT", value=scrapper.playerGetAgent(player_name).capitalize())
+    embed=discord.Embed(title=f"{database.playerGetUsername(player_name)}",description=f"**{database.playerGetName(player_name)}**\n{database.playerGetRegionFlag(player_name)} {database.playerGetRegion(player_name).lower().title()}")
+    embed.set_author(name=database.playerGetTeam(player_name), icon_url=database.teamGetLogo(database.playerGetTeam(player_name)))
+    embed.set_thumbnail(url=database.playerGetPicture(player_name))
+    embed.add_field(name="ACS", value=database.playerGetGlobalACS(player_name), inline=True)
+    embed.add_field(name="K/D", value=database.playerGetGlobalKD(player_name), inline=True)
+    embed.add_field(name="KPR", value=database.playerGetGlobalKPR(player_name))
+    embed.add_field(name="APR", value=database.playerGetGlobalAPR(player_name), inline=True)
+    embed.add_field(name="AGENT", value=database.playerGetAgent(player_name).capitalize())
     return (embed)
 
 
-### Getter Methods
+### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
 ## Method returns average player ACS over course of match
 ## Pulled from match
 ## EX: getPlayerMatchACS()
 def getPlayerMatchACS(match ,player_name):
-    for player_stats in scrapper.getPlayerStats(match):
+    for player_stats in database.getPlayerStats(match):
         if player_stats[0].lower() == player_name.lower():
             return player_stats[1]
 

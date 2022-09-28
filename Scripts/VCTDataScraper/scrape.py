@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import json
 
 
-class Scrapper():
+class Scraper():
     
     file_dir = os.path.dirname(__file__)
     teamid_file_name = os.path.join(file_dir, 'JsonFiles/teamids.json')
