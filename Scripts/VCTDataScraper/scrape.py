@@ -339,11 +339,6 @@ class Scraper():
     
 
 ## TESTING 
-scrapper = Scrapper()
-url = scrapper.getRecentUrl()
-
-print(scrapper.playerGetTeam('xeppaa'))
-
 
 
 

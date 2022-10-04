@@ -3,7 +3,8 @@ import discord #pip install discord.py
 from discord.ext import commands
 from discord import app_commands
 '''from VCTDataScraper.scrape import Scraper '''#                                            ***TO BE ADDED TO DB.PY***
-from VCTDataScraper.db import Database
+from db import Database
+from VCTDataScraper.scrape import Scraper
 
 # NOTES ABOUT PROGRAM:
 # TAKES ~ 30s TO LAUNCH, GIVE IT TIME
@@ -30,6 +31,9 @@ class Client(commands.Bot):
         await ctx.reply(error,ephemeral = True)
 
 client = Client()
+
+scraper = Scraper()
+
 
 # client = commands.Bot(command_prefix='$', intents=discord.Intents.all())
 ## TOKEN DO NOT LEAK
@@ -78,17 +82,18 @@ async def player(ctx: commands.Context, player = ""):
 ## embedPlayerInfo(player_name) will return embed 
 def embedPlayerInfo(player_name):
     try:
-        database.playerGetUsername()
+        pname = scraper.playerGetUsername(player_name)
     except AttributeError:
         return "No player found"
-    embed=discord.Embed(title=f"{database.playerGetUsername(player_name)}",description=f"**{database.playerGetName(player_name)}**\n{database.playerGetRegionFlag(player_name)} {database.playerGetRegion(player_name).lower().title()}")
-    embed.set_author(name=database.playerGetTeam(player_name), icon_url=database.teamGetLogo(database.playerGetTeam(player_name)))
-    embed.set_thumbnail(url=database.playerGetPicture(player_name))
-    embed.add_field(name="ACS", value=database.playerGetGlobalACS(player_name), inline=True)
-    embed.add_field(name="K/D", value=database.playerGetGlobalKD(player_name), inline=True)
-    embed.add_field(name="KPR", value=database.playerGetGlobalKPR(player_name))
-    embed.add_field(name="APR", value=database.playerGetGlobalAPR(player_name), inline=True)
-    embed.add_field(name="AGENT", value=database.playerGetAgent(player_name).capitalize())
+
+    embed=discord.Embed(title=f"{scraper.playerGetUsername(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname).upper())} {database.playerGetRegion(pname).lower().title()}")
+    embed.set_author(name=database.playerGetTeam(pname), icon_url=scraper.teamGetLogo(database.playerGetTeam(pname)))
+    embed.set_thumbnail(url=database.playerGetPicture(pname))
+    embed.add_field(name="ACS", value=database.playerGetGlobalACS(pname), inline=True)
+    embed.add_field(name="K/D", value=database.playerGetGlobalKD(pname), inline=True)
+    embed.add_field(name="KPR", value=database.playerGetGlobalKPR(pname))
+    embed.add_field(name="APR", value=database.playerGetGlobalAPR(pname), inline=True)
+    embed.add_field(name="AGENT", value=database.playerGetAgent(pname).capitalize())
     return (embed)
 
 
