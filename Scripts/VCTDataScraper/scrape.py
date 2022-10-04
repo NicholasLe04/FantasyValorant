@@ -52,53 +52,7 @@ class Scraper():
         soup = BeautifulSoup(html.content, 'lxml')
         
         return [int(soup.find('span', {'class': 'match-header-vs-score-winner'}).text.strip()), 
-                int(soup.find('span', {'class': 'match-header-vs-score-loser'}).text.strip())]
-
-
-    ## ~~~~
-    ### OBSELETE
-    ## ~~~~
-    ## Gets and returns ARRAY of team 1 players 
-    #  example output: ['yay', 'crashies', 'FNS, 'Victor', 'Marved']
-    #  example usage: 'ScrapperObject'.getTeam1Players(url)[0] = 'yay'
-    # def getTeam1Players(self, url):
-    #     html = requests.get(url)
-    #     soup = BeautifulSoup(html.content, 'lxml')
-    #     stat_tables = soup.find('tbody')
-    #     output = []
-
-    #     containers = stat_tables.find_all('tr')
-    #     for container in containers:
-    #         player = container.find("div", {"class": "text-of"}).text.strip()
-
-    #         output.append(
-    #             player
-    #         )
-
-    #     return output
-
-    ## ~~~~
-    ### OBSELETE
-    ## ~~~~
-    ## Gets and returns ARRAY of team 1 players 
-    #  example output: ['Sacy', 'aspas', 'pancada, 'Less', 'saadhak']
-    #  example usage: 'ScrapperObject'.getTeam2Players(url)[0] = 'Sacy'
-    # def getTeam2Players(self, url):
-    #     html = requests.get(url)
-    #     soup = BeautifulSoup(html.content, 'lxml')
-    #     stat_tables = soup.find_all('tbody')
-    #     output = []
-
-    #     containers = stat_tables[1].find_all('tr')
-    #     for container in containers:
-    #         player = container.find("div", {"class": "text-of"}).text.strip()
-
-    #         output.append(
-    #             player
-    #         )
-
-    #     return output
-        
+                int(soup.find('span', {'class': 'match-header-vs-score-loser'}).text.strip())]  
 
     ## Gets and returns DICTIONARY filled with ARRAYS of map scores 
     #  example ouput: {'map-1': [15, 13], 'map-2': [6, 13], 'map-3': [16, 14], 'map-4': [13, 5]}
