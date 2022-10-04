@@ -114,6 +114,10 @@ class Database():
             I9 = "UPDATE Players SET playerImg = %s WHERE userName = %s"
             self.mycursor.execute(I9, (img, pName,))
 
+            flg = self.scrape.flagEmojis.get(self.playerGetRegion(pName).upper())
+            I10 = "UPDATE Players SET flag = %s WHERE userName = %s"
+            self.mycursor.execute(I10, (flg, pName))
+
             self.mycursor.execute("SELECT * FROM Players WHERE userName = %s", (pName,))
             for x in self.mycursor:
                 print(x)
@@ -176,6 +180,8 @@ class Database():
 
 #TESTING
 datab = Database()
+datab.APOCALYPSE()
+datab.createTable()
 datab.fillNames()
 datab.updateTable()
 
