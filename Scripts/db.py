@@ -27,9 +27,11 @@ class Database():
         for i in self.data.get('players'):
             self.playerNames.append(i)
 
+        
+
     def APOCALYPSE(self):
         self.mycursor.execute("DROP TABLE Players")
-        self.mycursor.execute("DROP TABLE Userteam")
+        self.mycursor.execute("DROP TABLE UserTeam")
         self.mycursor.execute("DROP TABLE Users")
 
     ## CREATING A DATA TABLE NAMED PLAYERS
