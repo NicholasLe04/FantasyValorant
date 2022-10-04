@@ -179,7 +179,6 @@ class Database():
 
 #TESTING
 datab = Database()
-datab.APOCALYPSE()
 datab.createTable()
 datab.updateTable()
 
