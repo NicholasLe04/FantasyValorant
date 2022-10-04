@@ -13,7 +13,7 @@ class Database():
             host="localhost",
             user="root",
             passwd="SavestaAQT100%",
-            database="testdatabase"
+            database="FantasyValorant"
         )
         self.mycursor = self.db.cursor()
         self.playeridJson = open('Scripts/VCTDataScraper/JsonFiles/playerlist.json')
