@@ -64,14 +64,11 @@ class Database():
                         playerFour VARCHAR(20) DEFAULT 'Missing' NOT NULL,
                         playerFive VARCHAR(20) DEFAULT 'Missing' NOT NULL)
                         """)
+    def fillNames (self):
         for y, pName in enumerate(self.playerNames):
             Q1 = "INSERT INTO Players (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (pName,))
 
-        self.mycursor.execute("DESCRIBE UserTeam")
-        for x in self.mycursor:
-            print(x)
-        print("\n\n")
     #db.commit()'''
     #Opening playerlist.json to be accessed
 
@@ -179,7 +176,7 @@ class Database():
 
 #TESTING
 datab = Database()
-datab.createTable()
+datab.fillNames()
 datab.updateTable()
 
 
