@@ -116,7 +116,10 @@ class Database():
 
             flg = self.scrape.flagEmojis.get(self.playerGetRegion(pName).upper())
             I10 = "UPDATE Players SET flag = %s WHERE userName = %s"
-            self.mycursor.execute(I10, (flg, pName))
+            if (flg == None):
+                self.mycursor.execute(I10, (":pirate_flag:", pName))
+            else:
+                self.mycursor.execute(I10, (flg, pName))
 
             self.mycursor.execute("SELECT * FROM Players WHERE userName = %s", (pName,))
             for x in self.mycursor:
