@@ -179,9 +179,6 @@ class Database():
 
 #TESTING
 datab = Database()
-datab.mycursor.execute("DESCRIBE Players")
-for x in datab.mycursor:
-    print(x)
 datab.APOCALYPSE()
 datab.createTable()
 datab.updateTable()
