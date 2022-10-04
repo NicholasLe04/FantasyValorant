@@ -1,6 +1,7 @@
 import mysql.connector
 from VCTDataScraper.scrape import Scraper
 import json
+import os
 
 class Database():
 
@@ -15,8 +16,11 @@ class Database():
             passwd="SavestaAQT100%",
             database="FantasyValorant"
         )
+        
+        file_dir = os.path.dirname(__file__)
+        playerlist_dir = os.path.join(file_dir, 'JsonFiles/playerlist.json')
         self.mycursor = self.db.cursor()
-        self.playeridJson = open('Scripts/VCTDataScraper/JsonFiles/playerlist.json')
+        self.playeridJson = open(playerlist_dir)
         self.data = json.load(self.playeridJson)
         self.scrape = Scraper() #Declaring Scrapper object
         self.playerNames = []
