@@ -185,10 +185,10 @@ class Database():
 datab = Database()
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
-datab.APOCALYPSE()
-datab.createTable()
-datab.fillNames()
-datab.updateTable()
+# datab.APOCALYPSE()
+# datab.createTable()
+# datab.fillNames()
+# datab.updateTable()
 
 
 
