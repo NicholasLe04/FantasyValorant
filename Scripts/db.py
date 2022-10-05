@@ -27,7 +27,8 @@ class Database():
         for i in self.data.get('players'):
             self.playerNames.append(i)
 
-        
+    def attemptReconnect(self):
+        self.db.reconnect(attempts=1, delay=0)
 
     def APOCALYPSE(self):
         self.mycursor.execute("DROP TABLE Players")
