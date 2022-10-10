@@ -27,8 +27,7 @@ class Database():
         for i in self.data.get('players'):
             self.playerNames.append(i)
 
-    def attemptReconnect(self):
-        self.db.reconnect(attempts=1, delay=0)
+    
 
     def APOCALYPSE(self):
         self.mycursor.execute("DROP TABLE Players")
@@ -183,7 +182,7 @@ class Database():
     #mycursor.execute("DROP TABLE users")
 
 #TESTING
-datab = Database()
+# datab = Database()
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()

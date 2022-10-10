@@ -1,11 +1,11 @@
 from ast import ExceptHandler
 import discord #pip install discord.py
-from discord.ext import commands
-from discord.ext import tasks 
+from discord.ext import commands, tasks
 from discord import app_commands
 '''from VCTDataScraper.scrape import Scraper '''#                                            ***TO BE ADDED TO DB.PY***
 from db import Database
 from VCTDataScraper.scrape import Scraper
+import asyncio, os
 
 # NOTES ABOUT PROGRAM:
 # TAKES ~ 30s TO LAUNCH, GIVE IT TIME
@@ -32,30 +32,31 @@ class Client(commands.Bot):
         await ctx.reply(error,ephemeral = True)
 
 client = Client()
-
+database = Database()
 scraper = Scraper()
+
+
+### TESTING ZONE NO CAP AREA 51 TYPE BEAT FR
+
+
+@tasks.loop(minutes=30) # Every 30 min, update table
+async def test_loop():
+    print("Updating SQL Table")
+    database.updateTable()
+    print("SQL Table Updated")
+
+#####
 
 
 # client = commands.Bot(command_prefix='$', intents=discord.Intents.all())
 ## TOKEN DO NOT LEAK
 TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
 
-## Create scraper object                                                                                                          ***TO BE ADDED TO DB.PY***
-''' scraper = Scraper()'''
-database = Database()
-'''recentMatchUrl = scraper.getRecentUrl()'''                                                                                 ##  ***TO BE ADDED TO DB.PY***
-
-# Every 7 hours, attempt to reconnect to the sql databse
-@tasks.loop(seconds=25200) 
-async def SQLreconnect():
-    database.attemptReconnect()
-
-# Starts the reconnect loop
-SQLreconnect.start()
  
 ## Prints message in console if bot launches successfully
 @client.event
 async def on_ready():
+    test_loop.start()
     print("I got cash. Anyone need something?") # If you don't see this, the bot ain't online
 
 # Sends player info to channel 
