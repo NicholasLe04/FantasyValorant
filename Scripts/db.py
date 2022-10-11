@@ -75,7 +75,7 @@ class Database():
     ##PULLING PLAYER NAMES FROM playerlist.json AND SCRAPPING DATA ACCORDING TO NAME
     ##THEN FILLING THE DATA TABLE WITH THE APPROPIATE VALUES
 
-    def updateTable(self):
+    async def updateTable(self):
         for y, pName in enumerate(self.playerNames):
 
             realname = self.scrape.playerGetName(pName)
