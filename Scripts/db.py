@@ -170,16 +170,16 @@ class Database():
     #mycursor.execute("DROP TABLE users")
 
 #TESTING
-datab = Database()
+#datab = Database()
 #datab.addNewUser("283407511133093889")
 #datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
 #datab.addNewUser(34351351)
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
-datab.createTable()
-datab.fillNames()
-datab.updateTable()
+# datab.createTable()
+# datab.fillNames()
+# datab.updateTable()
 
 
 
