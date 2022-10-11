@@ -97,7 +97,7 @@ def embedPlayerInfo(player_name):
     except AttributeError:
         return "No player found"
 
-    embed=discord.Embed(title=f"{scraper.playerGetUsername(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname).upper())} {database.playerGetRegion(pname).lower().title()}")
+    embed=discord.Embed(title=f"{database.playerGetUserName(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}")
     embed.set_author(name=database.playerGetTeam(pname), icon_url=scraper.teamGetLogo(database.playerGetTeam(pname)))
     embed.set_thumbnail(url=database.playerGetPicture(pname))
     embed.add_field(name="ACS", value=database.playerGetGlobalACS(pname), inline=True)

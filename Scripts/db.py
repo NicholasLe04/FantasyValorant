@@ -144,6 +144,11 @@ class Database():
         for x in self.mycursor:
             return x[0]
 
+    def playerGetUserName(self, name: str):
+        self.mycursor.execute("SELECT userName FROM Players WHERE userName = %s", (name,))
+        for x in self.mycursor:
+            return x[0]
+
     def playerGetTeam(self, name: str):
         self.mycursor.execute("SELECT team FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
