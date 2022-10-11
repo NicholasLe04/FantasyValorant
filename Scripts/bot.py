@@ -1,18 +1,21 @@
-from ast import ExceptHandler
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import app_commands
-'''from VCTDataScraper.scrape import Scraper '''#                                            ***TO BE ADDED TO DB.PY***
 from db import Database
 from VCTDataScraper.scrape import Scraper
-import asyncio, os
 from threading import Thread
 
 # NOTES ABOUT PROGRAM:
-# TAKES ~ 30s TO LAUNCH, GIVE IT TIME
-# ONCE DONE, STOP YOUR PROGRAM
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
 # IF TOKEN LEAKED, GENERATE NEW ONE
+
+
+## TOKEN DO NOT LEAK
+TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
+
+## Creates necessary objects
+database = Database()
+scraper = Scraper()
 
 ## Initialize client
 class Client(commands.Bot):
@@ -32,33 +35,30 @@ class Client(commands.Bot):
     async def on_command_error(self,ctx,error):
         await ctx.reply(error,ephemeral = True)
 
+## Generate Client object
 client = Client()
-database = Database()
-scraper = Scraper()
 
 
 ### TESTING ZONE NO CAP AREA 51 TYPE BEAT FR
 
 
-@tasks.loop(minutes=30) # Every 30 min, update table
-async def test_loop():
-    print("Updating SQL Table")
-    dbUpdate = Thread(target = database.updateTable, args=())
+@tasks.loop(minutes=30) # Every 30 min, update player table
+async def db_update_loop():
+    channel = client.get_channel(1020057539292962856)   # Prints message in 'bot-commands' channel to confirm loop
+    await channel.send('Updating SQL Table')
+    dbUpdate = Thread(target = database.updateTable, args=())   # Runs database update on 2nd thread to run bot processes and database processes simultaneously
     dbUpdate.start()
-    print("SQL Table Updated")
 
 #####
 
 
 # client = commands.Bot(command_prefix='$', intents=discord.Intents.all())
-## TOKEN DO NOT LEAK
-TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaXU'
 
  
 ## Prints message in console if bot launches successfully
 @client.event
 async def on_ready():
-    test_loop.start()
+    db_update_loop.start()
     print("I got cash. Anyone need something?") # If you don't see this, the bot ain't online
 
 # Sends player info to channel 
