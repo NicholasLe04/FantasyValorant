@@ -6,6 +6,7 @@ from discord import app_commands
 from db import Database
 from VCTDataScraper.scrape import Scraper
 import asyncio, os
+from threading import Thread
 
 # NOTES ABOUT PROGRAM:
 # TAKES ~ 30s TO LAUNCH, GIVE IT TIME
@@ -42,7 +43,8 @@ scraper = Scraper()
 @tasks.loop(minutes=30) # Every 30 min, update table
 async def test_loop():
     print("Updating SQL Table")
-    await database.updateTable()
+    dbUpdate = Thread(target = database.updateTable, args=())
+    dbUpdate.start()
     print("SQL Table Updated")
 
 #####
