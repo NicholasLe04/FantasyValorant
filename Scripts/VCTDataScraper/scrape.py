@@ -168,10 +168,7 @@ class Scraper():
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        if (soup.find('div', {'class': 'wf-avatar team-header-logo'}).find('img').get('src') == None):
-            return 'https://www.vlr.gg/img/base/ph/sil.png'
-        else:
-            return 'https:' + soup.find('div', {'class': 'wf-avatar team-header-logo'}).find('img').get('src')
+        return 'https:' + soup.find('div', {'class': 'wf-avatar team-header-logo'}).find('img').get('src')
 
 
 

@@ -98,7 +98,7 @@ def embedPlayerInfo(player_name):
         return "No player found"
 
     print(scraper.flagEmojis.get(database.playerGetRegion(pname)))
-    print(scraper.teamGetLogo(database.playerGetTeam(pname)))
+    print(scraper.teamGetLogo(database.playerGetTeam(pname)).lower())
     embed=discord.Embed(title=f"{database.playerGetUserName(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}")
     embed.set_author(name=database.playerGetTeam(pname), icon_url=scraper.teamGetLogo(database.playerGetTeam(pname)))
     embed.set_thumbnail(url=database.playerGetPicture(pname))
