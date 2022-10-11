@@ -112,4 +112,5 @@ class Userbase():
 #TESTING
 
 userb = Userbase()
+userb.createTable()
 userb.addNewUser("328309041518608385")
