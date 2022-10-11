@@ -18,7 +18,7 @@ class Userbase():
         self.mycursor = self.db.cursor()
 
     def createTable(self):
-        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20),
+        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20) PRIMARY KEY,
                         playerName VARCHAR(40) DEFAULT 'user' NOT NULL,
                         pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
                         points int DEFAULT 0 NOT NULL,
@@ -37,10 +37,10 @@ class Userbase():
         self.db.commit()
 
     def addNewUser(self, discID: str):
-        self.mycursor.execute("INSERT into Users (discordID) %s", (discID))
-        self.mycursor.execute("SELECT FROM Users WHERE discordID = %s", (discID,))
+        self.mycursor.execute("INSERT into Users (discordID) VALUES (%s)", (discID,))
+        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
         for x in self.mycursor:
-            print(x)
+            print("Was added to the Users Table " + x[0])
         self.db.commit()
         logging.info("Added a user %s to User Table", (discID))
     
@@ -112,5 +112,4 @@ class Userbase():
 #TESTING
 
 userb = Userbase()
-userb.createTable()
 userb.addNewUser("328309041518608385")
