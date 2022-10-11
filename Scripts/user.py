@@ -19,7 +19,6 @@ class Userbase():
 
     def createTable(self):
         self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20) PRIMARY KEY,
-                        playerName VARCHAR(40) DEFAULT 'user' NOT NULL,
                         pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
                         points int DEFAULT 0 NOT NULL,
                         userID int PRIMARY KEY AUTO_INCREMENT)""")
@@ -112,4 +111,5 @@ class Userbase():
 #TESTING
 
 userb = Userbase()
+userb.createTable()
 userb.addNewUser("328309041518608385")
