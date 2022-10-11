@@ -185,7 +185,8 @@ class Scraper():
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
-            return soup.find_all('div', {'class': 'wf-card'})[2].find('div', {'style': 'font-weight: 500;'}).text.strip()
+            #return soup.find_all('div', {'class': 'wf-card'})[2].find('div', {'style': 'font-weight: 500;'}).text.strip()
+            return soup.find('div', {'style': 'font-weight: 500;'}).text.strip()
         except:
             return 'no team' 
 
