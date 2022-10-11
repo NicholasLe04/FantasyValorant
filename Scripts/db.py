@@ -50,28 +50,7 @@ class Database():
                         playerImg VARCHAR(50) DEFAULT 'https://www.vlr.gg/img/base/ph/sil.png' NOT NULL,
                         flag VARCHAR(15) DEFAULT ':pirate_flag:' NOT NULL,
                         personID int PRIMARY KEY AUTO_INCREMENT)""")
-        '''
-        self.mycursor.execute("""CREATE TABLE Users (userID int PRIMARY KEY AUTO_INCREMENT,
-                        playerName VARCHAR(40) DEFAULT 'user' NOT NULL,
-                        pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
-                        points int DEFAULT 0 NOT NULL)""")
-        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(50),
-                        playerName VARCHAR(40) DEFAULT 'user' NOT NULL,
-                        pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
-                        points int DEFAULT 0 NOT NULL,
-                        userID int PRIMARY KEY AUTO_INCREMENT)""")
-                        
-        self.mycursor.execute("""CREATE TABLE UserTeam (teamID int PRIMARY KEY, FOREIGN KEY(teamID) REFERENCES Users(userID),
-                        leagueID VARCHAR(16) DEFAULT '-1' NOT NULL,
-                        playerTeam VARCHAR(40) DEFAULT 'userTeam' NOT NULL,
-                        coach VARCHAR(25) DEFAULT 'Missing' NOT NULL,
-                        playerOne VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerTwo VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerThree VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerFour VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerFive VARCHAR(20) DEFAULT 'Missing' NOT NULL)
-                        """)
-        '''
+
     def fillNames (self):
         for y, pName in enumerate(self.playerNames):
             Q1 = "INSERT INTO Players (userName) VALUES (%s)"
@@ -191,16 +170,16 @@ class Database():
     #mycursor.execute("DROP TABLE users")
 
 #TESTING
-#datab = Database()
+datab = Database()
 #datab.addNewUser("283407511133093889")
 #datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
 #datab.addNewUser(34351351)
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
-# datab.createTable()
-# datab.fillNames()
-# datab.updateTable()
+datab.createTable()
+datab.fillNames()
+datab.updateTable()
 
 
 
