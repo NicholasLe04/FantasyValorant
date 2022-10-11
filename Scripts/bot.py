@@ -42,7 +42,7 @@ scraper = Scraper()
 @tasks.loop(minutes=30) # Every 30 min, update table
 async def test_loop():
     print("Updating SQL Table")
-    database.updateTable()
+    await database.updateTable()
     print("SQL Table Updated")
 
 #####

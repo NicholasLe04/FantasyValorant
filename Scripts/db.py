@@ -2,6 +2,7 @@ import mysql.connector
 from VCTDataScraper.scrape import Scraper
 import json
 import os
+import asyncio
 
 class Database():
 
