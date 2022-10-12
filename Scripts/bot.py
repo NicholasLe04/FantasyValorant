@@ -45,7 +45,7 @@ client = Client()
 @tasks.loop(minutes=30) # Every 30 min, update player table
 async def db_update_loop():
     channel = client.get_channel(1020057539292962856)   # Prints message in 'bot-commands' channel to confirm loop
-    await channel.send('Updating SQL Table')
+    await channel.send('Updating SQL Table',delete_after=120)
     dbUpdate = Thread(target = database.updateTable, args=())   # Runs database update on 2nd thread to run bot processes and database processes simultaneously
     dbUpdate.start()
 
@@ -68,6 +68,7 @@ async def on_ready():
 # Defining player command
 # Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
+    user_id = ctx.author.id # This obtains the user's id who sent the command
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if embedPlayerInfo(player) == "No player found":
