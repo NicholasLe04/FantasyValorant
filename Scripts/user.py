@@ -105,34 +105,19 @@ class Userbase():
     # returns an array 
     def uTeamGetPlayers(self, name: str) -> list:
         output = []
-        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE teamID = %s", (name,))
-        for x in self.mycursor:
-            output.append(str(x[0]))
-            break
-        
-        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
-        for x in self.mycursor:
-            output.append(str(x[0]))
-            break
-
-        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE teamID = %s", (name,))
-        for x in self.mycursor:
-            output.append(str(x[0]))
-            break
-
-        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE teamID = %s", (name,))
-        for x in self.mycursor:
-            output.append(str(x[0]))
-            break
-
-        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE teamID = %s", (name,))
-        for x in self.mycursor:
-            output.append(str(x[0]))
-            break
-        print(output)
+        output.append(self.uTeamGetPlayerOne(name))
+        output.append(self.uTeamGetPlayerTwo(name))
+        output.append(self.uTeamGetPlayerThree(name))
+        output.append(self.uTeamGetPlayerFour(name))
+        output.append(self.uTeamGetPlayerFive(name))
         return output
 
-    '''def uTeamGetPlayerTwo(self, name: str):
+    def uTeamGetPlayerOne(self, name: str):
+        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
+        for x in self.mycursor:
+            return x[0]
+
+    def uTeamGetPlayerTwo(self, name: str):
         self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
@@ -150,7 +135,7 @@ class Userbase():
     def uTeamGetPlayerFive(self, name: str):
         self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
-            return x[0]'''
+            return x[0]
 
     def addPlayer(self, name: str, discID: str, pos: int):
         pname = None
