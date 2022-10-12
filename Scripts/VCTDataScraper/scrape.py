@@ -165,6 +165,8 @@ class Scraper():
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
     def teamGetLogo(self, team: str):
+        if (team == 'no team'):
+            return 'https://www.vlr.gg/img/base/ph/sil.png'
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
