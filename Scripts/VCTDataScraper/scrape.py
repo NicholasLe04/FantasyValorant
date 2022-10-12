@@ -170,7 +170,7 @@ class Scraper():
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
     def teamGetLogo(self, team: str):
-        return self.teamImgs.get(team)
+        return self.teamImgs.get(team.lower())
 
 
 
