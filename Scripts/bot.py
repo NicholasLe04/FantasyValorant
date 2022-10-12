@@ -4,6 +4,7 @@ from discord import app_commands
 from db import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
+from user import Userbase
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
@@ -69,6 +70,7 @@ async def on_ready():
 # Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
     user_id = ctx.author.id # This obtains the user's id who sent the command
+    Userbase.addNewUser(user_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if embedPlayerInfo(player) == "No player found":

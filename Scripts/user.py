@@ -1,5 +1,7 @@
+from tabnanny import check
 import mysql.connector
 import logging
+from db import Database
 
 class Userbase():
 
@@ -34,14 +36,26 @@ class Userbase():
                         playerFive VARCHAR(20) DEFAULT 'Missing' NOT NULL)
                         """)
         self.db.commit()
+    
+    def checkForUser(self, discID: str):
+        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s" (discID,))
+        for x in self.mycursor:
+            if x[0] == discID:
+                print("User Found")
+                return False
+            else:
+                logging.info("User not found creating a table entry...")
+                return True
 
     def addNewUser(self, discID: str):
-        self.mycursor.execute("INSERT into Users (discordID) VALUES (%s)", (discID,))
-        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
-        for x in self.mycursor:
-            print("Was added to the Users Table " + x[0])
-        self.db.commit()
-        logging.info("Added a user %s to User Table", (discID))
+        if(self.checkForUser(discID)):
+            self.mycursor.execute("INSERT into Users (discordID) VALUES (%s)", (discID,))
+            self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
+            for x in self.mycursor:
+                print("Was added to the Users Table " + x[0])
+            self.db.commit()
+            logging.info("Added a user %s to User Table", (discID))
+
     
     '''def userGetDiscordID(self, name: str):
         self.mycursor.execute("SELECT discordID FROM Users WHERE userName = %s", (name,))
