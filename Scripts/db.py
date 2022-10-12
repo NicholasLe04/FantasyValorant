@@ -38,7 +38,7 @@ class Database():
     ## CREATING A DATA TABLE NAMED PLAYERS
     # Commented out as datatable has already been created locally on Joshua's Laptop
     def createTable(self):
-        self.mycursor.execute("""CREATE TABLE Players (userName VARCHAR(25) DEFAULT 'noname' NOT NULL,
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Players (userName VARCHAR(25) DEFAULT 'noname' NOT NULL,
                         realName VARCHAR(30) DEFAULT 'noname' NOT NULL,
                         team VARCHAR(20) DEFAULT 'noname' NOT NULL,
                         country VARCHAR(25) DEFAULT 'noname' NOT NULL,
@@ -175,16 +175,14 @@ class Database():
     #mycursor.execute("DROP TABLE users")
 
 #TESTING
-#datab = Database()
+datab = Database()
 #datab.addNewUser("283407511133093889")
 #datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
 #datab.addNewUser(34351351)
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
-# datab.createTable()
-# datab.fillNames()
-# datab.updateTable()
+datab.createTable()
 
 
 
