@@ -89,11 +89,12 @@ async def player(ctx: commands.Context, player = ""):
 async def roster(ctx: commands.Context, roster = ""):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     # Reply with a private message (command) or public message (using prefix)                   implement database
+    userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     await ctx.reply(embed=embedRosterInfo(user_id))
 ## EMBED FUNCTIONS
 
-def embedPlayerInfo(player_name):
+async def embedPlayerInfo(player_name):
     pname = None
 
     for name in database.playerNames:
@@ -116,9 +117,10 @@ def embedPlayerInfo(player_name):
     return (embed)
 
 
-def embedRosterInfo(user_id):
+async def embedRosterInfo(user_id):
     embed = discord.Embed(title=f"{str(user_id)}'s Roster")
-    embed.set_thumbnail(url=client.fetch_user(user_id).avatar)
+    user = await client.fetch_user(user_id)
+    embed.set_thumbnail(url=user.avatar)
     embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(user_id)))
     embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(user_id))) 
     embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(user_id)))
