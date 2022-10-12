@@ -85,7 +85,7 @@ class Userbase():
             return x[0]
     '''
     def uTeamGetTeamID(self, name: str):
-        self.mycursor.execute("SELECT teamID FROM userTeams WHERE discordID = %s", (name,))
+        self.mycursor.execute("SELECT teamID FROM UserTeam WHERE discordID = %s", (name,))
         for x in self.mycursor:
             return x[0]'''
 

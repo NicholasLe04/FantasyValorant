@@ -1,6 +1,7 @@
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import app_commands
+from discord import Member
 from db import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
@@ -85,16 +86,23 @@ async def player(ctx: commands.Context, player = ""):
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining roster command
-# Params: ctx is defined as the command's context, player is set to empty string by default
-async def roster(ctx: commands.Context, roster = ""):
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+# Params: ctx is defined as the command's context, user is optional field
+async def roster(ctx: commands.Context, member: Member):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
+<<<<<<< Updated upstream
     await ctx.reply(embed=embedRosterInfo(user_id))
 
 
     
+=======
+    if (member == None):
+        user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+        await ctx.reply(embed = embedRosterInfo(user_id))
+    else:
+        await ctx.reply(embed = embedRosterInfo(str(member.id)))
+>>>>>>> Stashed changes
 ## EMBED FUNCTIONS
 
 def embedPlayerInfo(player_name):
