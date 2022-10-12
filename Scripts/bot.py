@@ -6,6 +6,7 @@ from db import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
 from user import Userbase
+from time import time
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
@@ -145,6 +146,7 @@ def embedRosterInfo(member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     for x in range (5):
         embed.add_field(name="Player " + str(x + 1) + ": ", value=userbase.uTeamGetPlayers(str(member.id))[x])
+        time.sleep (10)
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
