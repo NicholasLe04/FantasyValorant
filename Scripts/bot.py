@@ -87,7 +87,7 @@ async def player(ctx: commands.Context, player = ""):
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining roster command
 # Params: ctx is defined as the command's context, user is optional field
-async def roster(ctx: commands.Context, member: Member):
+async def roster(ctx: commands.Context, member: Member = None):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(user_id)
