@@ -90,37 +90,37 @@ class Userbase():
             return x[0]'''
 
     def uTeamGetLeagueID(self, name: str):
-        self.mycursor.execute("SELECT leagueID FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT leagueID FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def uTeamGetCoach(self, name: str):
-        self.mycursor.execute("SELECT coach FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT coach FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def uTeamGetPlayerOne(self, name: str):
-        self.mycursor.execute("SELECT playerOne FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def uTeamGetPlayerTwo(self, name: str):
-        self.mycursor.execute("SELECT playerTwo FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
     
     def uTeamGetPlayerThree(self, name: str):
-        self.mycursor.execute("SELECT playerThree FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
     
     def uTeamGetPlayerFour(self, name: str):
-        self.mycursor.execute("SELECT playerFour FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
     
     def uTeamGetPlayerFive(self, name: str):
-        self.mycursor.execute("SELECT playerFive FROM userTeams WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
