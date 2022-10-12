@@ -10,7 +10,7 @@ class Scraper():
     teamid_file_name = os.path.join(file_dir, 'JsonFiles/teamids.json')
     playerid_file_name = os.path.join(file_dir, 'JsonFiles/playerids.json')
     flags_file_name = os.path.join(file_dir, 'JsonFiles/flags.json')
-    teamimgs_file_name = os.path.join(file_dir, 'JsonFiles/teamimgs.json')
+    teamlogos_file_name = os.path.join(file_dir, 'JsonFiles/teamlogos.json')
 
     ## Loads team page ID's to access team page urls
     with open(teamid_file_name) as ids:
@@ -22,14 +22,22 @@ class Scraper():
     with open(flags_file_name) as flags:
         flagEmojis = json.load(flags)
 
-    with open(teamimgs_file_name) as teamimgs:
-        teamImgs = json.load(teamimgs)
+    with open(teamlogos_file_name) as teamlogos:
+        teamLogos = json.load(teamlogos)
 
     ## 'Scrapper' object constructor
     def __init__(self):
         self.headers = {
             "User_Agent": ""
         }
+
+    ## Gets and returns url to the overview page of the most recent match on vlr.gg/matches/results
+    def getRecentUrl(self):
+        html = requests.get('https://www.vlr.gg/matches/results')
+        soup = BeautifulSoup(html.content, 'lxml')
+
+        url = 'https://www.vlr.gg' + soup.find('a', {'class': 'match-item'}).get('href')    # Gets and returns url to the overview page of the most recent match on vlr.gg/matches/results
+        return url
 
     #############################
     #                           #
@@ -39,8 +47,8 @@ class Scraper():
 
     ## Gets and returns ARRAY of team names 
     #  example output: ['OpTic Gaming', 'Sentinels']
-    #  example usage: 'ScrapperObject'.getTeams(url)[0] = 'OpTic Gaming'
-    def getTeams(self, match_id):    
+    #  example usage: 'ScrapperObject'.scrapeMatchTeams(url)[0] = 'OpTic Gaming'
+    def scrapeMatchTeams(self, match_id):    
         html = requests.get('https://www.vlr.gg/' + str(match_id))
         soup = BeautifulSoup(html.content, 'lxml')
 
@@ -51,8 +59,8 @@ class Scraper():
 
     ## Gets and returns ARRAY of score from match 
     #  example output: [2,1]
-    #  example usage: ScrapperObject'.getScore(url)[0] = 2
-    def getScore(self, match_id):
+    #  example usage: ScrapperObject'.scrapeMatchScore(url)[0] = 2
+    def scrapeMatchScore(self, match_id):
         html = requests.get('https://www.vlr.gg/' + str(match_id))
         soup = BeautifulSoup(html.content, 'lxml')
         
@@ -61,8 +69,8 @@ class Scraper():
 
     ## Gets and returns DICTIONARY filled with ARRAYS of map scores 
     #  example ouput: {'map-1': [15, 13], 'map-2': [6, 13], 'map-3': [16, 14], 'map-4': [13, 5]}
-    #  example usage: 'ScrapperObject'.getMapScores(url).get('map-1') = [15, 13]
-    def getMapScores(self, match_id: int):
+    #  example usage: 'ScrapperObject'.scrapeMapScores(url).get('map-1') = [15, 13]
+    def scrapeMapScores(self, match_id: int):
         html = requests.get('https://www.vlr.gg/' + str(match_id))
         soup = BeautifulSoup(html.content, 'lxml')
         map_scores = soup.find_all('div', {'class': 'score'})
@@ -75,7 +83,7 @@ class Scraper():
         return output
 
     ## Gets and returns ARRAY filled with DICTIONARIES for each player's info/stats 
-    def getPlayerStats(self, match_id: int):
+    def scrapeMatchPlayerStats(self, match_id: int):
         html = requests.get('https://www.vlr.gg/' + str(match_id))
         soup = BeautifulSoup(html.content, 'lxml')
         stat_tables = soup.find_all('tbody')    # Finds all table body elements
@@ -106,7 +114,7 @@ class Scraper():
 
 
     ## Gets all game stats (Teams, score, players, acs, K/D/A)
-    def getMatchStats(self, match_id):
+    def scrapeMatchInfo(self, match_id):
         info={}
 
         ## Get team names
@@ -124,14 +132,6 @@ class Scraper():
 
         return info
 
-    ## Gets and returns url to the overview page of the most recent match on vlr.gg/matches/results
-    def getRecentUrl(self):
-        html = requests.get('https://www.vlr.gg/matches/results')
-        soup = BeautifulSoup(html.content, 'lxml')
-
-        url = 'https://www.vlr.gg' + soup.find('a', {'class': 'match-item'}).get('href')    # Gets and returns url to the overview page of the most recent match on vlr.gg/matches/results
-        return url
-
 
     #############################
     #                           #
@@ -141,8 +141,7 @@ class Scraper():
     
     ##  Returns an ARRAY filled with DICTIONARIES of all the players IGNs and url's to their images
     #   example output: [{'name 1': 'vanity', 'image 1': 'https://owcdn.net/img/6224a530d0113.png'}, 'name 2': 'curry', 'image 2': 'https:/img/base/ph/sil.png'}, etc.]
-    #   example usage: 'ScrapperObject'.getPlayers('cloud9') = [{'name 1': 'vanity', 'image 1': 'https://owcdn.net/img/6224a530d0113.png'}, etc.]
-    def teamGetPlayers(self, team: str):
+    def scrapeTeamPlayers(self, team: str):
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml')
@@ -163,14 +162,16 @@ class Scraper():
 
         return output
 
-    def teamGetName(self, team: str):
+    ## Returns team name with correct capitalization
+    def scrapeTeamName(self, team: str):
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
-    def teamGetLogo(self, team: str):
-        return self.teamImgs.get(team.lower())
+    ## Returns the url for the logo of the inputted team
+    def scrapeTeamLogo(self, team: str):
+        return self.teamLogos.get(team.lower())
 
 
 
@@ -181,8 +182,8 @@ class Scraper():
     ##############################
 
     ## Returns player_name's team
-    #  Example: scrapper.playerGetTeam('tenz') = 'Sentinels'
-    def playerGetTeam(self, player_name: str):
+    #  Example: scrapper.scrapePlayerTeam('tenz') = 'Sentinels'
+    def scrapePlayerTeam(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -193,24 +194,24 @@ class Scraper():
             return 'no team' 
 
     ## Returns 'player_name''s real name 
-    #  Example: scrapper.playerGetName('tenz') = 'Tyson Ngo'
-    def playerGetName(self, player_name: str):
+    #  Example: scrapper.scrapePlayerName('tenz') = 'Tyson Ngo'
+    def scrapePlayerName(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('h2', {'class': 'player-real-name'}).text.strip()
 
     ## Returns player_name's username witch correct capitalization
-    #  Example: scrapper.playerGetTeam('tenz') = 'TenZ'
-    def playerGetUsername(self, player_name: str):
+    #  Example: scrapper.scrapePlayerTeam('tenz') = 'TenZ'
+    def scrapePlayerUsername(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
     ## Returns player_name's picture or default image url
-    #  Example: scrapper.playerGetPicture('tenz') = 'https://www.vlr.gg/img/base/ph/sil.png'
-    def playerGetPicture(self, player_name:str):
+    #  Example: scrapper.scrapePlayerPicture('tenz') = 'https://www.vlr.gg/img/base/ph/sil.png'
+    def scrapePlayerPicture(self, player_name:str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -221,16 +222,16 @@ class Scraper():
             return image
 
     ## Returns player_name's country/region
-    #  Example: scrapper.playerGetRegion('tenz') = 'CANADA'
-    def playerGetRegion(self, player_name: str):
+    #  Example: scrapper.scrapePlayerRegion('tenz') = 'CANADA'
+    def scrapePlayerRegion(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         return soup.find('div', {'class': 'ge-text-light'}).text.strip()
 
     ## Returns player_name's country/region flag emoji
-    #  Example: scrapper.playerGetPicture('tenz') = ':flag_ca:'
-    def playerGetRegionFlag(self, player_name: str):
+    #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
+    def scrapePlayerRegionFlag(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -238,8 +239,8 @@ class Scraper():
         return self.flagEmojis.get(region)
         
     ## Returns player_name's average ACS over the past 90 days
-    #  Example: scrapper.playerGetPicture('tenz') = '229.6'
-    def playerGetGlobalACS(self, player_name: str):
+    #  Example: scrapper.scrapePlayerGlobalACS('tenz') = '229.6'
+    def scrapePlayerGlobalACS(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -249,8 +250,8 @@ class Scraper():
             return 0.0
 
     ## Returns player_name's average K/D over the past 90 days
-    #  Example: scrapper.playerGetPicture('tenz') = '1.2'
-    def playerGetGlobalKD(self, player_name: str):
+    #  Example: scrapper.scrapePlayerGlobalKD('tenz') = '1.2'
+    def scrapePlayerGlobalKD(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -260,8 +261,8 @@ class Scraper():
             return 0.0
     
     ## Returns player_name's average kills per round over the past 90 days
-    #  Example: scrapper.playerGetPicture('tenz') = '0.84'
-    def playerGetGlobalKPR(self, player_name: str):
+    #  Example: scrapper.scrapePlayerGlobalKPR('tenz') = '0.84'
+    def scrapePlayerGlobalKPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -271,8 +272,8 @@ class Scraper():
             return 0.0
 
     ## Returns player_name's average assists per round over the past 90 days
-    #  Example: scrapper.playerGetPicture('tenz') = '0.11'
-    def playerGetGlobalAPR(self, player_name: str):
+    #  Example: scrapper.scrapePlayerGlobalAPR('tenz') = '0.11'
+    def scrapePlayerGlobalAPR(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
@@ -282,8 +283,8 @@ class Scraper():
             return 0.0
 
     ## Returns player_name's most played agent over the past 90 days
-    #  Example: scrapper.playerGetPicture('tenz') = 'Chamber'
-    def playerGetAgent(self, player_name: str):
+    #  Example: scrapper.scrapePlayerAgent('tenz') = 'Chamber'
+    def scrapePlayerAgent(self, player_name: str):
         url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 

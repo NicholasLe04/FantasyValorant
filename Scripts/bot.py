@@ -41,17 +41,13 @@ class Client(commands.Bot):
 client = Client()
 
 
-### TESTING ZONE NO CAP AREA 51 TYPE BEAT FR
-
-
-@tasks.loop(minutes=30) # Every 30 min, update player table
+## Updates player table every 30 minutes
+@tasks.loop(minutes=30)
 async def db_update_loop():
     channel = client.get_channel(1020057539292962856)   # Prints message in 'bot-commands' channel to confirm loop
     await channel.send('Updating SQL Table',delete_after=120)
     dbUpdate = Thread(target = database.updateTable, args=())   # Runs database update on 2nd thread to run bot processes and database processes simultaneously
     dbUpdate.start()
-
-#####
 
 
 # client = commands.Bot(command_prefix='$', intents=discord.Intents.all())

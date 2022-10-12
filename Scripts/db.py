@@ -23,7 +23,7 @@ class Database():
         self.mycursor = self.db.cursor()
         self.playeridJson = open(playerlist_dir)
         self.data = json.load(self.playeridJson)
-        self.scrape = Scraper() #Declaring Scrapper object
+        self.scraper = Scraper() #Declaring Scrapper object
         self.playerNames = []
         for i in self.data.get('players'):
             self.playerNames.append(i)
@@ -65,43 +65,43 @@ class Database():
     def updateTable(self):
         for y, pName in enumerate(self.playerNames):
 
-            realname = self.scrape.playerGetName(pName)
+            realname = self.scraper.scrapePlayerName(pName)
             I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
             self.mycursor.execute(I1, (realname, pName,))
 
-            teamName = self.scrape.playerGetTeam(pName)
+            teamName = self.scraper.scrapePlayerTeam(pName)
             I2 = "UPDATE Players SET team = %s WHERE userName = %s"
             self.mycursor.execute(I2, (teamName, pName,))
 
-            country = self.scrape.playerGetRegion(pName)
+            country = self.scraper.scrapePlayerRegion(pName)
             I3 = "UPDATE Players SET country = %s WHERE userName = %s"
             self.mycursor.execute(I3, (country, pName,))
 
-            acs = self.scrape.playerGetGlobalACS(pName)
+            acs = self.scraper.scrapePlayerGlobalACS(pName)
             I4 = "UPDATE Players SET globalACS = %s WHERE userName = %s"
             self.mycursor.execute(I4, (acs, pName,))
             
-            kd = self.scrape.playerGetGlobalKD(pName)
+            kd = self.scraper.scrapePlayerGlobalKD(pName)
             I5 = "UPDATE Players SET globalKD = %s WHERE userName = %s"
             self.mycursor.execute(I5, (kd, pName,))
 
-            kpr = self.scrape.playerGetGlobalKPR(pName)
+            kpr = self.scraper.scrapePlayerGlobalKPR(pName)
             I6 = "UPDATE Players SET globalKPR = %s WHERE userName = %s"
             self.mycursor.execute(I6, (kpr, pName,))
 
-            apr = self.scrape.playerGetGlobalAPR(pName)
+            apr = self.scraper.scrapePlayerGlobalAPR(pName)
             I7 = "UPDATE Players SET globalAPR = %s WHERE userName = %s"
             self.mycursor.execute(I7, (apr, pName,))
 
-            agt = self.scrape.playerGetAgent(pName)
+            agt = self.scraper.scrapePlayerAgent(pName)
             I8 = "UPDATE Players SET agent = %s WHERE userName = %s"
             self.mycursor.execute(I8, (agt, pName,))
 
-            img = self.scrape.playerGetPicture(pName)
+            img = self.scraper.scrapePlayerPicture(pName)
             I9 = "UPDATE Players SET playerImg = %s WHERE userName = %s"
             self.mycursor.execute(I9, (img, pName,))
 
-            flg = self.scrape.flagEmojis.get(self.playerGetRegion(pName).upper())
+            flg = self.scraper.flagEmojis.get(self.scrapePlayerRegion(pName).upper())
             I10 = "UPDATE Players SET flag = %s WHERE userName = %s"
             if (flg == None):
                 self.mycursor.execute(I10, (":pirate_flag:", pName))
