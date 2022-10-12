@@ -17,6 +17,7 @@ TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaX
 ## Creates necessary objects
 database = Database()
 scraper = Scraper()
+userbase = Userbase()
 
 ## Initialize client
 class Client(commands.Bot):
@@ -70,7 +71,7 @@ async def on_ready():
 # Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    Userbase.addNewUser(user_id)
+    userbase.addNewUser(user_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if embedPlayerInfo(player) == "No player found":
