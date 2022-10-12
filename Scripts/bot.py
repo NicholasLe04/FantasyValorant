@@ -93,9 +93,9 @@ async def roster(ctx: commands.Context, member: Member = None):
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if (member == None):
-        await ctx.reply(embed = embedRosterInfo(user_id))
+        await ctx.reply(embed = embedRosterInfo(ctx.author))
     else:
-        await ctx.reply(embed = embedRosterInfo(str(member.id)))
+        await ctx.reply(embed = embedRosterInfo(member))
         
 ## EMBED FUNCTIONS
 
@@ -122,13 +122,13 @@ def embedPlayerInfo(player_name):
     return (embed)
 
 
-def embedRosterInfo(user_id):
-    embed = discord.Embed(title=f"{client.get_user(int(user_id)).mention}'s Roster")
-    embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(user_id)))
-    embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(user_id))) 
-    embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(user_id)))
-    embed.add_field(name="Player 4", value=str(userbase.uTeamGetPlayerFour(user_id)))
-    embed.add_field(name="Player 5", value=str(userbase.uTeamGetPlayerFive(user_id)))
+def embedRosterInfo(member):
+    embed = discord.Embed(title=f"{member.mention}'s Roster")
+    embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(member.id)))
+    embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(member.id))) 
+    embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(member.id)))
+    embed.add_field(name="Player 4", value=str(userbase.uTeamGetPlayerFour(member.id)))
+    embed.add_field(name="Player 5", value=str(userbase.uTeamGetPlayerFive(member.id)))
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
