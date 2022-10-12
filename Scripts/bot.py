@@ -123,7 +123,7 @@ def embedPlayerInfo(player_name):
 
 
 def embedRosterInfo(member):
-    embed = discord.Embed(title=f"{member.mention}'s Roster")
+    embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(member.id)))
     embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(member.id))) 
     embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(member.id)))
