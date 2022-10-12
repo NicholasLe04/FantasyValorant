@@ -20,10 +20,11 @@ class Userbase():
         self.mycursor = self.db.cursor()
 
     def createTable(self):
-        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20) PRIMARY KEY,
+        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20),
                         pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
                         points int DEFAULT 0 NOT NULL,
-                        userID int PRIMARY KEY AUTO_INCREMENT)""")
+                        userID int AUTO_INCREMENT,
+                        PRIMARY KEY(userID, discordID))""")
                         
         self.mycursor.execute("""CREATE TABLE UserTeam (teamID int PRIMARY KEY, FOREIGN KEY(teamID) REFERENCES Users(discordID),
                         leagueID VARCHAR(16) DEFAULT '-1' NOT NULL,
@@ -38,7 +39,7 @@ class Userbase():
         self.db.commit()
     
     def checkForUser(self, discID: str):
-        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s" (discID,))
+        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
         for x in self.mycursor:
             if x[0] == discID:
                 print("User Found")
@@ -125,5 +126,3 @@ class Userbase():
 #TESTING
 
 userb = Userbase()
-userb.createTable()
-userb.addNewUser("328309041518608385")
