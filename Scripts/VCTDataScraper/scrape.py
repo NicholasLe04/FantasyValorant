@@ -10,6 +10,8 @@ class Scraper():
     teamid_file_name = os.path.join(file_dir, 'JsonFiles/teamids.json')
     playerid_file_name = os.path.join(file_dir, 'JsonFiles/playerids.json')
     flags_file_name = os.path.join(file_dir, 'JsonFiles/flags.json')
+    teamimgs_file_name = os.path.join(file_dir, 'JsonFiles/teamimgs.json')
+
     ## Loads team page ID's to access team page urls
     with open(teamid_file_name) as ids:
         teamIDs = json.load(ids)
@@ -19,6 +21,9 @@ class Scraper():
 
     with open(flags_file_name) as flags:
         flagEmojis = json.load(flags)
+
+    with open(teamimgs_file_name) as teamimgs:
+        teamImgs = json.load(teamimgs)
 
     ## 'Scrapper' object constructor
     def __init__(self):
@@ -165,10 +170,7 @@ class Scraper():
         return soup.find('h1', {'class': 'wf-title'}).text.strip()
 
     def teamGetLogo(self, team: str):
-        url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml') 
-        return 'https:' + soup.find('div', {'class': 'wf-avatar team-header-logo'}).find('img').get('src')
+        return self.teamImgs.get(team)
 
 
 
