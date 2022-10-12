@@ -91,18 +91,11 @@ async def roster(ctx: commands.Context, member: Member):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-<<<<<<< Updated upstream
-    await ctx.reply(embed=embedRosterInfo(user_id))
-
-
-    
-=======
     if (member == None):
         user_id = str(ctx.author.id) # This obtains the user's id who sent the command
         await ctx.reply(embed = embedRosterInfo(user_id))
     else:
         await ctx.reply(embed = embedRosterInfo(str(member.id)))
->>>>>>> Stashed changes
 ## EMBED FUNCTIONS
 
 def embedPlayerInfo(player_name):
