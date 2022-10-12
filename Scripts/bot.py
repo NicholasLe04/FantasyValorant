@@ -66,7 +66,7 @@ async def on_ready():
 # /roster
 
 # Sends player info to channel 
-@client.hybrid_command(name = "player", with_app_command = True, description = "Obtain player statistics",aliases = ['p'])
+@client.hybrid_command(name = "player", with_app_command = True, description = "Obtains player statistics",aliases = ['p'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining player command
@@ -82,7 +82,7 @@ async def player(ctx: commands.Context, player = ""):
     await ctx.reply(embed=embedPlayerInfo(player))
 
 # Returns a user's roster
-@client.hybrid_command(name = "roster", with_app_command = True, description = "Get your fantasy roster",aliases = ['r'])
+@client.hybrid_command(name = "roster", with_app_command = True, description = "Gets your fantasy roster",aliases = ['r'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining roster command
@@ -96,6 +96,24 @@ async def roster(ctx: commands.Context, member: Member = None):
         await ctx.reply(embed = embedRosterInfo(ctx.author))
     else:
         await ctx.reply(embed = embedRosterInfo(member))
+
+# Adds a player to user's roster
+@client.hybrid_command(name = "add", with_app_command = True, description = "Adds a player to your roster",aliases = ['a'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, user is optional field
+async def add(ctx: commands.Context, player):
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(user_id)
+
+''' #### to be implemented, add an index query too
+    if (member == None):
+        await ctx.reply(embed = embedRosterInfo(ctx.author))
+    else:
+        await ctx.reply(embed = embedRosterInfo(member))'''
         
 ## EMBED FUNCTIONS
 
