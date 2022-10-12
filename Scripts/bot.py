@@ -99,12 +99,12 @@ async def roster(ctx: commands.Context, member: Member = None):
         await ctx.reply(embed = embedRosterInfo(member))
 
 # Adds a player to user's roster
-@client.hybrid_command(name = "add", with_app_command = True, description = "Adds a player to your roster",aliases = ['a'])
+@client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
 # Params: ctx is defined as the command's context, user is optional field
-async def add(ctx: commands.Context, player):
+async def add(ctx: commands.Context, player_name):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
@@ -118,7 +118,7 @@ async def add(ctx: commands.Context, player):
         
 ## EMBED FUNCTIONS
 
-def embedPlayerInfo(player_name):
+def embedPlayerInfo(player_name : str):
     pname = None
 
     for name in database.playerNames:
@@ -141,10 +141,10 @@ def embedPlayerInfo(player_name):
     return (embed)
 
 
-def embedRosterInfo(member):
+def embedRosterInfo(member : Member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
-    for x in range (5):
-        embed.add_field(name="Player " + str(x + 1) + ": ", value=userbase.uTeamGetPlayers(str(member.id))[x])
+    for x, player in enumerate(userbase.uTeamGetPlayers(str(member.id))):
+        embed.add_field(name="Player " + str(x + 1) + ": ", value=player)
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
@@ -152,7 +152,7 @@ def embedRosterInfo(member):
 ## Method returns average player ACS over course of match
 ## Pulled from match
 ## EX: getPlayerMatchACS()
-def getPlayerMatchACS(match ,player_name):
+def getPlayerMatchACS(match, player_name):
     for player_stats in database.getPlayerStats(match):
         if player_stats[0].lower() == player_name.lower():
             return player_stats[1]
