@@ -59,6 +59,11 @@ async def on_ready():
     db_update_loop.start()
     print("I got cash. Anyone need something?") # If you don't see this, the bot ain't online
 
+
+### USER COMMANDS
+# /player
+# /roster
+
 # Sends player info to channel 
 @client.hybrid_command(name = "player", with_app_command = True, description = "Obtain player statistics",aliases = ['p'])
 # Works only on selected server (guild)
@@ -85,24 +90,9 @@ async def roster(ctx: commands.Context, roster = ""):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-    await ctx.reply("Player 1: " + str(userbase.uTeamGetPlayerOne(user_id)) + "Player 2: " + str(userbase.uTeamGetPlayerTwo(user_id)) + "Player 3: " + str(userbase.uTeamGetPlayerThree(user_id)) + "Player 4: " + str(userbase.uTeamGetPlayerFour(user_id)) + "Player 5: " + str(userbase.uTeamGetPlayerFive(user_id)))
+    await ctx.reply(embed=embedRosterInfo(user_id))
+## EMBED FUNCTIONS
 
-# Methods that interface with discord.py
-
-## Team info method
-## Returns an embed with respective team information
-## Usage: await ctx.reply(embed = embedTeamInfo(team_name))
-## embedTeamInfo(team_name) will return embed
-# def embedTeamInfo(team_name):
-#     embed=discord.Embed(title=f"{getTeamName(team_name)}",description=f"**{getTeamAbbreviation(team_name)}**\n{getTeamRegionFlag(team_name)} {getTeamRegion(team_name).lower().title()}") # This cannot be implemented until these methods are added
-#     embed.set_thumbnail(url=getTeamLogo(team_name))
-#     # For loop here for each player to be listed, inline 2 wide
-#     return (embed)
-
-## Player info method                                                                                                          ***TO BE ADDED TO DB.PY***
-## Returns an embed with respective player information
-## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
-## embedPlayerInfo(player_name) will return embed 
 def embedPlayerInfo(player_name):
     pname = None
 
@@ -126,6 +116,16 @@ def embedPlayerInfo(player_name):
     return (embed)
 
 
+def embedRosterInfo(user_id):
+    embed = discord.Embed(title=f"{str(user_id)}'s Roster")
+    embed.set_thumbnail(url=client.fetch_user(user_id).avatar_url)
+    embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(user_id)))
+    embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(user_id))) 
+    embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(user_id)))
+    embed.add_field(name="Player 4", value=str(userbase.uTeamGetPlayerFour(user_id)))
+    embed.add_field(name="Player 5", value=str(userbase.uTeamGetPlayerFive(user_id)))
+    return (embed)
+
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
 ## Method returns average player ACS over course of match
@@ -146,3 +146,27 @@ async def shutdown(ctx):
 
 # Runs bot
 client.run(TOKEN)
+
+
+
+
+
+
+
+
+# Methods that interface with discord.py
+
+## Team info method
+## Returns an embed with respective team information
+## Usage: await ctx.reply(embed = embedTeamInfo(team_name))
+## embedTeamInfo(team_name) will return embed
+# def embedTeamInfo(team_name):
+#     embed=discord.Embed(title=f"{getTeamName(team_name)}",description=f"**{getTeamAbbreviation(team_name)}**\n{getTeamRegionFlag(team_name)} {getTeamRegion(team_name).lower().title()}") # This cannot be implemented until these methods are added
+#     embed.set_thumbnail(url=getTeamLogo(team_name))
+#     # For loop here for each player to be listed, inline 2 wide
+#     return (embed)
+
+## Player info method                                                                                                          ***TO BE ADDED TO DB.PY***
+## Returns an embed with respective player information
+## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
+## embedPlayerInfo(player_name) will return embed 
