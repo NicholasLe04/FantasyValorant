@@ -85,7 +85,7 @@ async def roster(ctx: commands.Context, roster = ""):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-    await ctx.reply("Player 1: " + userbase.uTeamGetPlayerOne + "Player 2: " + userbase.uTeamGetPlayerTwo + "Player 3: " + userbase.uTeamGetPlayerThree + "Player 4: " + userbase.uTeamGetPlayerFour + "Player 5: " + userbase.uTeamGetPlayerFive)
+    await ctx.reply("Player 1: " + str(userbase.uTeamGetPlayerOne) + "Player 2: " + str(userbase.uTeamGetPlayerTwo) + "Player 3: " + str(userbase.uTeamGetPlayerThree) + "Player 4: " + str(userbase.uTeamGetPlayerFour) + "Player 5: " + str(userbase.uTeamGetPlayerFive))
 
 # Methods that interface with discord.py
 
