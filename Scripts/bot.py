@@ -92,11 +92,15 @@ async def player(ctx: commands.Context, player = ""):
 ## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
 ## embedPlayerInfo(player_name) will return embed 
 def embedPlayerInfo(player_name):
+    pname = ''
+
     for name in database.playerNames:
-        if (player_name == name.lower()):
+        if (player_name.lower() == name.lower()):
             pname = name
             break
-        return "No player found"
+    
+    if (pname == ''):
+        return 'Player not found'
         
 
     embed=discord.Embed(title=f"{database.playerGetUserName(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}")
