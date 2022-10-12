@@ -105,10 +105,30 @@ class Userbase():
     # returns an array 
     def uTeamGetPlayers(self, name: str) -> list:
         output = []
-        self.mycursor.execute("SELECT playerOne, playerTwo, playerThree, playerFour, playerFive FROM UserTeam WHERE teamID = %s", (name,))
+        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
-            for player in x:
-                output.append(player)
+            output.append(str(x[0]))
+            break
+        
+        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
+        for x in self.mycursor:
+            output.append(str(x[0]))
+            break
+
+        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE teamID = %s", (name,))
+        for x in self.mycursor:
+            output.append(str(x[0]))
+            break
+
+        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE teamID = %s", (name,))
+        for x in self.mycursor:
+            output.append(str(x[0]))
+            break
+
+        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE teamID = %s", (name,))
+        for x in self.mycursor:
+            output.append(str(x[0]))
+            break
 
         return output
 
