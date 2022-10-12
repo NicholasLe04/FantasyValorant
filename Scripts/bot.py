@@ -92,9 +92,12 @@ async def roster(ctx: commands.Context, roster = ""):
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     await ctx.reply(embed=embedRosterInfo(user_id))
+
+
+    
 ## EMBED FUNCTIONS
 
-async def embedPlayerInfo(player_name):
+def embedPlayerInfo(player_name):
     pname = None
 
     for name in database.playerNames:
@@ -117,10 +120,8 @@ async def embedPlayerInfo(player_name):
     return (embed)
 
 
-async def embedRosterInfo(user_id):
+def embedRosterInfo(user_id):
     embed = discord.Embed(title=f"{str(user_id)}'s Roster")
-    user = await client.fetch_user(user_id)
-    embed.set_thumbnail(url=user.avatar)
     embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(user_id)))
     embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(user_id))) 
     embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(user_id)))
