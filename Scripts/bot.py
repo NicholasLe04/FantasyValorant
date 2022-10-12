@@ -19,6 +19,7 @@ TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaX
 database = Database()
 scraper = Scraper()
 userbase = Userbase()
+userbase.createTable()
 
 ## Initialize client
 class Client(commands.Bot):
@@ -142,11 +143,8 @@ def embedPlayerInfo(player_name):
 
 def embedRosterInfo(member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
-    embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(member.id)))
-    embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(member.id))) 
-    embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(member.id)))
-    embed.add_field(name="Player 4", value=str(userbase.uTeamGetPlayerFour(member.id)))
-    embed.add_field(name="Player 5", value=str(userbase.uTeamGetPlayerFive(member.id)))
+    for x in range (5):
+        embed.add_field(name="Player " + str(x + 1) + ": ", value=userbase.uTeamGetPlayers(str(member.id))[x])
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***

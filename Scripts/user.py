@@ -102,10 +102,10 @@ class Userbase():
         for x in self.mycursor:
             return x[0]
 
+    # returns an array 
     def uTeamGetPlayers(self, name: str):
         self.mycursor.execute("SELECT playerOne, playerTwo, playerThree, playerFour, playerFive FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
-            print(x)
             return x
 
     '''def uTeamGetPlayerTwo(self, name: str):
@@ -166,4 +166,4 @@ class Userbase():
 
 #TESTING
 
-userb = Userbase()
+# userb = Userbase()
