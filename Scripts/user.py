@@ -20,13 +20,13 @@ class Userbase():
         self.mycursor = self.db.cursor()
 
     def createTable(self):
-        self.mycursor.execute("""CREATE TABLE Users (discordID VARCHAR(20),
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Users (discordID VARCHAR(20),
                         pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
                         points int DEFAULT 0 NOT NULL,
                         userID int AUTO_INCREMENT,
                         PRIMARY KEY(userID, discordID))""")
                         
-        self.mycursor.execute("""CREATE TABLE UserTeam (teamID int PRIMARY KEY, FOREIGN KEY(teamID) REFERENCES Users(discordID),
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserTeam (teamID VARCHAR(20) PRIMARY KEY REFERENCES Users(discordID),
                         leagueID VARCHAR(16) DEFAULT '-1' NOT NULL,
                         playerTeam VARCHAR(40) DEFAULT 'userTeam' NOT NULL,
                         coach VARCHAR(25) DEFAULT 'Missing' NOT NULL,
@@ -39,12 +39,13 @@ class Userbase():
         self.db.commit()
     
     def checkForUser(self, discID: str):
-        self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
+        self.mycursor.execute("SELECT EXISTS(SELECT discordID FROM Users WHERE discordID = %s)", (discID,))
         for x in self.mycursor:
-            if x[0] == discID:
+            if(x[0] == 1):
                 print("User Found")
                 return False
             else:
+                print("Proceeding...")
                 logging.info("User not found creating a table entry...")
                 return True
 
@@ -126,3 +127,4 @@ class Userbase():
 #TESTING
 
 userb = Userbase()
+userb.createTable()

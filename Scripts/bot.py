@@ -79,6 +79,18 @@ async def player(ctx: commands.Context, player = ""):
         return None
     await ctx.reply(embed=embedPlayerInfo(player))
 
+# Returns a user's roster
+@client.hybrid_command(name = "roster", with_app_command = True, description = "Get your fantasy roster",aliases = ['r'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining roster command
+# Params: ctx is defined as the command's context, player is set to empty string by default
+async def roster(ctx: commands.Context, roster = ""):
+    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral = True) # Idek what this does but it works lol
+    await ctx.reply("Player 1: " + userbase.uTeamGetPlayerOne + "Player 2: " + userbase.uTeamGetPlayerTwo + "Player 3: " + userbase.uTeamGetPlayerThree + "Player 4: " + userbase.uTeamGetPlayerFour + "Player 5: " + userbase.uTeamGetPlayerFive)
+
 # Methods that interface with discord.py
 
 ## Team info method
