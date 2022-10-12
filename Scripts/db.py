@@ -101,7 +101,7 @@ class Database():
             I9 = "UPDATE Players SET playerImg = %s WHERE userName = %s"
             self.mycursor.execute(I9, (img, pName,))
 
-            flg = self.scraper.flagEmojis.get(self.scrapePlayerRegion(pName).upper())
+            flg = self.scraper.flagEmojis.get(self.scraper.scrapePlayerRegion(pName).upper())
             I10 = "UPDATE Players SET flag = %s WHERE userName = %s"
             if (flg == None):
                 self.mycursor.execute(I10, (":pirate_flag:", pName))
