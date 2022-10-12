@@ -129,7 +129,7 @@ class Userbase():
         for x in self.mycursor:
             output.append(str(x[0]))
             break
-
+        print(output)
         return output
 
     '''def uTeamGetPlayerTwo(self, name: str):
