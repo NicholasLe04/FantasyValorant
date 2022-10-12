@@ -118,7 +118,7 @@ def embedPlayerInfo(player_name):
 
 def embedRosterInfo(user_id):
     embed = discord.Embed(title=f"{str(user_id)}'s Roster")
-    embed.set_thumbnail(url=client.fetch_user(user_id).avatar_url)
+    embed.set_thumbnail(url=client.fetch_user(user_id).avatar)
     embed.add_field(name="Player 1", value=str(userbase.uTeamGetPlayerOne(user_id)))
     embed.add_field(name="Player 2", value=str(userbase.uTeamGetPlayerTwo(user_id))) 
     embed.add_field(name="Player 3", value=str(userbase.uTeamGetPlayerThree(user_id)))
