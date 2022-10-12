@@ -145,7 +145,8 @@ def embedPlayerInfo(player_name : str):
 def embedRosterInfo(member : Member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     for x, player in enumerate(userbase.uTeamGetPlayers(str(member.id))):
-        embed.add_field(name="Player " + str(x + 1) + ": ", value=player)
+        embed.add_field(name="Player " + str(x + 1) + ": ", value=str(player))
+        time.sleep (10)
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
