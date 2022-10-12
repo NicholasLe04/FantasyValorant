@@ -92,13 +92,13 @@ async def player(ctx: commands.Context, player = ""):
 ## Usage: await ctx.reply(embed = embedPlayerInfo(player_name))
 ## embedPlayerInfo(player_name) will return embed 
 def embedPlayerInfo(player_name):
-    try:
-        pname = scraper.playerGetUsername(player_name)
-    except AttributeError:
+    for name in database.playerNames:
+        if (player_name == name.lower()):
+            pname = name
+            break
         return "No player found"
+        
 
-    print(scraper.flagEmojis.get(database.playerGetRegion(pname)))
-    print(database.playerGetTeam(pname)).lower()
     embed=discord.Embed(title=f"{database.playerGetUserName(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}")
     embed.set_author(name=database.playerGetTeam(pname), icon_url=scraper.teamGetLogo(database.playerGetTeam(pname)))
     embed.set_thumbnail(url=database.playerGetPicture(pname))
