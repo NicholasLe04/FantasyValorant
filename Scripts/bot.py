@@ -100,7 +100,7 @@ def embedPlayerInfo(player_name):
             break
     
     if (pname == ''):
-        return 'Player not found'
+        raise AttributeError('Player not found')
         
 
     embed=discord.Embed(title=f"{database.playerGetUserName(pname)}",description=f"**{database.playerGetRealName(pname)}**\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}")
