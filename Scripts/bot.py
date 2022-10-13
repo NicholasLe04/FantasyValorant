@@ -105,7 +105,7 @@ async def roster(ctx: commands.Context, member: Member = None):
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
-# Params: ctx is defined as the command's context, user is optional field
+# Params: ctx is defined as the command's context, player_name is the selected player
 async def draft(ctx: commands.Context, player_name : str):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(user_id)
@@ -114,17 +114,18 @@ async def draft(ctx: commands.Context, player_name : str):
     if userbase.addPlayer(player_name, user_id) == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
-    elif userbase.addPlayer(player_name, user_id) == "Roster full":
+    if userbase.addPlayer(player_name, user_id) == "Roster full":
         await  ctx.reply("Roster full!")
         return None
     await ctx.reply("Player added")
 
-    # Adds a player to user's roster
+
+# Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
-# Params: ctx is defined as the command's context, user is optional field
+# Params: ctx is defined as the command's context, player_name is the selected player
 async def drop(ctx: commands.Context, player_name : str):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(user_id)

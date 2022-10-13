@@ -150,28 +150,27 @@ class Userbase():
 
 
     def dropPlayer(self, player_name: str, discID: str):
+
+        if (player_name not in self.uTeamGetPlayers(discID)):
+            return ("No player found")
+
         if(self.uTeamGetPlayerOne(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", ("Missing", discID,))
-            print("Proceeding...")
-            self.db.commit()
+
         elif(self.uTeamGetPlayerTwo(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", ("Missing", discID,))
-            print("Proceeding...")
-            self.db.commit()
+            
         elif(self.uTeamGetPlayerThree(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", ("Missing", discID,))
-            print("Proceeding...")
-            self.db.commit()
+            
         elif(self.uTeamGetPlayerFour(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", ("Missing", discID,))
-            print("Proceeding...")
-            self.db.commit()
+            
         elif(self.uTeamGetPlayerFive(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", ("Missing", discID,))
-            print("Proceeding...")
-            self.db.commit()
-        else:
-            return("No player found")
+
+        print("Proceeding...")
+        self.db.commit()
 
 
     ##################
