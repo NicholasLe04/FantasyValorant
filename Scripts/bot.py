@@ -107,9 +107,13 @@ async def roster(ctx: commands.Context, member: Member = None):
 # Params: ctx is defined as the command's context, user is optional field
 async def draft(ctx: commands.Context, player_name : str):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addPlayer(player_name, user_id)
+    
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
+    if userbase.addPlayer(player_name, user_id) == "No player found":
+        await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
+        return None
+    await ctx.reply("Player added")
 
 ''' #### to be implemented, add an index query too
     if (member == None):
