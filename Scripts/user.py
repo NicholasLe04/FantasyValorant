@@ -147,7 +147,8 @@ class Userbase():
 
         if (pname == None):
             return "No player found"
-
+        
+        print(self.uTeamGetPlayerOne)
         if(self.uTeamGetPlayerOne == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
