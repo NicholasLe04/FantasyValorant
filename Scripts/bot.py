@@ -95,10 +95,10 @@ async def roster(ctx: commands.Context, member: Member = None):
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if (member == None):
-        await ctx.reply(embed = embedRosterInfo(ctx.author, user_id))
+        await ctx.reply(embed = embedRosterInfo(ctx.author))
     else:
         #await ctx.reply(embed = embedRosterInfo(member))
-        await ctx.reply(embed = embedRosterInfo(member, user_id))
+        await ctx.reply(embed = embedRosterInfo(member))
 
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
@@ -147,16 +147,15 @@ def embedPlayerInfo(player_name : str):
     return (embed)
 
 
-def embedRosterInfo(member : Member, id: str):
-    testi = str(id)
+def embedRosterInfo(member : Member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     #embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
-    embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers("328309041518608385")[0], inline=False)
+    embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
     print(id)
     print(userbase.uTeamGetPlayers(id)[0])
     print(userbase.uTeamGetPlayers)
-    embed.add_field(name="Player 2", value=userbase.uTeamGetPlayers(id)[1], inline=False)
-    embed.add_field(name="Player 3", value=userbase.uTeamGetPlayers(testi)[2], inline=False)
+    embed.add_field(name="Player 2", value=userbase.uTeamGetPlayers(str(member.id))[1], inline=False)
+    embed.add_field(name="Player 3", value=userbase.uTeamGetPlayers(str(member.id))[2], inline=False)
     embed.add_field(name="Player 4", value=userbase.uTeamGetPlayers(str(member.id))[3], inline=False)
     embed.add_field(name="Player 5", value=userbase.uTeamGetPlayers(str(member.id))[4], inline=False)
     print(userbase.uTeamGetPlayers(str(member.id))[4])
