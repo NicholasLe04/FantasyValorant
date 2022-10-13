@@ -144,34 +144,38 @@ class Userbase():
             if (name.lower() == dName.lower()):
                 pname = dName
                 break
-
+        print(pname)
         if (pname == None):
             return "No player found"
-        
-        print(self.uTeamGetPlayerOne)
-        if(self.uTeamGetPlayerOne == "Missing"):
+        print(self.uTeamGetPlayerOne(discID))
+        print(self.uTeamGetPlayerFive(discID))
+        if(self.uTeamGetPlayerOne(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerTwo == "Missing"):
+        elif(self.uTeamGetPlayerTwo(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerThree == "Missing"):
+        elif(self.uTeamGetPlayerThree(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFour == "Missing"):
+        elif(self.uTeamGetPlayerFour(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFive == "Missing"):
+        elif(self.uTeamGetPlayerFive(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+        else:
+            print("Something went wrong and you ended up here! hello")
             
         
 
 #TESTING
 
-# userb = Userbase()
+'''userb = Userbase()
+userb.uTeamGetPlayerFour("328309041518608385")
+userb.addPlayer("yay", "328309041518608385")'''
