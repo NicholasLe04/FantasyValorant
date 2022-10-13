@@ -111,14 +111,11 @@ class Userbase():
         output.append(self.uTeamGetPlayerThree(name))
         output.append(self.uTeamGetPlayerFour(name))
         output.append(self.uTeamGetPlayerFive(name))
-        print(output)
         return output
 
     def uTeamGetPlayerOne(self, name: str) -> str:
-        print("THIS IS IMPORTANT" + name)
         self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(name),))
         for x in self.mycursor:
-            print("LIKEWISE VERY IMPORTANT: " + x[0])
             return x[0]
 
     def uTeamGetPlayerTwo(self, name: str) -> str:
@@ -148,7 +145,6 @@ class Userbase():
             if (name.lower() == dName.lower()):
                 pname = dName
                 break
-        print(pname)
         if (pname == None):
             return "No player found"
         if(self.uTeamGetPlayerOne(discID) == "Missing"):
