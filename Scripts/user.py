@@ -114,6 +114,7 @@ class Userbase():
         return output
 
     def uTeamGetPlayerOne(self, name: str) -> str:
+        print("THIS IS IMPORTANT" + name)
         self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
             return x[0]
