@@ -137,7 +137,7 @@ class Userbase():
         for x in self.mycursor:
             return x[0]
 
-    def addPlayer(self, name: str, discID: str, pos: int):
+    def addPlayer(self, name: str, discID: str):
         pname = None
 
         for dName in database.playerNames:
@@ -148,23 +148,23 @@ class Userbase():
         if (pname == None):
             return "No player found"
 
-        if(pos == 1):
+        if(self.uTeamGetPlayerOne == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(pos == 2):
+        elif(self.uTeamGetPlayerTwo == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(pos == 3):
+        elif(self.uTeamGetPlayerThree == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(pos == 4):
+        elif(self.uTeamGetPlayerFour == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(pos == 5):
+        elif(self.uTeamGetPlayerFive == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()

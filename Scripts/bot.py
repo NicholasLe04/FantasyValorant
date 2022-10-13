@@ -105,11 +105,11 @@ async def roster(ctx: commands.Context, member: Member = None):
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
 # Params: ctx is defined as the command's context, user is optional field
-async def add(ctx: commands.Context, player_name):
+async def draft(ctx: commands.Context, player_name : str):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    userbase.addPlayer(player_name, user_id)
 
 ''' #### to be implemented, add an index query too
     if (member == None):
