@@ -127,7 +127,7 @@ class Userbase():
         if (pname == None):
             return "No player found"
 
-        if ("Missing" not in self.uTeamGetPlayers(discID)):
+        if (self.uTeamGetPlayerOne(discID) != "Missing" and self.uTeamGetPlayerTwo(discID) != "Missing" and self.uTeamGetPlayerThree(discID) != "Missing" and self.uTeamGetPlayerFour(discID) != "Missing" and self.uTeamGetPlayerFive(discID) != "Missing"):
             return "Roster full"
 
         if(self.uTeamGetPlayerOne(discID) == "Missing"):
@@ -151,7 +151,7 @@ class Userbase():
 
     def dropPlayer(self, player_name: str, discID: str):
 
-        if (player_name not in self.uTeamGetPlayers(discID)):
+        if (player_name not in [x.lower() for x in [self.uTeamGetPlayers]]):
             return ("No player found")
 
         if(self.uTeamGetPlayerOne(discID).lower() == player_name.lower()):
