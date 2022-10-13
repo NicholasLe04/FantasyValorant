@@ -117,6 +117,7 @@ class Userbase():
         print("THIS IS IMPORTANT" + name)
         self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print("LIKEWISE VERY IMPORTANT: " + x[0])
             return x[0]
 
     def uTeamGetPlayerTwo(self, name: str) -> str:
