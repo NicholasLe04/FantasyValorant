@@ -20,6 +20,7 @@ class Userbase():
         self.logging = logging.basicConfig(filename = 'logging.log', format = '`%(asctime)s %(message)s' , level = logging.INFO)
         self.mycursor = self.db.cursor()
 
+    ###CREATES TABLE USER & USERTEAM IF THEY DO NOT EXIST
     def createTable(self):
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Users (discordID VARCHAR(20),CONSTRAINT userteam_ibfk_1 PRIMARY KEY(discordID),
                         pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
@@ -29,17 +30,21 @@ class Userbase():
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserTeam (discordID VARCHAR(20),
                         PRIMARY KEY (discordID),
                         FOREIGN KEY(discordID) REFERENCES Users(discordID) ON UPDATE CASCADE,
-                        leagueID VARCHAR(16) DEFAULT '-1' NOT NULL,
+                        leagueID int UNIQUE KEY DEFAULT '-1' NOT NULL,
                         playerTeam VARCHAR(40) DEFAULT 'userTeam' NOT NULL,
-                        coach VARCHAR(25) DEFAULT 'Missing' NOT NULL,
-                        playerOne VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerTwo VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerThree VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerFour VARCHAR(20) DEFAULT 'Missing' NOT NULL,
-                        playerFive VARCHAR(20) DEFAULT 'Missing' NOT NULL) ENGINE = INNODB
+                        coach VARCHAR(25) DEFAULT '' NOT NULL,
+                        playerOne VARCHAR(20) DEFAULT '' NOT NULL,
+                        playerTwo VARCHAR(20) DEFAULT '' NOT NULL,
+                        playerThree VARCHAR(20) DEFAULT '' NOT NULL,
+                        playerFour VARCHAR(20) DEFAULT '' NOT NULL,
+                        playerFive VARCHAR(20) DEFAULT '' NOT NULL) ENGINE = INNODB
                         """)
         self.db.commit()
-    
+
+    #CHECKS THE USER TABLE FOR THE DISCORD ID PASSED TO THE FUNCTION
+    #IF IT IS FOUND DOES NOTHING AND RETURNS FALSE
+    #IF NOT FOUND RETURNS TRUE -- REFERENCE ADD NEW USER
+
     def checkForUser(self, discID: str):
         self.mycursor.execute("SELECT EXISTS(SELECT discordID FROM Users WHERE discordID = %s)", (discID,))
         for x in self.mycursor:
@@ -50,6 +55,8 @@ class Userbase():
                 print("Proceeding...")
                 logging.info("User not found creating a table entry...")
                 return True
+
+    #IF CHECK FOR USER RETURNS TRUE CREATES AN ENTRY IN BOTH TABLES FOR THEIR DISC ID
 
     def addNewUser(self, discID: str):
         if(self.checkForUser(discID)):
@@ -67,6 +74,9 @@ class Userbase():
         for x in self.mycursor:
             return x[0]'''
 
+    ##################################
+    # GETTER METHODS FROM THE TABLES #
+    ##################################
     def userGetPlayerName(self, name: str):
         self.mycursor.execute("SELECT playerName FROM Users WHERE discordID = %s", (name,))
         for x in self.mycursor:
@@ -208,7 +218,8 @@ class Userbase():
 
 userb = Userbase()
 userb.createTable()
-'''userb.addNewUser("328309041518608385")
+userb.addNewUser("328309041518608385")
+'''
 print("P4 " + userb.uTeamGetPlayerOne("328309041518608385"))
 userb.addPlayer("yay", "328309041518608385")
 userb.addPlayer("yay", "328309041518608385")
