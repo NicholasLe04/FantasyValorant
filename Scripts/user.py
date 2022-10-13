@@ -170,23 +170,23 @@ class Userbase():
             return("Roster full")
 
     def dropPlayer(self, player_name: str, discID: str):
-        if(self.uTeamGetPlayerOne(discID) == player_name):
+        if(self.uTeamGetPlayerOne(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", ("Missing", discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerTwo(discID) == player_name):
+        elif(self.uTeamGetPlayerTwo(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", ("Missing", discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerThree(discID) == player_name):
+        elif(self.uTeamGetPlayerThree(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", ("Missing", discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFour(discID) == player_name):
+        elif(self.uTeamGetPlayerFour(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", ("Missing", discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFive(discID) == player_name):
+        elif(self.uTeamGetPlayerFive(discID).lower() == player_name.lower()):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", ("Missing", discID,))
             print("Proceeding...")
             self.db.commit()
