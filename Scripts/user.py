@@ -115,26 +115,31 @@ class Userbase():
     def uTeamGetPlayerOne(self, name: str) -> str:
         self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print(x[0])
             return x[0]
 
     def uTeamGetPlayerTwo(self, name: str) -> str:
         self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print(x[0])
             return x[0]
     
     def uTeamGetPlayerThree(self, name: str) -> str:
         self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print(x[0])
             return x[0]
     
     def uTeamGetPlayerFour(self, name: str) -> str:
         self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print(x[0])
             return x[0]
     
     def uTeamGetPlayerFive(self, name: str) -> str:
         self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE teamID = %s", (name,))
         for x in self.mycursor:
+            print(x[0])
             return x[0]
 
     def addPlayer(self, name: str, discID: str):

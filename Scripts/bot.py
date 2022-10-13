@@ -149,10 +149,12 @@ def embedPlayerInfo(player_name : str):
 def embedRosterInfo(member : Member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
+    print(userbase.uTeamGetPlayers(str(member.id))[0])
     embed.add_field(name="Player 2", value=userbase.uTeamGetPlayers(str(member.id))[1], inline=False)
     embed.add_field(name="Player 3", value=userbase.uTeamGetPlayers(str(member.id))[2], inline=False)
     embed.add_field(name="Player 4", value=userbase.uTeamGetPlayers(str(member.id))[3], inline=False)
     embed.add_field(name="Player 5", value=userbase.uTeamGetPlayers(str(member.id))[4], inline=False)
+    print(userbase.uTeamGetPlayers(str(member.id))[4])
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
