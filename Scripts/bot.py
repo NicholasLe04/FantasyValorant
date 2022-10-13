@@ -116,10 +116,11 @@ async def draft(ctx: commands.Context, player_name : str):
     userbase.addNewUser(user_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    if userbase.addPlayer(player_name, user_id) == "No player found":
+    x = userbase.addPlayer(player_name, user_id)
+    if x == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
-    if userbase.addPlayer(player_name, user_id) == "Roster full":
+    elif x == "Roster full":
         await  ctx.reply("Roster filled!")
         return None
     await ctx.reply("Player added")
