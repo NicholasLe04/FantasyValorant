@@ -168,7 +168,7 @@ class Userbase():
             print("Proceeding...")
             self.db.commit()
         else:
-            print("Something went wrong and you ended up here! hello")
+            return("Roster full")
             
         
 

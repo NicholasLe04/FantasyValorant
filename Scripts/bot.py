@@ -114,6 +114,9 @@ async def draft(ctx: commands.Context, player_name : str):
     if userbase.addPlayer(player_name, user_id) == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
+    elif userbase.addPlayer(player_name, user_id) == "Roster full":
+        await  ctx.reply("Roster full!")
+        return None
     await ctx.reply("Player added")
 
 ''' #### to be implemented, add an index query too
@@ -150,11 +153,11 @@ def embedPlayerInfo(player_name : str):
 def embedRosterInfo(member : Member):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     #embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
-    embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(member.id)[0], inline=False)
-    embed.add_field(name="Player 2", value=userbase.uTeamGetPlayers(member.id)[1], inline=False)
-    embed.add_field(name="Player 3", value=userbase.uTeamGetPlayers(member.id)[2], inline=False)
-    embed.add_field(name="Player 4", value=userbase.uTeamGetPlayers(member.id)[3], inline=False)
-    embed.add_field(name="Player 5", value=userbase.uTeamGetPlayers(member.id)[4], inline=False)
+    embed.add_field(name="Players", value=userbase.uTeamGetPlayers(member.id)[0], inline=False)
+    embed.add_field(value=userbase.uTeamGetPlayers(member.id)[1], inline=False)
+    embed.add_field(value=userbase.uTeamGetPlayers(member.id)[2], inline=False)
+    embed.add_field(value=userbase.uTeamGetPlayers(member.id)[3], inline=False)
+    embed.add_field(value=userbase.uTeamGetPlayers(member.id)[4], inline=False)
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
