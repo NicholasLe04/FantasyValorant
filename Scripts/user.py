@@ -104,45 +104,45 @@ class Userbase():
             return x[0]
 
     # returns an array 
-    def uTeamGetPlayers(self, name: str) -> list:
+    def uTeamGetPlayers(self, user_id: str) -> list:
         output = []
-        output.append(self.uTeamGetPlayerOne(name))
-        output.append(self.uTeamGetPlayerTwo(name))
-        output.append(self.uTeamGetPlayerThree(name))
-        output.append(self.uTeamGetPlayerFour(name))
-        output.append(self.uTeamGetPlayerFive(name))
+        output.append(self.uTeamGetPlayerOne(user_id))
+        output.append(self.uTeamGetPlayerTwo(user_id))
+        output.append(self.uTeamGetPlayerThree(user_id))
+        output.append(self.uTeamGetPlayerFour(user_id))
+        output.append(self.uTeamGetPlayerFive(user_id))
         return output
 
-    def uTeamGetPlayerOne(self, name: str) -> str:
-        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(name),))
+    def uTeamGetPlayerOne(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(user_id),))
         for x in self.mycursor:
             return x[0]
 
-    def uTeamGetPlayerTwo(self, name: str) -> str:
-        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE discordID = %s", (name,))
+    def uTeamGetPlayerTwo(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE discordID = %s", (user_id,))
         for x in self.mycursor:
             return x[0]
     
-    def uTeamGetPlayerThree(self, name: str) -> str:
-        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE discordID = %s", (name,))
+    def uTeamGetPlayerThree(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE discordID = %s", (user_id,))
         for x in self.mycursor:
             return x[0]
     
-    def uTeamGetPlayerFour(self, name: str) -> str:
-        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE discordID = %s", (name,))
+    def uTeamGetPlayerFour(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE discordID = %s", (user_id,))
         for x in self.mycursor:
             return x[0]
     
-    def uTeamGetPlayerFive(self, name: str) -> str:
-        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE discordID = %s", (name,))
+    def uTeamGetPlayerFive(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE discordID = %s", (user_id,))
         for x in self.mycursor:
             return x[0]
 
-    def addPlayer(self, name: str, discID: str):
+    def addPlayer(self, player_name: str, discID: str):
         pname = None
 
         for dName in database.playerNames:
-            if (name.lower() == dName.lower()):
+            if (player_name.lower() == dName.lower()):
                 pname = dName
                 break
         if (pname == None):
@@ -169,7 +169,15 @@ class Userbase():
             self.db.commit()
         else:
             return("Roster full")
-            
+
+    def dropPlayer(self, player_name: str, discID: str):
+        for player in self.uTeamGetPlayers(discID):
+            if (player.lower() == player_name.lower()):
+                player = "Missing"
+                return None
+
+        return "No player found"
+
         
 
 #TESTING
