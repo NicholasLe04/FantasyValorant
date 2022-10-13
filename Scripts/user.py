@@ -148,28 +148,26 @@ class Userbase():
         if (pname == None):
             return "No player found"
 
-        if(self.uTeamGetPlayerOne == "None"):
+        if(self.uTeamGetPlayerOne == None):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerTwo == "None"):
+        elif(self.uTeamGetPlayerTwo == None):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerThree == "None"):
+        elif(self.uTeamGetPlayerThree == None):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFour == "None"):
+        elif(self.uTeamGetPlayerFour == None):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFive == "None"):
+        elif(self.uTeamGetPlayerFive == None):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        else:
-            return "Invalid position"
             
         
 
