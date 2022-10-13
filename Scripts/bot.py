@@ -154,6 +154,7 @@ def embedRosterInfo(member : Member, id: str):
     embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers("328309041518608385")[0], inline=False)
     print(id)
     print(userbase.uTeamGetPlayers(id)[0])
+    print(userbase.uTeamGetPlayers)
     embed.add_field(name="Player 2", value=userbase.uTeamGetPlayers(id)[1], inline=False)
     embed.add_field(name="Player 3", value=userbase.uTeamGetPlayers(testi)[2], inline=False)
     embed.add_field(name="Player 4", value=userbase.uTeamGetPlayers(str(member.id))[3], inline=False)

@@ -110,6 +110,7 @@ class Userbase():
         output.append(self.uTeamGetPlayerThree(name))
         output.append(self.uTeamGetPlayerFour(name))
         output.append(self.uTeamGetPlayerFive(name))
+        print(output)
         return output
 
     def uTeamGetPlayerOne(self, name: str) -> str:
