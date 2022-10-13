@@ -127,7 +127,7 @@ class Userbase():
         if (pname == None):
             return "No player found"
 
-        if (self.uTeamGetPlayerOne(discID) != "Missing" and self.uTeamGetPlayerTwo(discID) != "Missing" and self.uTeamGetPlayerThree(discID) != "Missing" and self.uTeamGetPlayerFour(discID) != "Missing" and self.uTeamGetPlayerFive(discID) != "Missing"):
+        if ("Missing" not in self.uTeamGetPlayers(discID)):
             return "Roster full"
 
         if(self.uTeamGetPlayerOne(discID) == "Missing"):

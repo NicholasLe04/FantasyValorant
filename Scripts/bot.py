@@ -64,8 +64,11 @@ async def on_ready():
 
 
 ### USER COMMANDS
-# /player
-# /roster
+# '/player'
+# '/roster'
+# '/draft'
+# '/drop'
+# '/drop-all'
 
 # Sends player info to channel 
 @client.hybrid_command(name = "player", with_app_command = True, description = "Obtains player statistics",aliases = ['p'])
@@ -82,6 +85,7 @@ async def player(ctx: commands.Context, player = ""):
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
     await ctx.reply(embed=embedPlayerInfo(player))
+
 
 # Returns a user's roster
 @client.hybrid_command(name = "roster", with_app_command = True, description = "Gets your fantasy roster",aliases = ['r'])
@@ -100,6 +104,7 @@ async def roster(ctx: commands.Context, member: Member = None):
         #await ctx.reply(embed = embedRosterInfo(member))
         await ctx.reply(embed = embedRosterInfo(member))
 
+
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
 # Works only on selected server (guild)
@@ -115,7 +120,7 @@ async def draft(ctx: commands.Context, player_name : str):
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
     if userbase.addPlayer(player_name, user_id) == "Roster full":
-        await  ctx.reply("Roster full!")
+        await  ctx.reply("Roster filled!")
         return None
     await ctx.reply("Player added")
 
@@ -135,6 +140,41 @@ async def drop(ctx: commands.Context, player_name : str):
         await ctx.reply("No player has been found under that name in your roster. Are you sure you typed it correctly?")
         return None
     await ctx.reply("Player dropped")
+
+
+# Removes player from user's roster
+@client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def drop(ctx: commands.Context, player_name : str):
+    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(user_id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    if userbase.dropPlayer(player_name, user_id) == "No player found":
+        await ctx.reply("No player has been found under that name in your roster. Are you sure you typed it correctly?")
+        return None
+    await ctx.reply("Player dropped")
+
+
+# Removes player from user's roster
+@client.hybrid_command(name = "drop-all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def drop_all(ctx: commands.Context, player_name : str):
+    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(user_id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    for player in userbase.uTeamGetPlayers(user_id):
+        userbase.dropPlayer(player, user_id)
+
+    await ctx.reply("Roster has been dropped")
+
 
 ''' #### to be implemented, add an index query too
     if (member == None):
