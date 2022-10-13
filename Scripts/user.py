@@ -147,7 +147,8 @@ class Userbase():
         print(pname)
         if (pname == None):
             return "No player found"
-        
+        print(self.uTeamGetPlayerOne(discID))
+        print(self.uTeamGetPlayerFive(discID))
         if(self.uTeamGetPlayerOne(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
@@ -168,6 +169,8 @@ class Userbase():
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+        else:
+            print("Something went wrong and you ended up here! hello")
             
         
 
