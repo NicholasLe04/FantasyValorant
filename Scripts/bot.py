@@ -125,7 +125,7 @@ async def draft(ctx: commands.Context, player_name : str):
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
 # Params: ctx is defined as the command's context, user is optional field
-async def draft(ctx: commands.Context, player_name : str):
+async def drop(ctx: commands.Context, player_name : str):
     user_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(user_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database

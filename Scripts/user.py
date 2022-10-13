@@ -1,6 +1,7 @@
 from tabnanny import check
 import mysql.connector
 import logging
+from Scripts.bot import player
 from db import Database
 
 database = Database()
@@ -171,13 +172,28 @@ class Userbase():
             return("Roster full")
 
     def dropPlayer(self, player_name: str, discID: str):
-        for player in self.uTeamGetPlayers(discID):
-            if (player.lower() == player_name.lower()):
-                player = "Missing"
-                return None
-
-        return "No player found"
-
+        if(self.uTeamGetPlayerOne(discID) == player_name):
+            self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", ("Missing", discID,))
+            print("Proceeding...")
+            self.db.commit()
+        elif(self.uTeamGetPlayerTwo(discID) == player_name):
+            self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", ("Missing", discID,))
+            print("Proceeding...")
+            self.db.commit()
+        elif(self.uTeamGetPlayerThree(discID) == player_name):
+            self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", ("Missing", discID,))
+            print("Proceeding...")
+            self.db.commit()
+        elif(self.uTeamGetPlayerFour(discID) == player_name):
+            self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", ("Missing", discID,))
+            print("Proceeding...")
+            self.db.commit()
+        elif(self.uTeamGetPlayerFive(discID) == player_name):
+            self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", ("Missing", discID,))
+            print("Proceeding...")
+            self.db.commit()
+        else:
+            return("No player found")
         
 
 #TESTING
