@@ -53,9 +53,6 @@ class Userbase():
                 return True
 
     def addNewUser(self, discID: str):
-        self.mycursor.execute("SELECT discordID FROM UserTeam WHERE discordID = %s", (discID,))
-        for x in self.mycursor:
-            print("Was added to the Users Table " + x[0])
         if(self.checkForUser(discID)):
             self.mycursor.execute("INSERT into Users (discordID) VALUES (%s)", (discID,))
             self.mycursor.execute("INSERT into UserTeam (discordID) VALUES (%s)", (discID,))
@@ -154,8 +151,6 @@ class Userbase():
         print(pname)
         if (pname == None):
             return "No player found"
-        print(self.uTeamGetPlayerOne(discID))
-        print(self.uTeamGetPlayerFive(discID))
         if(self.uTeamGetPlayerOne(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
