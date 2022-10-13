@@ -95,7 +95,7 @@ async def roster(ctx: commands.Context, member: Member = None):
     userbase.addNewUser(user_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if (member == None):
-        await ctx.reply(embed = embedRosterInfo(ctx.author))
+        await ctx.reply(embed = embedRosterInfo(ctx.author, user_id))
     else:
         #await ctx.reply(embed = embedRosterInfo(member))
         await ctx.reply(embed = embedRosterInfo(member, user_id))
