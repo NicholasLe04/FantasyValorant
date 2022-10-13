@@ -149,23 +149,23 @@ class Userbase():
             return "No player found"
         print(self.uTeamGetPlayerOne(discID))
         print(self.uTeamGetPlayerFive(discID))
-        if(self.uTeamGetPlayerOne(discID) == "Missing"):
+        if(self.uTeamGetPlayerOne(discID) == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerTwo(discID) == "Missing"):
+        elif(self.uTeamGetPlayerTwo(discID) == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerThree(discID) == "Missing"):
+        elif(self.uTeamGetPlayerThree(discID) == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFour(discID) == "Missing"):
+        elif(self.uTeamGetPlayerFour(discID) == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
-        elif(self.uTeamGetPlayerFive(discID) == "Missing"):
+        elif(self.uTeamGetPlayerFive(discID) == "None"):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE teamID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
