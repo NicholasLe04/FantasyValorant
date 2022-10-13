@@ -1,7 +1,5 @@
-from tabnanny import check
 import mysql.connector
 import logging
-from Scripts.bot import player
 from db import Database
 
 database = Database()
