@@ -142,7 +142,7 @@ async def drop(ctx: commands.Context, player_name : str):
     await ctx.reply("Player dropped")
 
 # Removes player from user's roster
-@client.hybrid_command(name = "drop all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
+@client.hybrid_command(name = "drop-all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
