@@ -112,30 +112,10 @@ class Userbase():
         output.append(self.uTeamGetPlayerFive(user_id))
         return output
 
-    def uTeamGetPlayerOne(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(user_id),))
-        for x in self.mycursor:
-            return x[0]
-
-    def uTeamGetPlayerTwo(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE discordID = %s", (user_id,))
-        for x in self.mycursor:
-            return x[0]
     
-    def uTeamGetPlayerThree(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE discordID = %s", (user_id,))
-        for x in self.mycursor:
-            return x[0]
-    
-    def uTeamGetPlayerFour(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE discordID = %s", (user_id,))
-        for x in self.mycursor:
-            return x[0]
-    
-    def uTeamGetPlayerFive(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE discordID = %s", (user_id,))
-        for x in self.mycursor:
-            return x[0]
+    ##################
+    # SETTER METHODS #
+    ##################
 
     def addPlayer(self, player_name: str, discID: str):
         pname = None
@@ -150,22 +130,27 @@ class Userbase():
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+            return None
         elif(self.uTeamGetPlayerTwo(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+            return None
         elif(self.uTeamGetPlayerThree(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+            return None
         elif(self.uTeamGetPlayerFour(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+            return None
         elif(self.uTeamGetPlayerFive(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", (pname, discID,))
             print("Proceeding...")
             self.db.commit()
+            return None
         else:
             return("Roster full")
 
@@ -192,7 +177,38 @@ class Userbase():
             self.db.commit()
         else:
             return("No player found")
-        
+
+
+    ##################
+    # HELPER METHODS #
+    ##################    
+
+    def uTeamGetPlayerOne(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(user_id),))
+        for x in self.mycursor:
+            return x[0]
+
+    def uTeamGetPlayerTwo(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerTwo FROM UserTeam WHERE discordID = %s", (user_id,))
+        for x in self.mycursor:
+            return x[0]
+    
+    def uTeamGetPlayerThree(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerThree FROM UserTeam WHERE discordID = %s", (user_id,))
+        for x in self.mycursor:
+            return x[0]
+    
+    def uTeamGetPlayerFour(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerFour FROM UserTeam WHERE discordID = %s", (user_id,))
+        for x in self.mycursor:
+            return x[0]
+    
+    def uTeamGetPlayerFive(self, user_id: str) -> str:
+        self.mycursor.execute("SELECT playerFive FROM UserTeam WHERE discordID = %s", (user_id,))
+        for x in self.mycursor:
+            return x[0]
+
+
 
 #TESTING
 
