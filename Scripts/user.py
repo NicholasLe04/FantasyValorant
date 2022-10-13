@@ -151,7 +151,7 @@ class Userbase():
 
     def dropPlayer(self, player_name: str, discID: str):
 
-        if (player_name not in [x.lower() for x in self.uTeamGetPlayers(discID)]):
+        if (player_name.lower() not in [x.lower() for x in self.uTeamGetPlayers(discID)]):
             return ("No player found")
 
         if(self.uTeamGetPlayerOne(discID).lower() == player_name.lower()):
