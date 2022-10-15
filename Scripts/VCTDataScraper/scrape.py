@@ -173,7 +173,19 @@ class Scraper():
     def scrapeTeamLogo(self, team: str):
         return self.teamLogos.get(team.lower())
 
+    def scrapeTeamMapWinrate(self, team: str):
+        url = 'https://www.vlr.gg/team/stats/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml') 
 
+        output = []
+
+        table = soup.find('tbody')
+        for tr in table.find_all('tr', {'class': ''}):
+
+            output.append([tr.find_all('td')[0].text.strip(), tr.find_all('td')[2].text.strip()])
+
+        return output
 
     ##############################
     #                            #
@@ -295,8 +307,16 @@ class Scraper():
             return 'no agent'
 
     
+    #############################
+    #                           #
+    #   INDIVIDUAL COACH DATA   #
+    #                           #
+    #############################
+
+
+    
+
 
 ## TESTING 
-
 
 
