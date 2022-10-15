@@ -37,14 +37,10 @@ class Database():
 
     def APOCALYPSE(self):
         self.mycursor.execute("DROP TABLE Players")
-        self.mycursor.execute("DROP TABLE UserTeam")
-        self.mycursor.execute("DROP TABLE Users")
 
     ## CREATING A DATA TABLE NAMED PLAYERS
     # Commented out as datatable has already been created locally on Joshua's Laptop
     def createTable(self):
-        self.mycursor.execute("DROP TABLE IF EXISTS Players")
-        self.mycursor.execute("DROP TABLE IF EXISTS Coaches")
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Players (userName VARCHAR(25) DEFAULT 'noname' NOT NULL,
                         realName VARCHAR(30) DEFAULT 'noname' NOT NULL,
                         team VARCHAR(20) DEFAULT 'noname' NOT NULL,
@@ -62,11 +58,13 @@ class Database():
                         team VARCHAR(20) DEFAULT 'noname' NOT NULL,
                         country VARCHAR(25) DEFAULT 'noname' NOT NULL)
                         """)
+        self.db.commit()
 
     def fillNames (self):
         for pName in self.playerNames:
             Q1 = "INSERT INTO Players (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (pName,))
+            self.db.commit()
 
     #db.commit()'''
     #Opening playerlist.json to be accessed
@@ -195,6 +193,8 @@ datab = Database()
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
 datab.createTable()
+datab.fillNames()
+datab.updateTable()
 
 
 

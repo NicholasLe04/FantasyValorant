@@ -1,7 +1,7 @@
 from itertools import count
 import mysql.connector
 import logging
-from db import Database
+from database import Database
 
 database = Database()
 
@@ -146,7 +146,6 @@ class Userbase():
 
     def addPlayer(self, player_name: str, discID: str):
         pname = None
-
         for dName in database.playerNames:
             if (player_name.lower() == dName.lower()):
                 pname = dName
