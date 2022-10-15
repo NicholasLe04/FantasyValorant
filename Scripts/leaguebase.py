@@ -1,13 +1,13 @@
 from discord import User
 import mysql.connector
 import logging
-from db import Database
-from user import Userbase
+from database import Database
+from userbase import Userbase
 
 database = Database()
 userbase = Userbase()
 
-class League():
+class LeagueBase():
 
     ##CONNECTING TO LOCALLY HOSTED SQL SERVER
     ##AVOID RUNNING CODE UNTIL SQL SERVER SORTED OUT
@@ -36,5 +36,5 @@ class League():
                         """)
         self.mycursor.execute("ALTER TABLE LeagueInfo AUTO_INCREMENT=100")
         self.db.commit()
-leg = League()
+leg = LeagueBase()
 leg.createTable()

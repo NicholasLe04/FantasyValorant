@@ -2,11 +2,10 @@ import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import app_commands
 from discord import Member
-from db import Database
+from database import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
-from user import Userbase
-from time import time
+from userbase import Userbase
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT

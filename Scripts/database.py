@@ -18,15 +18,20 @@ class Database():
             database="FantasyValorant"
         )
         self.logging = logging.basicConfig(filename = 'logging.log', format = '`%(asctime)s %(message)s' , level = logging.INFO)
+
         file_dir = os.path.dirname(__file__)
         playerlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/playerlist.json')
         self.mycursor = self.db.cursor()
-        self.playeridJson = open(playerlist_dir)
-        self.data = json.load(self.playeridJson)
-        self.scraper = Scraper() #Declaring Scrapper object
+
+        with open(playerlist_dir) as ids:
+            self.data = json.load(ids)
+
         self.playerNames = []
+
         for i in self.data.get('players'):
             self.playerNames.append(i)
+        
+        self.scraper = Scraper() #Declaring Scrapper object
 
     
 
@@ -59,7 +64,7 @@ class Database():
                         """)
 
     def fillNames (self):
-        for y, pName in enumerate(self.playerNames):
+        for pName in self.playerNames:
             Q1 = "INSERT INTO Players (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (pName,))
 
@@ -70,7 +75,7 @@ class Database():
     ##THEN FILLING THE DATA TABLE WITH THE APPROPIATE VALUES
 
     def updateTable(self):
-        for y, pName in enumerate(self.playerNames):
+        for pName in self.playerNames:
 
             realname = self.scraper.scrapePlayerName(pName)
             I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
