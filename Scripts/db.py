@@ -38,6 +38,8 @@ class Database():
     ## CREATING A DATA TABLE NAMED PLAYERS
     # Commented out as datatable has already been created locally on Joshua's Laptop
     def createTable(self):
+        self.mycursor.execute("DROP TABLE IF EXISTS Players")
+        self.mycursor.execute("DROP TABLE IF EXISTS Coaches")
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Players (userName VARCHAR(25) DEFAULT 'noname' NOT NULL,
                         realName VARCHAR(30) DEFAULT 'noname' NOT NULL,
                         team VARCHAR(20) DEFAULT 'noname' NOT NULL,
@@ -50,6 +52,11 @@ class Database():
                         playerImg VARCHAR(50) DEFAULT 'https://www.vlr.gg/img/base/ph/sil.png' NOT NULL,
                         flag VARCHAR(15) DEFAULT ':pirate_flag:' NOT NULL,
                         personID int PRIMARY KEY AUTO_INCREMENT)""")
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Coaches (userName VARCHAR(30) DEFAULT 'noname' NOT NULL,
+                        realName VARCHAR(30) DEFAULT 'noname' NOT NULL,
+                        team VARCHAR(20) DEFAULT 'noname' NOT NULL,
+                        country VARCHAR(25) DEFAULT 'noname' NOT NULL)
+                        """)
 
     def fillNames (self):
         for y, pName in enumerate(self.playerNames):

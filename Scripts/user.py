@@ -1,5 +1,8 @@
+from itertools import count
 import mysql.connector
 import logging
+
+from numpy import insert
 from db import Database
 
 database = Database()
@@ -22,23 +25,27 @@ class Userbase():
 
     ###CREATES TABLE USER & USERTEAM IF THEY DO NOT EXIST
     def createTable(self):
-        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Users (discordID VARCHAR(20),CONSTRAINT userteam_ibfk_1 PRIMARY KEY(discordID),
-                        pTeamName VARCHAR(30) DEFAULT 'no name' NOT NULL,
-                        points int DEFAULT 0 NOT NULL,
-                        userID int AUTO_INCREMENT UNIQUE KEY) ENGINE = INNODB""")
-                        
-        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserTeam (discordID VARCHAR(20),
-                        PRIMARY KEY (discordID),
-                        FOREIGN KEY(discordID) REFERENCES Users(discordID) ON UPDATE CASCADE,
-                        leagueID int UNIQUE KEY DEFAULT '-1' NOT NULL,
-                        playerTeam VARCHAR(40) DEFAULT 'userTeam' NOT NULL,
-                        coach VARCHAR(25) DEFAULT '' NOT NULL,
-                        playerOne VARCHAR(20) DEFAULT '' NOT NULL,
-                        playerTwo VARCHAR(20) DEFAULT '' NOT NULL,
-                        playerThree VARCHAR(20) DEFAULT '' NOT NULL,
-                        playerFour VARCHAR(20) DEFAULT '' NOT NULL,
-                        playerFive VARCHAR(20) DEFAULT '' NOT NULL) ENGINE = INNODB
+        self.mycursor.execute("DROP TABLE IF EXISTS UserGameData")
+        self.mycursor.execute("DROP TABLE IF EXISTS UserInfo")
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserInfo(
+                        userID int AUTO_INCREMENT,
+                        discID VARCHAR(20) UNIQUE KEY,
+                        email VARCHAR(50) UNIQUE KEY,
+                        username VARCHAR(30) UNIQUE KEY,
+                        PRIMARY KEY(userID)) ENGINE = INNODB
                         """)
+        self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserGameData (
+                        userID int,
+                        leagueID VARCHAR(30) DEFAULT '-1' NOT NULL,
+                        leagueRoster1 VARCHAR(70) DEFAULT 'Missing,Missing,Missing,Missing,Missing' NOT NULL,
+                        leagueRoster2 VARCHAR(70) DEFAULT '' NOT NULL,
+                        leagueRoster3 VARCHAR(70) DEFAULT '' NOT NULL,
+                        leaguePoints1 int DEFAULT 0 NOT NULL,
+                        leaguePoints2 int DEFAULT 0 NOT NULL,
+                        leaguePoints3 int DEFAULT 0 NOT NULL)
+                        ENGINE = INNODB
+                        """)
+        self.mycursor.execute("ALTER TABLE UserGameData ADD CONSTRAINT FK_UserGameData FOREIGN KEY(userID) REFERENCES UserInfo(userID) ON UPDATE CASCADE ON DELETE CASCADE")
         self.db.commit()
 
     #CHECKS THE USER TABLE FOR THE DISCORD ID PASSED TO THE FUNCTION
@@ -46,7 +53,7 @@ class Userbase():
     #IF NOT FOUND RETURNS TRUE -- REFERENCE ADD NEW USER
 
     def checkForUser(self, discID: str):
-        self.mycursor.execute("SELECT EXISTS(SELECT discordID FROM Users WHERE discordID = %s)", (discID,))
+        self.mycursor.execute("SELECT EXISTS(SELECT discID FROM UserInfo WHERE discID = %s)", (discID,))
         for x in self.mycursor:
             if(x[0] == 1):
                 print("User Found")
@@ -60,13 +67,14 @@ class Userbase():
 
     def addNewUser(self, discID: str):
         if(self.checkForUser(discID)):
-            self.mycursor.execute("INSERT into Users (discordID) VALUES (%s)", (discID,))
-            self.mycursor.execute("INSERT into UserTeam (discordID) VALUES (%s)", (discID,))
+            self.mycursor.execute("INSERT into UserInfo (discID) VALUES (%s)", (discID,))
+            x = self.mycursor.lastrowid
+            self.mycursor.execute("INSERT into UserGameData (userID) VALUES (%s)", (x,))
             self.db.commit()
-            self.mycursor.execute("SELECT discordID FROM Users WHERE discordID = %s", (discID,))
+            self.mycursor.execute("SELECT discID FROM UserInfo WHERE discID = %s", (discID,))
             for x in self.mycursor:
-                print("Was added to the Users Table " + x[0])
-        logging.info("Added a user %s to User Table and created discordID", (discID))
+                print("Was added to the UserInfo Table " + x[0])
+        logging.info("Added a user %s to UserInfo Table and created discordID", (discID))
 
     
     '''def userGetDiscordID(self, name: str):
@@ -78,12 +86,12 @@ class Userbase():
     # GETTER METHODS FROM THE TABLES #
     ##################################
     def userGetPlayerName(self, name: str):
-        self.mycursor.execute("SELECT playerName FROM Users WHERE discordID = %s", (name,))
+        self.mycursor.execute("SELECT username FROM Users WHERE discID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def userGetTeamName(self, name: str):
-        self.mycursor.execute("SELECT pTeamName FROM Users WHERE discordID = %s", (name,))
+        self.mycursor.execute("SELECT pTeamName FROM Users WHERE discID = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
@@ -103,7 +111,10 @@ class Userbase():
             return x[0]'''
 
     def uTeamGetLeagueID(self, name: str):
-        self.mycursor.execute("SELECT leagueID FROM UserTeam WHERE discordID = %s", (name,))
+        self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (name,))
+        for x in self.mycursor:
+            uref = x[0]
+        self.mycursor.execute("SELECT leagueID FROM UserGameData WHERE userID = %s", (uref,))
         for x in self.mycursor:
             return x[0]
 
@@ -113,14 +124,22 @@ class Userbase():
             return x[0]
 
     # returns an array 
-    def uTeamGetPlayers(self, user_id: str) -> list:
+    def getLgRoster1(self, discordID: str) -> list:
         output = []
-        output.append(self.uTeamGetPlayerOne(user_id))
-        output.append(self.uTeamGetPlayerTwo(user_id))
-        output.append(self.uTeamGetPlayerThree(user_id))
-        output.append(self.uTeamGetPlayerFour(user_id))
-        output.append(self.uTeamGetPlayerFive(user_id))
+        self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
+        for x in self.mycursor:
+            uref = x[0]
+        self.mycursor.execute("SELECT leagueRoster1 FROM UserGameData WHERE userID = %s", (uref,))
+        for x in self.mycursor:
+            output = x[0].split(",")
         return output
+    '''output = []
+    output.append(self.uTeamGetPlayerOne(user_id))
+    output.append(self.uTeamGetPlayerTwo(user_id))
+    output.append(self.uTeamGetPlayerThree(user_id))
+    output.append(self.uTeamGetPlayerFour(user_id))
+    output.append(self.uTeamGetPlayerFive(user_id))
+    return output'''
 
     
     ##################
@@ -136,11 +155,31 @@ class Userbase():
                 break
         if (pname == None):
             return "No player found"
-
-        if ("Missing" not in self.uTeamGetPlayers(discID)):
+        #THIS IF STATEMENT DOES NOTHING V
+        if ("Missing" not in self.getLgRoster1(discID)):
             return "Roster full"
 
-        if(self.uTeamGetPlayerOne(discID) == "Missing"):
+        #for i in range(self.getLgRoster1(discID)):
+        count = 0
+        temp = self.getLgRoster1("328309041518608385")
+        ind = temp.index("Missing")
+        temp.pop(ind)
+        temp.insert(ind,pname)
+        s = ""
+        for i in temp:
+            count += 1
+            if(count<5):
+                s += i + ","
+            else:
+                s += i
+        print(s)
+        self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
+        for x in self.mycursor:
+            uref = x[0]
+        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (s,uref))
+
+
+        '''if(self.uTeamGetPlayerOne(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", (pname, discID,))
 
         elif(self.uTeamGetPlayerTwo(discID) == "Missing"):
@@ -153,7 +192,7 @@ class Userbase():
             self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", (pname, discID,))
             
         elif(self.uTeamGetPlayerFive(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", (pname, discID,))
+            self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", (pname, discID,))'''
         
         print("Proceeding...")
         self.db.commit()
@@ -216,14 +255,54 @@ class Userbase():
 
 #TESTING
 
-userb = Userbase()
+'''userb = Userbase()
+s = ""
+a = ""
+y = 0
 userb.createTable()
 userb.addNewUser("328309041518608385")
+userb.addNewUser("328309041518608385")
+userb.addNewUser("283407511133093889")
+print(userb.uTeamGetLeagueID("328309041518608385"))
+print(userb.getLgRoster1("328309041518608385"))
+print(a.join(userb.getLgRoster1("328309041518608385")))
+for i in userb.getLgRoster1("328309041518608385"):
+    y += 1
+    if(y<5):
+        s += i + ","
+    else:
+        s += i
+print(s)
+print("__________________")
+userb.addPlayer("yay", "328309041518608385")
+userb.addPlayer("stellar", "328309041518608385")
+userb.addPlayer("yay", "328309041518608385")
+userb.addPlayer("stellar", "328309041518608385")
+userb.addPlayer("yay", "328309041518608385")
+userb.addPlayer("stellar", "328309041518608385")
+userb.addPlayer("who", "328309041518608385")'''
+    
+
+#userb.mycursor.execute("INSERT into UserInfo (discID) VALUES (%s)", ("328309041518608385",))
 '''
-print("P4 " + userb.uTeamGetPlayerOne("328309041518608385"))
-userb.addPlayer("yay", "328309041518608385")
-userb.addPlayer("yay", "328309041518608385")
-userb.addPlayer("yay", "328309041518608385")
-userb.addPlayer("yay", "328309041518608385")
-userb.addPlayer("yay", "328309041518608385")
-print(userb.uTeamGetPlayers("328309041518608385")[0])'''
+x = userb.mycursor.lastrowid
+userb.mycursor.execute("INSERT into UserGameData (leagueID) VALUES (%s)", (2,))
+userb.mycursor.execute("INSERT into UserGameData (leagueID) VALUES (%s)", (2,))
+userb.mycursor.execute("INSERT into UserGameData (leagueID,userID) VALUES (%s,%s)", (1,x))
+userb.mycursor.execute("INSERT into UserInfo (discID) VALUES (%s)", ("3r153513312",))
+x = userb.mycursor.lastrowid
+userb.mycursor.execute("INSERT into UserGameData (leagueID,userID) VALUES (%s,%s)", (1,4))'''
+
+#userb.db.commit()
+'''
+userb.addNewUser("328309041518608385")
+userb.addNewUser("280100023050436609")
+userb.addNewUser("735656344966660147")
+userb.addNewUser("283407511133093889")
+#print("P4 " + userb.uTeamGetPlayerOne("328309041518608385"))
+userb.addPlayer("stellar", "328309041518608385")
+userb.addPlayer("yay", "280100023050436609")
+userb.addPlayer("Tenz", "328309041518608385")
+userb.addPlayer("cyrocells", "735656344966660147")
+userb.addPlayer("yay", "283407511133093889")
+#print(userb.uTeamGetPlayers("328309041518608385")[0])'''
