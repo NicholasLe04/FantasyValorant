@@ -1,8 +1,6 @@
 from itertools import count
 import mysql.connector
 import logging
-
-from numpy import insert
 from db import Database
 
 database = Database()
