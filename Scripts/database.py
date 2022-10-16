@@ -17,19 +17,25 @@ class Database():
             passwd="SavestaAQT100%",
             database="FantasyValorant"
         )
+
+        self.mycursor = self.db.cursor()
         self.logging = logging.basicConfig(filename = 'logging.log', format = '`%(asctime)s %(message)s' , level = logging.INFO)
 
         file_dir = os.path.dirname(__file__)
         playerlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/playerlist.json')
-        self.mycursor = self.db.cursor()
+        teamIDs_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/teamids.json')
+        with open(playerlist_dir) as playerList:
+            players = json.load(playerList)
+        with open(teamIDs_dir) as teamIds:
+            self.teamIDs = json.load(teamIds) 
 
-        with open(playerlist_dir) as ids:
-            self.data = json.load(ids)
+        self.playerNames = [] 
+        self.coachesNames = []
 
-        self.playerNames = []
-
-        for i in self.data.get('players'):
+        for i in players.get('players'):
             self.playerNames.append(i)
+        for i in players.get('coaches'):
+            self.coachesNames.append(i)
         
         self.scraper = Scraper() #Declaring Scrapper object
 
@@ -178,12 +184,12 @@ class Database():
         for x in self.mycursor:
             return x[0]
 
-    def getPlayersFromTeam(self, name: str):
-        self.mycursor.execute("SELECT username FROM Players WHERE team = %s", (name,))
-        myresult = self.mycursor.fetchall()
+    def teamGetPlayers(self, team_name: str):
+        self.mycursor.execute("SELECT username FROM Players WHERE team = %s", (team_name,))
+        team = self.mycursor.fetchall()
         output = []
-        for x in range(len(myresult)):
-            output.append(myresult[x][0])
+        for player in team:
+            output.append(player[0])
         return output
 
 

@@ -80,10 +80,24 @@ async def player(ctx: commands.Context, player = ""):
     userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-    if embedPlayerInfo(player) == "No player found":
+    embed=embedPlayerInfo(player)
+    if embed == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
-    await ctx.reply(embed=embedPlayerInfo(player))
+    await ctx.reply(embed)
+
+
+@client.hybrid_command(name = "team", with_app_command= True, description = "Returns team stats",aliases = ['t'])
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+async def team(ctx: commands.Context, team_name = ""):
+    disc_id = str(ctx.author.id)
+    userbase.addNewUser(disc_id)
+    await ctx.defer(ephemeral=True)
+    embed=embedTeamInfo(team_name)
+    if embed == "No team found":
+        await ctx.reply("No team has been found under that name. Are you sure you typed it correctly?")
+        return None
+    await ctx.reply(embed)
 
 
 # Returns a user's roster
@@ -158,13 +172,6 @@ async def drop_all(ctx: commands.Context):
     await ctx.reply("Roster has been dropped")
 
 
-@client.hybrid_command(name = "team", with_app_command= True, description = "All players from a team",aliases = ['t'])
-@app_commands.guilds(discord.Object(id=1020055030247727155))
-async def team(ctx: commands.Context, *, team_name:str):
-    disc_id = str(ctx.author.id)
-    userbase.addNewUser(disc_id)
-    await ctx.defer(ephemeral=True)
-    await ctx.reply(database.getPlayersFromTeam(team_name))
 
 
 ''' #### to be implemented, add an index query too
@@ -173,9 +180,11 @@ async def team(ctx: commands.Context, *, team_name:str):
     else:
         await ctx.reply(embed = embedRosterInfo(member))'''
         
-## EMBED FUNCTIONS
+#######################
+#   EMBED FUNCTIONS   #
+#######################
 
-def embedPlayerInfo(player_name : str):
+def embedPlayerInfo(player_name: str):
     pname = None
 
     for name in database.playerNames:
@@ -199,12 +208,24 @@ def embedPlayerInfo(player_name : str):
 
 
 def embedRosterInfo(member: Member):
-    
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.set_thumbnail(url = member.avatar.url)
     #embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
     embed.add_field(name="Players", value=f"• {userbase.uTeamGetLeagueRoster1(member.id)[0]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[1]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[2]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[3]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[4]}\n", inline=False)
     return (embed)
+
+
+def embedTeamInfo (team_name: str):
+    try:
+        team_name = team_name.lower()
+        embed = discord.Embed(title=f"{team_name}")
+        embed.set_thumbnail(url=scraper.scrapeTeamLogo(team_name.lower()))
+        embed.add_field(name="Roster", value=f"• {database.teamGetPlayers(team_name)[0]}\n• {database.teamGetPlayers(team_name)[1]}\n• {database.teamGetPlayers(team_name)[2]}\n• {database.teamGetPlayers(team_name)[3]}\n• {database.teamGetPlayers(team_name)[4]}\n", inline=False)
+        return (embed)
+    except:
+        return ("Team not found")
+
+
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
