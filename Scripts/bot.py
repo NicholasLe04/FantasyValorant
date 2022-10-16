@@ -80,24 +80,24 @@ async def player(ctx: commands.Context, player = ""):
     userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
-    embed=embedPlayerInfo(player)
-    if embed == "No player found":
+    
+    if embedPlayerInfo(player) == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
-    await ctx.reply(embed)
+    await ctx.reply(embed=embedPlayerInfo(player))
 
 
 @client.hybrid_command(name = "team", with_app_command= True, description = "Returns team stats",aliases = ['t'])
 @app_commands.guilds(discord.Object(id=1020055030247727155))
-async def team(ctx: commands.Context, team_name = ""):
+async def team(ctx: commands.Context, team_name):
     disc_id = str(ctx.author.id)
     userbase.addNewUser(disc_id)
     await ctx.defer(ephemeral=True)
-    embed=embedTeamInfo(team_name)
-    if embed == "No team found":
+    
+    if embedTeamInfo(team_name) == "No team found":
         await ctx.reply("No team has been found under that name. Are you sure you typed it correctly?")
         return None
-    await ctx.reply(embed)
+    await ctx.reply(embed=embedTeamInfo(team_name))
 
 
 # Returns a user's roster
