@@ -160,7 +160,6 @@ async def drop_all(ctx: commands.Context):
 
 @client.hybrid_command(name = "team", with_app_command= True, description = "All players from a team",aliases = ['t'])
 @app_commands.guilds(discord.Object(id=1020055030247727155))
-@app_commands.commands()
 async def team(ctx: commands.Context, *, team_name:str):
     disc_id = str(ctx.author.id)
     userbase.addNewUser(disc_id)
