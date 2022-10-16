@@ -89,7 +89,7 @@ async def player(ctx: commands.Context, player = ""):
 
 @client.hybrid_command(name = "team", with_app_command= True, description = "Returns team stats",aliases = ['t'])
 @app_commands.guilds(discord.Object(id=1020055030247727155))
-async def team(ctx: commands.Context, team_name):
+async def team(ctx: commands.Context, *, team_name):
     disc_id = str(ctx.author.id)
     userbase.addNewUser(disc_id)
     await ctx.defer(ephemeral=True)
@@ -220,7 +220,9 @@ def embedTeamInfo (team_name: str):
         team_name = team_name.lower()
         embed = discord.Embed(title=f"{team_name}")
         embed.set_thumbnail(url=scraper.scrapeTeamLogo(team_name.lower()))
-        embed.add_field(name="Roster", value=f"• {database.teamGetPlayers(team_name)[0]}\n• {database.teamGetPlayers(team_name)[1]}\n• {database.teamGetPlayers(team_name)[2]}\n• {database.teamGetPlayers(team_name)[3]}\n• {database.teamGetPlayers(team_name)[4]}\n", inline=False)
+        for i in range(len(database.teamGetPlayers(team_name))):
+            embed.add_field(name="Roster,", value=f"• {database.teamGetPlayers(team_name)[i]}\n", inline=False)
+            #embed.add_field(name="Roster", value=f"• {database.teamGetPlayers(team_name)[0]}\n• {database.teamGetPlayers(team_name)[1]}\n• {database.teamGetPlayers(team_name)[2]}\n• {database.teamGetPlayers(team_name)[3]}\n• {database.teamGetPlayers(team_name)[4]}\n", inline=False)
         return (embed)
     except:
         return ("Team not found")
