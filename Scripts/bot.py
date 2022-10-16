@@ -76,8 +76,8 @@ async def on_ready():
 # Defining player command
 # Params: ctx is defined as the command's context, player is set to empty string by default
 async def player(ctx: commands.Context, player = ""):
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if embedPlayerInfo(player) == "No player found":
@@ -94,8 +94,8 @@ async def player(ctx: commands.Context, player = ""):
 # Params: ctx is defined as the command's context, user is optional field
 async def roster(ctx: commands.Context, member: Member = None):
     # Reply with a private message (command) or public message (using prefix)                   implement database
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if (member == None):
         await ctx.reply(embed = embedRosterInfo(ctx.author))
@@ -111,11 +111,11 @@ async def roster(ctx: commands.Context, member: Member = None):
 # Defining add command
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def draft(ctx: commands.Context, player_name : str):
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    x = userbase.addPlayer(player_name, user_id)
+    x = userbase.addPlayer(player_name, disc_id)
     if x == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
@@ -132,11 +132,11 @@ async def draft(ctx: commands.Context, player_name : str):
 # Defining add command
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def drop(ctx: commands.Context, player_name : str):
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    if userbase.dropPlayer(player_name, user_id) == "No player found":
+    if userbase.dropPlayer(player_name, disc_id) == "No player found":
         await ctx.reply("No player has been found under that name in your roster. Are you sure you typed it correctly?")
         return None
     await ctx.reply("Player dropped")
@@ -148,12 +148,12 @@ async def drop(ctx: commands.Context, player_name : str):
 # Defining add command
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def drop_all(ctx: commands.Context):
-    user_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(user_id)
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    for player in userbase.getLgRoster1(user_id):
-        userbase.dropPlayer(player, user_id)
+    for player in userbase.getLgRoster1(disc_id):
+        userbase.dropPlayer(player, disc_id)
 
     await ctx.reply("Roster has been dropped")
 

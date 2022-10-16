@@ -122,7 +122,7 @@ class Userbase():
             return x[0]
 
     # returns an array 
-    def getLgRoster1(self, discordID: str) -> list:
+    def uTeamGetLeagueRoster1(self, discordID: str) -> list:
         output = []
         self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
         for x in self.mycursor:
@@ -145,6 +145,11 @@ class Userbase():
     ##################
 
     def addPlayer(self, player_name: str, discID: str):
+        roster = self.uTeamGetLeagueRoster1(discID)
+
+        if ("Missing" not in roster):
+            return "Roster full"
+
         pname = None
         for dName in database.playerNames:
             if (player_name.lower() == dName.lower()):
@@ -152,28 +157,18 @@ class Userbase():
                 break
         if (pname == None):
             return "No player found"
-        #THIS IF STATEMENT DOES NOTHING V
-        if ("Missing" not in self.getLgRoster1(discID)):
-            return "Roster full"
 
-        #for i in range(self.getLgRoster1(discID)):
-        count = 0
-        temp = self.getLgRoster1(discID)
-        emptyIndex = temp.index("Missing")
-        temp[emptyIndex] = pname
-        s = ""
-        for i in temp:
-            count += 1
-            if(count<5):
-                s += i + ","
-            else:
-                s += i
-        print(s)
+        emptyIndex = roster.index("Missing")
+        roster[emptyIndex] = pname
+        roster = ",".join(roster)
+        print(roster)
         self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
         for x in self.mycursor:
             uref = x[0]
-        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (s,uref))
+        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (roster,uref))
 
+        print("Proceeding...")
+        self.db.commit()
 
         '''if(self.uTeamGetPlayerOne(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", (pname, discID,))
@@ -190,12 +185,9 @@ class Userbase():
         elif(self.uTeamGetPlayerFive(discID) == "Missing"):
             self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", (pname, discID,))'''
         
-        print("Proceeding...")
-        self.db.commit()
 
 
     def dropPlayer(self, player_name: str, discID: str):
-
         pname = None
         for dName in database.playerNames:
             if (player_name.lower() == dName.lower()):
@@ -203,27 +195,16 @@ class Userbase():
                 break
         if (pname == None):
             return "No player found"
-        #THIS IF STATEMENT DOES NOTHING V
-        if ("Missing" not in self.getLgRoster1(discID)):
-            return "Roster full"
 
-        #for i in range(self.getLgRoster1(discID)):
-        count = 0
-        temp = self.getLgRoster1(discID)
-        emptyIndex = temp.index(pname)
-        temp[emptyIndex] = "Missing"
-        s = ""
-        for i in temp:
-            count += 1
-            if(count<5):
-                s += i + ","
-            else:
-                s += i
-        print(s)
+        roster = self.uTeamGetLeagueRoster1(discID)
+        emptyIndex = roster.index(pname)
+        roster[emptyIndex] = "Missing"
+        roster = ",".join(roster)
+        print(roster)
         self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
         for x in self.mycursor:
             uref = x[0]
-        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (s,uref))
+        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (roster,uref))
 
         print("Proceeding...")
         self.db.commit()
@@ -234,7 +215,7 @@ class Userbase():
     ##################    
 
     def uTeamGetPlayerOne(self, user_id: str) -> str:
-        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (str(user_id),))
+        self.mycursor.execute("SELECT playerOne FROM UserTeam WHERE discordID = %s", (user_id,))
         for x in self.mycursor:
             return x[0]
 
