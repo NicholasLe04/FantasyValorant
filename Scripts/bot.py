@@ -189,12 +189,12 @@ def embedPlayerInfo(player_name : str):
     return (embed)
 
 
-def embedRosterInfo(member : Member):
+def embedRosterInfo(member: Member, league: int):
     
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.set_thumbnail(url = member.avatar.url)
     #embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
-    embed.add_field(name="Players", value=f"• {userbase.getLgRoster1(member.id)[0]}\n• {userbase.getLgRoster1(member.id)[1]}\n• {userbase.getLgRoster1(member.id)[2]}\n• {userbase.getLgRoster1(member.id)[3]}\n• {userbase.getLgRoster1(member.id)[4]}\n", inline=False)
+    embed.add_field(name="Players", value=f"• {userbase.uTeamGetLeagueRoster1(member.id)[0]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[1]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[2]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[3]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[4]}\n", inline=False)
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
