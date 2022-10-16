@@ -158,10 +158,9 @@ class Userbase():
 
         #for i in range(self.getLgRoster1(discID)):
         count = 0
-        temp = self.getLgRoster1("328309041518608385")
+        temp = self.getLgRoster1(discID)
         emptyIndex = temp.index("Missing")
-        temp.pop(emptyIndex)
-        temp.insert(emptyIndex+1,pname)
+        temp[emptyIndex] = pname
         s = ""
         for i in temp:
             count += 1
@@ -210,10 +209,9 @@ class Userbase():
 
         #for i in range(self.getLgRoster1(discID)):
         count = 0
-        temp = self.getLgRoster1("328309041518608385")
+        temp = self.getLgRoster1(discID)
         emptyIndex = temp.index(pname)
-        temp.pop(emptyIndex)
-        temp.insert(emptyIndex+1,"Missing")
+        temp[emptyIndex] = "Missing"
         s = ""
         for i in temp:
             count += 1
