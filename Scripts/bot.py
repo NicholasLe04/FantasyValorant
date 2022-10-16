@@ -158,6 +158,15 @@ async def drop_all(ctx: commands.Context):
     await ctx.reply("Roster has been dropped")
 
 
+@client.hybrid_command(name = "team", with_app_command= True, description = "All players from a team",aliases = ['t'])
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+async def team(ctx: commands.Context, team_name:str):
+    disc_id = str(ctx.author.id)
+    userbase.addNewUser(disc_id)
+    await ctx.defer(ephemeral=True)
+    await ctx.reply(database.getPlayersFromTeam(team_name))
+
+
 ''' #### to be implemented, add an index query too
     if (member == None):
         await ctx.reply(embed = embedRosterInfo(ctx.author))
@@ -189,7 +198,7 @@ def embedPlayerInfo(player_name : str):
     return (embed)
 
 
-def embedRosterInfo(member: Member, league: int):
+def embedRosterInfo(member: Member):
     
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.set_thumbnail(url = member.avatar.url)

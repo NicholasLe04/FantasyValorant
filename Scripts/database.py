@@ -178,6 +178,15 @@ class Database():
         for x in self.mycursor:
             return x[0]
 
+    def getPlayersFromTeam(self, name: str):
+        self.mycursor.execute("SELECT username FROM Players WHERE team = %s", (name,))
+        myresult = self.mycursor.fetchall()
+        output = []
+        for x in range(len(myresult)):
+            output.append(myresult[x][0])
+        return output
+
+
 
     #updateTable()
     #closing playerlist.json file
@@ -192,7 +201,7 @@ datab = Database()
 
 ### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
-datab.createTable()
+'''print(datab.getPlayersFromTeam("100 Thieves"))'''
 
 
 
