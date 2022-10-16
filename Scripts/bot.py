@@ -221,7 +221,10 @@ def embedTeamInfo (team_name: str):
         embed = discord.Embed(title=f"{team_name}")
         embed.set_thumbnail(url=scraper.scrapeTeamLogo(team_name.lower()))
         for i in range(len(database.teamGetPlayers(team_name))):
-            embed.add_field(name="Roster,", value=f"• {database.teamGetPlayers(team_name)[i]}\n", inline=False)
+            if(i == 0):
+                embed.add_field(name="Roster:", value=f"• {database.teamGetPlayers(team_name)[i]}\n", inline=False)
+            else:
+                embed.add_field(name="",value=f"• {database.teamGetPlayers(team_name)[i]}\n", inline=False)
             #embed.add_field(name="Roster", value=f"• {database.teamGetPlayers(team_name)[0]}\n• {database.teamGetPlayers(team_name)[1]}\n• {database.teamGetPlayers(team_name)[2]}\n• {database.teamGetPlayers(team_name)[3]}\n• {database.teamGetPlayers(team_name)[4]}\n", inline=False)
         return (embed)
     except:
