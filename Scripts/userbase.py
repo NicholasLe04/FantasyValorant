@@ -159,9 +159,9 @@ class Userbase():
         #for i in range(self.getLgRoster1(discID)):
         count = 0
         temp = self.getLgRoster1("328309041518608385")
-        ind = temp.index("Missing")
-        temp.pop(ind)
-        temp.insert(ind,pname)
+        emptyIndex = temp.index("Missing")
+        temp.pop(emptyIndex)
+        temp.insert(emptyIndex+1,pname)
         s = ""
         for i in temp:
             count += 1
@@ -197,23 +197,35 @@ class Userbase():
 
     def dropPlayer(self, player_name: str, discID: str):
 
-        if (player_name.lower() not in [x.lower() for x in self.uTeamGetPlayers(discID)]):
-            return ("No player found")
+        pname = None
+        for dName in database.playerNames:
+            if (player_name.lower() == dName.lower()):
+                pname = dName
+                break
+        if (pname == None):
+            return "No player found"
+        #THIS IF STATEMENT DOES NOTHING V
+        if ("Missing" not in self.getLgRoster1(discID)):
+            return "Roster full"
 
-        if(self.uTeamGetPlayerOne(discID).lower() == player_name.lower()):
-            self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", ("Missing", discID,))
-
-        elif(self.uTeamGetPlayerTwo(discID).lower() == player_name.lower()):
-            self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", ("Missing", discID,))
-            
-        elif(self.uTeamGetPlayerThree(discID).lower() == player_name.lower()):
-            self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", ("Missing", discID,))
-            
-        elif(self.uTeamGetPlayerFour(discID).lower() == player_name.lower()):
-            self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", ("Missing", discID,))
-            
-        elif(self.uTeamGetPlayerFive(discID).lower() == player_name.lower()):
-            self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", ("Missing", discID,))
+        #for i in range(self.getLgRoster1(discID)):
+        count = 0
+        temp = self.getLgRoster1("328309041518608385")
+        emptyIndex = temp.index(pname)
+        temp.pop(emptyIndex)
+        temp.insert(emptyIndex+1,"Missing")
+        s = ""
+        for i in temp:
+            count += 1
+            if(count<5):
+                s += i + ","
+            else:
+                s += i
+        print(s)
+        self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
+        for x in self.mycursor:
+            uref = x[0]
+        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (s,uref))
 
         print("Proceeding...")
         self.db.commit()
