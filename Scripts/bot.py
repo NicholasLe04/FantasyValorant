@@ -118,7 +118,7 @@ async def roster(ctx: commands.Context, member: Member = None):
         member_ref = member
 
     # Pagination 
-    buttons = ['\N{keycap: 1}', '\N{keycap: 2}', '\N{kepcap: 3}']
+    buttons = ['\U0002B05', '\U00027A1']
     current_page = 1
     msg = await ctx.send(embed=embedRosterInfo(member_ref, current_page))
 
@@ -136,14 +136,11 @@ async def roster(ctx: commands.Context, member: Member = None):
         else:
             previous_page = current_page
 
-            if reaction.emoji == buttons[0]:
-                current_page = 1
+            if reaction.emoji == buttons[0] and current_page != 1:
+                current_page -= 1
             
-            elif reaction.emoji == buttons[1]:
-                current_page = 2
-
-            elif reaction.emoji == buttons[2]:
-                current_page = 3
+            elif reaction.emoji == buttons[1] and current_page != 3:
+                current_page += 1
             
             for button in buttons:
                 await msg.remove_reaction(button, ctx.author)
