@@ -45,7 +45,7 @@ client = Client()
 
 ### Buttons subclass
 class Buttons(discord.ui.View):
-    def __init__(self, *, timeout=60, member: Member):
+    def __init__(self, member: Member, timeout=60):
         super().__init__(timeout=timeout)
         self.member = member
     @discord.ui.button(label="Roster 1", style=discord.ButtonStyle.blurple)
