@@ -6,7 +6,7 @@ from database import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
 from userbase import Userbase
-import asyncio
+from discord.ui import Button, View
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
@@ -43,6 +43,24 @@ class Client(commands.Bot):
 ## Generate Client object
 client = Client()
 
+### Buttons subclass
+class Buttons(discord.ui.View):
+    def __init__(self, *, timeout=60, member: Member):
+        super().__init__(timeout=timeout)
+        self.member = member
+    @discord.ui.button(label="Roster 1", style=discord.ButtonStyle.blurple)
+    async def roster1(self, button:discord.ui.Button, interaction:discord.Interaction):
+        button.style=discord.ButtonStyle.green
+        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 1))
+    @discord.ui.button(label="Roster 2", style=discord.ButtonStyle.blurple)
+    async def roster2(self, button:discord.ui.Button, interaction:discord.Interaction):
+        button.style=discord.ButtonStyle.green
+        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 2))
+    @discord.ui.button(label="Roster 3", style=discord.ButtonStyle.blurple)
+    async def roster3(self, button:discord.ui.Button, interaction:discord.Interaction):
+        button.style=discord.ButtonStyle.green
+        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 3))
+    
 
 ## Updates player table every 30 minutes
 @tasks.loop(minutes=30)
@@ -116,37 +134,22 @@ async def roster(ctx: commands.Context, member: Member = None):
         member_ref = ctx.author
     else:
         member_ref = member
+    view = Buttons()
+    await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
 
-    # Pagination 
-    buttons = ['\U0002B05', '\U00027A1']
-    current_page = 1
-    msg = await ctx.send(embed=embedRosterInfo(member_ref, current_page))
+    # while True:
+    #     try:
+    #         reaction = await client.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+    #     except asyncio.TimeoutError:
+    #         embed = embedRosterInfo(member_ref, current_page)
+    #         embed.set_footer(text="Timed Out.")
+    #         await msg.clear_reactions()
 
-    for button in buttons:
-        await msg.add_reaction(button)
+    #     else:
+    #         previous_page = current_page
 
-    while True:
-        try:
-            reaction = await client.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
-        except asyncio.TimeoutError:
-            embed = embedRosterInfo(member_ref, current_page)
-            embed.set_footer(text="Timed Out.")
-            await msg.clear_reactions()
-
-        else:
-            previous_page = current_page
-
-            if reaction.emoji == buttons[0] and current_page != 1:
-                current_page -= 1
-            
-            elif reaction.emoji == buttons[1] and current_page != 3:
-                current_page += 1
-            
-            for button in buttons:
-                await msg.remove_reaction(button, ctx.author)
-
-            if current_page != previous_page:
-                await msg.edit(embed=embedRosterInfo(member_ref, current_page))
+    #         if current_page != previous_page:
+    #             await msg.edit(embed=embedRosterInfo(member_ref, current_page))
 
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
