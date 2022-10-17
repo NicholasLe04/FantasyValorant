@@ -118,7 +118,7 @@ async def roster(ctx: commands.Context, member: Member = None):
         member_ref = member
 
     # Pagination 
-    buttons = ['\U0000031', '\U0000032', '\U0000033']
+    buttons = ['\N{keycap: 1}', '\N{keycap: 2}', '\N{kepcap: 3}']
     current_page = 1
     msg = await ctx.send(embed=embedRosterInfo(member_ref, current_page))
 
