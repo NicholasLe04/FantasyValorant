@@ -122,14 +122,45 @@ class Userbase():
 
     # returns an array 
     def uTeamGetLeagueRoster1(self, discordID: str) -> list:
-        output = []
-        self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
-        for x in self.mycursor:
-            uref = x[0]
-        self.mycursor.execute("SELECT leagueRoster1 FROM UserGameData WHERE userID = %s", (uref,))
-        for x in self.mycursor:
-            output = x[0].split(",")
-        return output
+        try:
+            output = []
+            self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
+            for x in self.mycursor:
+                uref = x[0]
+            self.mycursor.execute("SELECT leagueRoster1 FROM UserGameData WHERE userID = %s", (uref,))
+            for x in self.mycursor:
+                output = x[0].split(",")
+            return output
+        except:
+            return ("Unable to find roster. Has this user created a roster yet?")
+
+    def uTeamGetLeagueRoster2(self, discordID: str) -> list:
+        try:
+            output = []
+            self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
+            for x in self.mycursor:
+                uref = x[0]
+            self.mycursor.execute("SELECT leagueRoster2 FROM UserGameData WHERE userID = %s", (uref,))
+            for x in self.mycursor:
+                output = x[0].split(",")
+            return output
+        except:
+            return ("Unable to find roster. Has this user created a roster yet?")
+
+    def uTeamGetLeagueRoster3(self, discordID: str) -> list:
+        try:
+            output = []
+            self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discordID,))
+            for x in self.mycursor:
+                uref = x[0]
+            self.mycursor.execute("SELECT leagueRoster3 FROM UserGameData WHERE userID = %s", (uref,))
+            for x in self.mycursor:
+                output = x[0].split(",")
+            return output
+        except:
+            return ("Unable to find roster. Has this user created a roster yet?")    
+
+    
     '''output = []
     output.append(self.uTeamGetPlayerOne(user_id))
     output.append(self.uTeamGetPlayerTwo(user_id))

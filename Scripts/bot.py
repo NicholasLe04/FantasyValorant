@@ -6,6 +6,7 @@ from database import Database
 from VCTDataScraper.scrape import Scraper
 from threading import Thread
 from userbase import Userbase
+import asyncio
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
@@ -112,11 +113,43 @@ async def roster(ctx: commands.Context, member: Member = None):
     userbase.addNewUser(disc_id)
     await ctx.defer(ephemeral = True) # Idek what this does but it works lol
     if (member == None):
-        await ctx.reply(embed = embedRosterInfo(ctx.author))
+        member_ref = ctx.author
     else:
-        #await ctx.reply(embed = embedRosterInfo(member))
-        await ctx.reply(embed = embedRosterInfo(member))
+        member_ref = member
 
+    # Pagination 
+    buttons = [u"\u0031", u"\u0032", u"\u0033"]
+    current_page = 1
+    msg = await ctx.send(embed=embedRosterInfo(member_ref, current_page))
+
+    for button in buttons:
+        await msg.add_reaction(button)
+
+    while True:
+        try:
+            reaction = await client.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+        except asyncio.TimeoutError:
+            embed = embedRosterInfo(member_ref, current_page)
+            embed.set_footer(text="Timed Out.")
+            await msg.clear_reactions()
+
+        else:
+            previous_page = current_page
+
+            if reaction.emoji == u"\u0031":
+                current_page = 1
+            
+            elif reaction.emoji == u"\u0032":
+                current_page = 2
+
+            elif reaction.emoji == u"\u0033":
+                current_page = 3
+            
+            for button in buttons:
+                await msg.remove_reaction(button, ctx.author)
+
+            if current_page != previous_page:
+                await msg.edit(embed=embedRosterInfo(member_ref, current_page))
 
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
@@ -166,7 +199,7 @@ async def drop_all(ctx: commands.Context):
     userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    for player in userbase.getLgRoster1(disc_id):
+    for player in userbase.uTeamGetLeagueRoster1(disc_id):
         userbase.dropPlayer(player, disc_id)
 
     await ctx.reply("Roster has been dropped")
@@ -214,22 +247,26 @@ def embedTeamInfo (team_name: str):
         rosterString = ""
         for player in database.teamGetPlayers(team_name):
             rosterString += f"• {player}\n\n"
-            # if(i == 0):
-            #     embed.add_field(name="Roster:", value=f"• {player}\n", inline=False)
-            # else:
-            #     embed.add_field(name="\u200b",value=f"• {player}\n", inline=False)
         
-        embed.add_field(name="Roster:", value=rosterString, inline=False)
+        embed.add_field(name="Roster:", value=f"\n{rosterString}", inline=False)
         return (embed)
     except:
         return ("Team not found")
 
 
-def embedRosterInfo(member: Member):
+def embedRosterInfo(member: Member, league: int):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.set_thumbnail(url = member.avatar.url)
-    #embed.add_field(name="Player 1", value=userbase.uTeamGetPlayers(str(member.id))[0], inline=False)
-    embed.add_field(name="Players", value=f"• {userbase.uTeamGetLeagueRoster1(member.id)[0]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[1]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[2]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[3]}\n• {userbase.uTeamGetLeagueRoster1(member.id)[4]}\n", inline=False)
+    if (league == 1):
+        roster = userbase.uTeamGetLeagueRoster1(member.id)
+    elif (league == 2):
+        roster = userbase.uTeamGetLeagueRoster2(member.id)
+    elif (league == 3):
+        roster = userbase.uTeamGetLeagueRoster3(member.id)
+    else:
+        return ("Invalid league")
+
+    embed.add_field(name="Players", value=f"• {roster[0]}\n• {roster[1]}\n• {roster[2]}\n• {roster[3]}\n• {roster[4]}\n", inline=False)
     return (embed)
 
 
