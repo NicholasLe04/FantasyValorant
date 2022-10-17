@@ -134,7 +134,7 @@ async def roster(ctx: commands.Context, member: Member = None):
         member_ref = ctx.author
     else:
         member_ref = member
-    view = Buttons()
+    view = Buttons(member_ref)
     await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
 
     # while True:
