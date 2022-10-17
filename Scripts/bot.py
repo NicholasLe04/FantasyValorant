@@ -48,17 +48,14 @@ class Buttons(discord.ui.View):
     def __init__(self, member: Member, timeout=60):
         super().__init__(timeout=timeout)
         self.member = member
-    @discord.ui.button(label="Roster 1", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="1", style=discord.ButtonStyle.blurple)
     async def roster1(self, button:discord.ui.Button, interaction:discord.Interaction):
-        button.style=discord.ButtonStyle.green
         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 1))
-    @discord.ui.button(label="Roster 2", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="2", style=discord.ButtonStyle.blurple)
     async def roster2(self, button:discord.ui.Button, interaction:discord.Interaction):
-        button.style=discord.ButtonStyle.green
         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 2))
-    @discord.ui.button(label="Roster 3", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="3", style=discord.ButtonStyle.blurple)
     async def roster3(self, button:discord.ui.Button, interaction:discord.Interaction):
-        button.style=discord.ButtonStyle.green
         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 3))
     
 
