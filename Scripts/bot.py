@@ -181,6 +181,18 @@ async def create(ctx: commands.Context, name : str):
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
     await ctx.reply(leaguebase.createLeague(name, disc_id))
+
+# Invites a player to a league
+@client.hybrid_command(name = "invite", with_app_command = True, description = "Invites a player to a league")
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining invite command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def invite(ctx: commands.Context, member : Member):
+    disc_id = str(ctx.author.id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    await ctx.reply(leaguebase.inviteLeague (disc_id, member.id))
     
 # Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
