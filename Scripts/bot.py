@@ -1,6 +1,8 @@
+from curses import nonl
+from sys import set_int_max_str_digits
 import discord #pip install discord.py
 from discord.ext import commands, tasks
-from discord import app_commands
+from discord import ButtonStyle, app_commands
 from discord import Member
 from database import Database
 from VCTDataScraper.scrape import Scraper
@@ -45,20 +47,20 @@ class Client(commands.Bot):
 ## Generate Client object
 client = Client()
 
-### Buttons subclass
-class Buttons(discord.ui.View):
-    def __init__(self, member: Member, timeout=60):
-        super().__init__(timeout=timeout)
-        self.member = member
-    @discord.ui.button(label="1", style=discord.ButtonStyle.blurple)
-    async def roster1(self, button:discord.ui.Button, interaction:discord.Interaction):
-        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 1))
-    @discord.ui.button(label="2", style=discord.ButtonStyle.blurple)
-    async def roster2(self, button:discord.ui.Button, interaction:discord.Interaction):
-        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 2))
-    @discord.ui.button(label="3", style=discord.ButtonStyle.blurple)
-    async def roster3(self, button:discord.ui.Button, interaction:discord.Interaction):
-        await interaction.response.edit_message(embed=embedRosterInfo(self.member, 3))
+# ### Buttons subclass
+# class Buttons(discord.ui.View):
+#     def __init__(self, member: Member, timeout=60):
+#         super().__init__(timeout=timeout)
+#         self.member = member
+#     @discord.ui.button(label="1", style=discord.ButtonStyle.blurple)
+#     async def roster1(self, button:discord.ui.Button, interaction:discord.Interaction):
+#         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 1))
+#     @discord.ui.button(label="2", style=discord.ButtonStyle.blurple)
+#     async def roster2(self, button:discord.ui.Button, interaction:discord.Interaction):
+#         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 2))
+#     @discord.ui.button(label="3", style=discord.ButtonStyle.blurple)
+#     async def roster3(self, button:discord.ui.Button, interaction:discord.Interaction):
+#         await interaction.response.edit_message(embed=embedRosterInfo(self.member, 3))
     
 
 ## Updates player table every 30 minutes
@@ -133,8 +135,36 @@ async def roster(ctx: commands.Context, member: Member = None):
         member_ref = ctx.author
     else:
         member_ref = member
-    view = Buttons(member_ref)
-    await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
+    
+    current_page = 1
+
+    async def page_1_callback(interaction):
+        nonlocal current_page, sent_msg
+        current_page = 1
+        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+
+    async def page_2_callback(interaction):
+        nonlocal current_page, sent_msg
+        current_page = 2
+        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+
+    async def page_3_callback(interaction):
+        nonlocal current_page, sent_msg
+        current_page = 3
+        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+
+    page_1_button = Button(label="1", style=ButtonStyle.blurple)
+    page_1_button.callback = page_1_callback
+    page_2_button = Button(label="2", style=ButtonStyle.blurple)
+    page_2_button.callback = page_2_callback
+    page_3_button = Button(label="3", style=ButtonStyle.blurple)
+    page_3_button.callback = page_3_callback
+
+    view = View(timeout=180)
+    view.add_item(page_1_button)
+    view.add_item(page_2_button)
+    view.add_item(page_3_button)
+    sent_msg = await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
 
     # while True:
     #     try:
@@ -282,6 +312,7 @@ def embedTeamInfo (team_name: str):
 def embedRosterInfo(member: Member, league: int):
     embed = discord.Embed(title=f"{member.name}'s Roster")
     embed.set_thumbnail(url = member.avatar.url)
+
     if (league == 1):
         roster = userbase.uTeamGetLeagueRoster1(member.id)
     elif (league == 2):
