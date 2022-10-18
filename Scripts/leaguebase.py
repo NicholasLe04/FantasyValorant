@@ -40,10 +40,12 @@ class LeagueBase():
         self.db.commit()
     
     def createLeague(self, name : str, discord_id : str):
+        userbase.addNewUser(discord_id)
         user_id = 0
         output = []
         print("Command initiated by: " + discord_id)
         userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discord_id,))
+        print(userbase.mycursor)
         for x in userbase.mycursor:
             user_id = x[0]
             print("This is at L46: " + str(user_id))
