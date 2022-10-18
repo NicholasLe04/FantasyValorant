@@ -225,11 +225,11 @@ async def invite(ctx: commands.Context, member : Member):
     view = View()
     view.add_item (yesButton)
     view.add_item (noButton)
-    async def yesButton_callback(Interaction):
+    async def yesButton_callback ():
         leaguebase.inviteLeague (disc_id, member.id)
-        await Interaction.response.send_message("Invite Accepted!")
-    async def noButton_callback(Interaction):
-        await Interaction.response.send_message ("Invite Declined")
+        await InteractionResponse.send_message("Invite Accepted!")
+    async def noButton_callback():
+        await InteractionResponse.send_message ("Invite Declined")
 
     yesButton.callback = yesButton_callback
     noButton.callback = noButton_callback
