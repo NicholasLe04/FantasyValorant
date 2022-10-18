@@ -31,13 +31,14 @@ class Database():
 
         self.playerNames = [] 
         self.coachesNames = []
+        self.teamNames = []
 
         for player in self.players.get('players'):
             self.playerNames.append(player)
         for coach in self.players.get('coaches'):
             self.coachesNames.append(coach)
         for team in self.teams.get('teams'):
-            self.teams.append(team)
+            self.teamNames.append(team)
         
         self.scraper = Scraper() #Declaring Scrapper object
 
