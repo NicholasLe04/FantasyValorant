@@ -88,8 +88,3 @@ class LeagueBase():
 
 leg = LeagueBase()
 leg.createTable()
-userbase.createTable()
-userbase.addNewUser("343")
-userbase.addNewUser("353")
-leg.createLeague("somenuts", "343")
-leg.createLeague("phatnuts", "353")
