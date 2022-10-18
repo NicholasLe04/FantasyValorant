@@ -182,7 +182,7 @@ class Scraper():
 
     ## Returns player_name's country/region flag emoji
     #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
-    def scrapeTeamRegionFlag(self, player_name: str):
+    def scrapeTeamRegionFlag(self, team: str):
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
