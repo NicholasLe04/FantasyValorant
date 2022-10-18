@@ -118,7 +118,7 @@ async def team(ctx: commands.Context, *, team_name):
     await ctx.reply(embed=embedTeamInfo(team_name))
 
 
-'''# Returns a user's roster
+# Returns a user's roster
 @client.hybrid_command(name = "roster", with_app_command = True, description = "Gets your fantasy roster",aliases = ['r'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
@@ -176,7 +176,7 @@ async def roster(ctx: commands.Context, member: Member = None):
     #         previous_page = current_page
 
     #         if current_page != previous_page:
-    #             await msg.edit(embed=embedRosterInfo(member_ref, current_page))'''
+    #             await msg.edit(embed=embedRosterInfo(member_ref, current_page))
 
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
