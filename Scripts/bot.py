@@ -170,7 +170,18 @@ async def draft(ctx: commands.Context, player_name : str):
         return None
     await ctx.reply("Player added")
 
-
+# Creates a league
+@client.hybrid_command(name = "create", with_app_command = True, description = "Creates a league")
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def create(ctx: commands.Context, name : str):
+    disc_id = str(ctx.author.id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    await ctx.reply (leaguebase.createLeague (disc_id, name))
+    
 # Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
 # Works only on selected server (guild)
