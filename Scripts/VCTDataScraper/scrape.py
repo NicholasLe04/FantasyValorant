@@ -13,11 +13,11 @@ class Scraper():
     teamlogos_file_name = os.path.join(file_dir, 'JsonFiles/teamlogos.json')
 
     ## Loads team page ID's to access team page urls
-    with open(teamid_file_name) as ids:
-        teamIDs = json.load(ids)
+    with open(teamid_file_name) as teamids:
+        teamIDs = json.load(teamids)
 
-    with open(playerid_file_name) as ids:
-        playerIDs = json.load(ids)
+    with open(playerid_file_name) as playerids:
+        playerIDs = json.load(playerids)
 
     with open(flags_file_name) as flags:
         flagEmojis = json.load(flags)
@@ -183,16 +183,7 @@ class Scraper():
     ## Returns player_name's country/region flag emoji
     #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
     def scrapeTeamRegionFlag(self, team: str):
-        url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml') 
-        region = soup.find('div', {'class': 'team-header-country'}).text.strip()
-        return self.flagEmojis.get(region)
-
-    def scrapeTeamMapWinrate(self, team: str):
-        url = 'https://www.vlr.gg/team/stats/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml') 
+        return self.flagEmojis.get(self.scrapeTeamRegion(team).upper())
 
         output = []
 
@@ -330,7 +321,8 @@ class Scraper():
     #############################
 
 
-    
+scraper = Scraper()
+print(scraper.scrapeTeamRegion("sentinels"))
 
 
 ## TESTING 
