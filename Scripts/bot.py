@@ -1,6 +1,6 @@
 import discord #pip install discord.py
 from discord.ext import commands, tasks
-from discord import ButtonStyle, app_commands
+from discord import ButtonStyle, InteractionResponse, app_commands
 from discord import Member
 from database import Database
 from VCTDataScraper.scrape import Scraper
@@ -225,11 +225,11 @@ async def invite(ctx: commands.Context, member : Member):
     view = View()
     view.add_item (yesButton)
     view.add_item (noButton)
-    async def yesButton_callback(interaction):
+    async def yesButton_callback(Interaction):
         leaguebase.inviteLeague (disc_id, member.id)
-        await interaction.response.send_message("Invite Accepted!")
-    async def noButton_callback(interaction):
-        await interaction.response.send_message("Invite Declined!")
+        await Interaction.response.send_message("Invite Accepted!")
+    async def noButton_callback(Interaction):
+        await Interaction.response.send_message ("Invite Declined")
 
     yesButton.callback = yesButton_callback
     noButton.callback = noButton_callback
