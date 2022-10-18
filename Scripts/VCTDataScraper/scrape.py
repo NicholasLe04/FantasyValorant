@@ -173,6 +173,22 @@ class Scraper():
     def scrapeTeamLogo(self, team: str):
         return self.teamLogos.get(team.lower())
 
+    ## Returns team region
+    def scrapeTeamRegion(self, team: str):
+        url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml') 
+        return soup.find('div', {'class': 'team-header-country'}).text.strip()
+
+    ## Returns player_name's country/region flag emoji
+    #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
+    def scrapeTeamRegionFlag(self, player_name: str):
+        url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml') 
+        region = soup.find('div', {'class': 'team-header-country'}).text.strip()
+        return self.flagEmojis.get(region)
+
     def scrapeTeamMapWinrate(self, team: str):
         url = 'https://www.vlr.gg/team/stats/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
