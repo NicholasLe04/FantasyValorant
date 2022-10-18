@@ -1,5 +1,3 @@
-from curses import nonl
-from sys import set_int_max_str_digits
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import ButtonStyle, app_commands
