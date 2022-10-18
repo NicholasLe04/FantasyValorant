@@ -255,11 +255,10 @@ def embedTeamInfo (team_name: str):
         embed = discord.Embed(title=f"{scraper.scrapeTeamName(team_name)}")
         embed.set_author(name=f"{scraper.scrapeTeamRegionFlag(team_name)} {scraper.scrapeTeamRegion(team_name)}")
         embed.set_thumbnail(url=scraper.scrapeTeamLogo(team_name.lower()))
-        rosterString = ""
+        rosterString = []
         
         for player in database.teamGetPlayers(team_name): ## Make a string of players seperated by ,
-            rosterString += f"{player},"
-        rosterString = rosterString.split() ## Convert string to array
+            rosterString.append(player)
 
         for player in rosterString:
             pname = player.lower()

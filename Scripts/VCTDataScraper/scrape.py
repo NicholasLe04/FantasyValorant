@@ -15,13 +15,10 @@ class Scraper():
     ## Loads team page ID's to access team page urls
     with open(teamid_file_name) as teamids:
         teamIDs = json.load(teamids)
-
     with open(playerid_file_name) as playerids:
         playerIDs = json.load(playerids)
-
     with open(flags_file_name) as flags:
         flagEmojis = json.load(flags)
-
     with open(teamlogos_file_name) as teamlogos:
         teamLogos = json.load(teamlogos)
 
@@ -307,7 +304,7 @@ class Scraper():
     ## Returns player_name's most played agent over the past 90 days
     #  Example: scrapper.scrapePlayerAgent('tenz') = 'Chamber'
     def scrapePlayerAgent(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
@@ -322,10 +319,6 @@ class Scraper():
     #   INDIVIDUAL COACH DATA   #
     #                           #
     #############################
-
-
-scraper = Scraper()
-print(scraper.scrapeTeamRegion("sentinels"))
 
 
 ## TESTING 

@@ -23,19 +23,21 @@ class Database():
 
         file_dir = os.path.dirname(__file__)
         playerlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/playerlist.json')
-        teamIDs_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/teamids.json')
+        teamlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/teamlist.json')
         with open(playerlist_dir) as playerList:
-            players = json.load(playerList)
-        with open(teamIDs_dir) as teamIds:
-            self.teamIDs = json.load(teamIds) 
+            self.players = json.load(playerList)
+        with open(teamlist_dir) as teamList:
+            self.teams = json.load(teamList) 
 
         self.playerNames = [] 
         self.coachesNames = []
 
-        for i in players.get('players'):
-            self.playerNames.append(i)
-        for i in players.get('coaches'):
-            self.coachesNames.append(i)
+        for player in self.players.get('players'):
+            self.playerNames.append(player)
+        for coach in self.players.get('coaches'):
+            self.coachesNames.append(coach)
+        for team in self.teams.get('teams'):
+            self.teams.append(team)
         
         self.scraper = Scraper() #Declaring Scrapper object
 
@@ -183,6 +185,10 @@ class Database():
             return x[0]
 
     def teamGetPlayers(self, team_name: str):
+        for team in self.teams:
+            if (team_name.lower() == team.lower()):
+                team_name = team
+                break
         self.mycursor.execute("SELECT username FROM Players WHERE team = %s", (team_name,))
         team = self.mycursor.fetchall()
         output = []
