@@ -124,9 +124,7 @@ class Database():
             else:
                 self.mycursor.execute(I10, (flg, pName))
 
-            self.mycursor.execute("SELECT * FROM Players WHERE userName = %s", (pName,))
-            for x in self.mycursor:
-                print(x)
+
             self.db.commit()
 
     def printTable(self):
