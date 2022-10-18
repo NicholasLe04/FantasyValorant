@@ -183,7 +183,13 @@ class Scraper():
     ## Returns player_name's country/region flag emoji
     #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
     def scrapeTeamRegionFlag(self, team: str):
-        return self.flagEmojis.get(self.scrapeTeamRegion(team).upper())
+        region = self.scrapeTeamRegion(team).upper()
+        return self.flagEmojis.get(region)
+
+    def scrapeTeamMapWinrate(self, team: str):
+        url = 'https://www.vlr.gg/team/stats/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
+        html = requests.get(url)
+        soup = BeautifulSoup(html.content, 'lxml') 
 
         output = []
 
@@ -251,10 +257,7 @@ class Scraper():
     ## Returns player_name's country/region flag emoji
     #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
     def scrapePlayerRegionFlag(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower()))  # Navigate to the specified team page 
-        html = requests.get(url)
-        soup = BeautifulSoup(html.content, 'lxml') 
-        region = soup.find('div', {'class': 'ge-text-light'}).text.strip()
+        region = self.scrapePlayerRegion(player_name).upper()
         return self.flagEmojis.get(region)
         
     ## Returns player_name's average ACS over the past 90 days
