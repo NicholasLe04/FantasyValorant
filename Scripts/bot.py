@@ -252,15 +252,11 @@ def embedPlayerInfo(player_name: str):
 def embedTeamInfo (team_name: str):
     try:
         team_name = team_name.lower()
-        embed = discord.Embed(title=f"{scraper.scrapeTeamName(team_name)}")
-        embed.set_author(name=f"{scraper.scrapeTeamRegionFlag(team_name)} {scraper.scrapeTeamRegion(team_name)}")
+        embed = discord.Embed(title=f"{scraper.scrapeTeamRegionFlag(team_name)} {scraper.scrapeTeamRegion(team_name)}")
+        embed.set_author(name=f"{scraper.scrapeTeamName(team_name)}")
         embed.set_thumbnail(url=scraper.scrapeTeamLogo(team_name.lower()))
-        rosterString = []
         
         for player in database.teamGetPlayers(team_name): ## Make a string of players seperated by ,
-            rosterString.append(player)
-
-        for player in rosterString:
             pname = player.lower()
             embed.add_field(name=f"{player}", value=f"**ACS** {database.playerGetGlobalACS(pname)} | **K/D** {database.playerGetGlobalKD(pname)}\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}", inline=False) ## Make an element for each player & display team
         
