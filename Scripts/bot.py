@@ -7,6 +7,7 @@ from VCTDataScraper.scrape import Scraper
 from threading import Thread
 from userbase import Userbase
 from discord.ui import Button, View
+from leaguebase import LeagueBase
 
 # NOTES ABOUT PROGRAM:
 # NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
@@ -20,6 +21,7 @@ TOKEN = 'MTAyMDAwOTM5MzM5MzI0NjI0Mg.Gt_Unu.jm624p_Ogoz3tyXfS6vXHv776SHpcR4pYDTaX
 database = Database()
 scraper = Scraper()
 userbase = Userbase()
+leaguebase = LeagueBase()
 userbase.createTable()
 
 ## Initialize client

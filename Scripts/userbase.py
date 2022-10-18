@@ -33,6 +33,7 @@ class Userbase():
                         """)
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserGameData (
                         userID int,
+                        discID VARCHAR(20) UNIQUE KEY,
                         leagueID VARCHAR(30) DEFAULT '-1' NOT NULL,
                         leagueRoster1 VARCHAR(70) DEFAULT 'Missing,Missing,Missing,Missing,Missing' NOT NULL,
                         leagueRoster2 VARCHAR(70) DEFAULT '' NOT NULL,
@@ -66,7 +67,7 @@ class Userbase():
         if(self.checkForUser(discID)):
             self.mycursor.execute("INSERT into UserInfo (discID) VALUES (%s)", (discID,))
             x = self.mycursor.lastrowid
-            self.mycursor.execute("INSERT into UserGameData (userID) VALUES (%s)", (x,))
+            self.mycursor.execute("INSERT into UserGameData (userID,discID) VALUES (%s,%s)", (x,discID))
             self.db.commit()
             self.mycursor.execute("SELECT discID FROM UserInfo WHERE discID = %s", (discID,))
             for x in self.mycursor:
