@@ -1,3 +1,4 @@
+from stat import SF_SNAPSHOT
 from discord import User
 import mysql.connector
 import logging
@@ -61,32 +62,56 @@ class LeagueBase():
         self.db.commit()
         print("This is at L59: "+ str(user_id))
         return("League Created; Owner: " + str(user_id) + ", " + discord_id + " league name: " + name)
+
+    def checkOwnership (self, disc_id : str):
+        self.mycursor.execute ("SELECT EXISTS (SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s)", (disc_id,))
+        isOwner = 0
+        for x in self.mycursor:
+            isOwner = x[0]
+        if (isOwner == 1):
+            return True
+        else:
+            return False
+    
+    def getOwnedLeague (self, disc_id : str):
+        if (self.checkOwnership(disc_id)):
+            self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
+            for x in self.mycursor:
+                name = x[0]
+                return (name)
+        else:
+            return None
     
     def inviteLeague(self, disc_id : str, odisc_id : str):
-        userbase.addNewUser(disc_id)
-        userbase.addNewUser(odisc_id)
-        self.mycursor.execute("SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
-        user_id = 0
-        ouser_id = 0
-        output = []
-        for x in self.mycursor:
-            user_id = x[0]
-        userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (odisc_id,))
-        for x in userbase.mycursor:
-            ouser_id = x[0]
-        self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
-        for x in self.mycursor:
-            output = x[0].split(",")
-        emptyIndex = output.index("Missing")
-        print(emptyIndex)
-        print(ouser_id)
-        print(user_id)
-        output[emptyIndex] = str(ouser_id)
-        output = ",".join(output)
-        self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
-        self.db.commit()
-        return ("work")
-        
+        if (self.checkOwnership(disc_id)):
+            userbase.addNewUser(disc_id)
+            userbase.addNewUser(odisc_id)
+            self.mycursor.execute("SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
+            user_id = 0
+            ouser_id = 0
+            output = []
+            for x in self.mycursor:
+                user_id = x[0]
+            userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (odisc_id,))
+            for x in userbase.mycursor:
+                ouser_id = x[0]
+            self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+            for x in self.mycursor:
+                output = x[0].split(",")
+            emptyIndex = output.index("Missing")
+            print(emptyIndex)
+            print(ouser_id)
+            print(user_id)
+            output[emptyIndex] = str(ouser_id)
+            output = ",".join(output)
+            self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
+            self.db.commit()
+            self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+            for x in self.mycursor:
+                name = x[0]
+                return (name)
+        else:
+            return ("failed")
         
         
 

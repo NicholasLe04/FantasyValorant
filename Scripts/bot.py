@@ -220,7 +220,24 @@ async def invite(ctx: commands.Context, member : Member):
     disc_id = str(ctx.author.id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    await ctx.reply(leaguebase.inviteLeague (disc_id, member.id))
+    yesButton = Button (label = "Accept", style = discord.ButtonStyle.green)
+    noButton = Button (label = "Decline", style = discord.ButtonStyle.red)
+    view = View()
+    view.add_item (yesButton)
+    view.add_item (noButton)
+    async def yesButton_callback(interaction):
+        leagueName = leaguebase.inviteLeague (disc_id, member.id)
+        await interaction.response.send_message("Invite Accepted!")
+    async def noButton_callback(interaction):
+        await interaction.response.send_message("Invite Declined!")
+
+    yesButton.callback = yesButton_callback
+    noButton.callback = noButton_callback
+
+    if (leaguebase.checkOwnership(disc_id)):
+        await ctx.send (member.mention + "Do you want to accept the invite from League " + leaguebase.getOwnedLeague(disc_id) + "?", view)
+    else:
+        await ctx.reply ("You are not the owner of a league.")
     
 # Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
