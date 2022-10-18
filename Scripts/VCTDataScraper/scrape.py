@@ -178,12 +178,12 @@ class Scraper():
         url = 'https://www.vlr.gg/team/' + str(self.teamIDs.get(team.lower()))  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
-        return soup.find('div', {'class': 'team-header-country'}).text.strip()
+        return soup.find('div', {'class': 'team-header-country'}).text.strip().upper()
 
     ## Returns player_name's country/region flag emoji
     #  Example: scrapper.scrapePlayerRegionFlag('tenz') = ':flag_ca:'
     def scrapeTeamRegionFlag(self, team: str):
-        region = self.scrapeTeamRegion(team).upper()
+        region = self.scrapeTeamRegion(team)
         return self.flagEmojis.get(region)
 
     def scrapeTeamMapWinrate(self, team: str):
@@ -263,7 +263,7 @@ class Scraper():
     ## Returns player_name's average ACS over the past 90 days
     #  Example: scrapper.scrapePlayerGlobalACS('tenz') = '229.6'
     def scrapePlayerGlobalACS(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
@@ -274,7 +274,7 @@ class Scraper():
     ## Returns player_name's average K/D over the past 90 days
     #  Example: scrapper.scrapePlayerGlobalKD('tenz') = '1.2'
     def scrapePlayerGlobalKD(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
@@ -285,7 +285,7 @@ class Scraper():
     ## Returns player_name's average kills per round over the past 90 days
     #  Example: scrapper.scrapePlayerGlobalKPR('tenz') = '0.84'
     def scrapePlayerGlobalKPR(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
@@ -296,7 +296,7 @@ class Scraper():
     ## Returns player_name's average assists per round over the past 90 days
     #  Example: scrapper.scrapePlayerGlobalAPR('tenz') = '0.11'
     def scrapePlayerGlobalAPR(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
@@ -307,7 +307,7 @@ class Scraper():
     ## Returns player_name's most played agent over the past 90 days
     #  Example: scrapper.scrapePlayerAgent('tenz') = 'Chamber'
     def scrapePlayerAgent(self, player_name: str):
-        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=90d'  # Navigate to the specified team page 
+        url = 'https://www.vlr.gg/player/' + str(self.playerIDs.get(player_name.lower())) + '/?timespan=all'  # Navigate to the specified team page 
         html = requests.get(url)
         soup = BeautifulSoup(html.content, 'lxml') 
         try:
