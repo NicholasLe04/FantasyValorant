@@ -55,6 +55,7 @@ class LeagueBase():
         self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE leagueName = %s", (output,name))
         print("Owner: " + str(user_id) + " | " + discord_id + " named league " + name)
         self.db.commit()
+        return("League Created; Owner: " + str(user_id) + ", " + discord_id + " league name: " + name)
     
     def inviteLeague(self, disc_id : str, odisc_id : str):
         self.mycursor.execute("SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))

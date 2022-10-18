@@ -178,9 +178,10 @@ async def draft(ctx: commands.Context, player_name : str):
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def create(ctx: commands.Context, name : str):
     disc_id = str(ctx.author.id)
+    userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    await ctx.reply (leaguebase.createLeague (disc_id, name))
+    await ctx.reply(leaguebase.createLeague(name, disc_id))
     
 # Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
