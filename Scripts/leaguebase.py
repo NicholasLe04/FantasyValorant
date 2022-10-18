@@ -28,8 +28,8 @@ class LeagueBase():
         self.mycursor.execute("DROP TABLE IF EXISTS LeagueInfo")
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS LeagueInfo(
                         leagueID int AUTO_INCREMENT,
-                        ownerID int,
-                        ownerdisc_id VARCHAR(20),
+                        ownerID int UNIQUE KEY,
+                        ownerdisc_id VARCHAR(20) UNIQUE KEY,
                         draftDate Date,
                         users VARCHAR(255) DEFAULT 'Missing,Missing,Missing,Missing,Missing,Missing,Missing,Missing,Missing,Missing',
                         draftTurn VARCHAR(20) DEFAULT 'none',
@@ -42,6 +42,7 @@ class LeagueBase():
     def createLeague(self, name : str, discord_id : str):
         user_id = 0
         output = []
+        print("Command initiated by: " + discord_id)
         userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discord_id,))
         for x in userbase.mycursor:
             user_id = x[0]
@@ -87,3 +88,8 @@ class LeagueBase():
 
 leg = LeagueBase()
 leg.createTable()
+userbase.createTable()
+userbase.addNewUser("343")
+userbase.addNewUser("353")
+leg.createLeague("somenuts", "343")
+leg.createLeague("phatnuts", "353")
