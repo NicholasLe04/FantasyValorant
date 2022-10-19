@@ -105,6 +105,11 @@ class LeagueBase():
             self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
             self.db.commit()
             self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+        
+    def leagueGetName (self, league_id):
+        self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE leagueID = %s", (league_id,))
+        for x in self.mycursor:
+            return x[0]
 
 
 leg = LeagueBase()

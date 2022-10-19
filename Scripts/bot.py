@@ -118,6 +118,19 @@ async def team(ctx: commands.Context, *, team_name):
     await ctx.reply(embed=embedTeamInfo(team_name))
 
 
+@client.hybrid_command(name = "league", with_app_command= True, description = "Returns league info",aliases = ['l'])
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+async def team(ctx: commands.Context, *, league_id):
+    disc_id = str(ctx.author.id)
+    userbase.addNewUser(disc_id)
+    await ctx.defer(ephemeral=True)
+    
+    if embedLeagueInfo(league_id) == "No league found":
+        await ctx.reply("No league has been found under that ID. Are you sure you typed it correctly?")
+        return None
+    await ctx.reply(embed=embedLeagueInfo(league_id))
+
+
 # Returns a user's roster
 @client.hybrid_command(name = "roster", with_app_command = True, description = "Gets your fantasy roster",aliases = ['r'])
 # Works only on selected server (guild)
@@ -279,11 +292,6 @@ async def invite(ctx: commands.Context, member : Member):
     except Exception as e:
         await ctx.reply(e)
 
-''' #### to be implemented, add an index query too
-    if (member == None):
-        await ctx.reply(embed = embedRosterInfo(ctx.author))
-    else:
-        await ctx.reply(embed = embedRosterInfo(member))'''
         
 #######################
 #   EMBED FUNCTIONS   #
@@ -348,9 +356,13 @@ def embedRosterInfo(member: Member, league: int):
     return (embed)
 
 
-def embedLeagueInfo(member: Member, name: str):
-    embed = discord.Embed(title=name, description=f"Owned by: {member.name}\nOwner ID: {member.id}\n")
-    return (embed)
+def embedLeagueInfo(league_id):
+    try:
+        league_name = leaguebase.leagueGetName(league_id)
+        embed = discord.Embed(title=league_name, description=f"League ID:{league_id}\n")
+        return (embed)
+    except:
+        return "No league found"
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 

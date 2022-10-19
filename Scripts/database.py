@@ -70,9 +70,9 @@ class Database():
         self.db.commit()
 
     def fillNames (self):
-        for pName in self.playerNames:
-            Q1 = "INSERT INTO Players (userName) VALUES (%s)"
-            self.mycursor.execute(Q1, (pName,))
+        # for pName in self.playerNames:
+        #     Q1 = "INSERT INTO Players (userName) VALUES (%s)"
+        #     self.mycursor.execute(Q1, (pName,))
         for cName in self.coachesNames:
             Q1 = "INSERT INTO Coaches (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (cName,))
@@ -138,12 +138,12 @@ class Database():
             self.mycursor.execute(I1, (realName, cName,))
 
             team = self.scraper.scrapePlayerTeam(cName)
-            I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
-            self.mycursor.execute(I1, (team, cName,))
+            I2 = "UPDATE Players SET realName = %s WHERE userName = %s"
+            self.mycursor.execute(I2, (team, cName,))
 
             country = self.scraper.scrapePlayerRegion(cName)
-            I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
-            self.mycursor.execute(I1, (country, cName,))
+            I3 = "UPDATE Players SET realName = %s WHERE userName = %s"
+            self.mycursor.execute(I3, (country, cName,))
         
         self.db.commit()
 
@@ -223,6 +223,7 @@ class Database():
 
 #TESTING
 datab = Database()
+datab.fillNames()
 #datab.addNewUser("283407511133093889")
 #datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
 #datab.addNewUser(34351351)
