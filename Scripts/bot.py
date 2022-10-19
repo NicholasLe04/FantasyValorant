@@ -226,6 +226,7 @@ async def invite(ctx: commands.Context, member : Member):
     view.add_item (yesButton)
     view.add_item (noButton)
     async def yesButton_callback (interaction):
+        leaguebase.inviteLeague(disc_id, member.id)
         await interaction.response.send_message("Invite Accepted!")
     async def noButton_callback(interaction):
         await interaction.response.send_message("Invite Declined!")
@@ -234,7 +235,7 @@ async def invite(ctx: commands.Context, member : Member):
     noButton.callback = noButton_callback
 
     if (leaguebase.checkOwnership(disc_id)):
-        sent_msg = await ctx.send (member.mention + "Do you want to accept the invite from League " + leaguebase.getOwnedLeague(disc_id) + "?", view=view)
+        await ctx.send (member.mention + "Do you want to accept the invite from League " + leaguebase.getOwnedLeague(disc_id) + "?", view=view)
     else:
         await ctx.reply ("You are not the owner of a league.")
     
