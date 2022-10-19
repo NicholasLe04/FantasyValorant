@@ -358,13 +358,10 @@ def embedRosterInfo(member: Member, league: int):
 
 
 def embedLeagueInfo(league_id): 
-    try:
-        league_name = leaguebase.leagueGetName(league_id)
-        league_owner_id = leaguebase.leagueGetOwnerID(league_id)
-        embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
-        return (embed)
-    except:
-        return "No league found"
+    league_name = leaguebase.leagueGetName(league_id)
+    league_owner_id = leaguebase.leagueGetOwnerID(league_id)
+    embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
+    return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
