@@ -35,9 +35,9 @@ class Userbase():
                         userID int,
                         discID VARCHAR(20) UNIQUE KEY,
                         leagueID VARCHAR(30) DEFAULT '-1' NOT NULL,
-                        leagueRoster1 VARCHAR(70) DEFAULT 'Missing,Missing,Missing,Missing,Missing' NOT NULL,
-                        leagueRoster2 VARCHAR(70) DEFAULT '' NOT NULL,
-                        leagueRoster3 VARCHAR(70) DEFAULT '' NOT NULL,
+                        leagueRoster1 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
+                        leagueRoster2 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
+                        leagueRoster3 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
                         leaguePoints1 int DEFAULT 0 NOT NULL,
                         leaguePoints2 int DEFAULT 0 NOT NULL,
                         leaguePoints3 int DEFAULT 0 NOT NULL)
@@ -183,7 +183,7 @@ class Userbase():
         elif (league == 3):
             roster = self.uTeamGetLeagueRoster3(discID)
 
-        if ("Missing" not in roster):
+        if ("PlayerSlot" not in roster):
             return "Roster full"
 
         pname = None
@@ -194,7 +194,7 @@ class Userbase():
         if (pname == None):
             return "No player found"
 
-        emptyIndex = roster.index("Missing")
+        emptyIndex = roster.index("PlayerSlot")
         roster[emptyIndex] = pname
         roster = ",".join(roster)
         print(roster)
@@ -224,7 +224,7 @@ class Userbase():
 
         roster = self.uTeamGetLeagueRoster1(discID)
         emptyIndex = roster.index(pname)
-        roster[emptyIndex] = "Missing"
+        roster[emptyIndex] = "PlayerSlot"
         roster = ",".join(roster)
         print(roster)
         self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
