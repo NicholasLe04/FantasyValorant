@@ -35,9 +35,9 @@ class Userbase():
                         userID int,
                         discID VARCHAR(20) UNIQUE KEY,
                         leagueID VARCHAR(30) DEFAULT '-1' NOT NULL,
-                        leagueRoster1 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
-                        leagueRoster2 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
-                        leagueRoster3 VARCHAR(70) DEFAULT 'CoachSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, PlayerSlot, BenchSlot, BenchSlot, BenchSlot' NOT NULL,
+                        leagueRoster1 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
+                        leagueRoster2 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
+                        leagueRoster3 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
                         leaguePoints1 int DEFAULT 0 NOT NULL,
                         leaguePoints2 int DEFAULT 0 NOT NULL,
                         leaguePoints3 int DEFAULT 0 NOT NULL)
