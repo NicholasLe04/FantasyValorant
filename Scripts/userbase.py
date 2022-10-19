@@ -52,7 +52,6 @@ class Userbase():
 
     def checkForUser(self, discID: str):
         self.mycursor.execute("SELECT EXISTS(SELECT discID FROM UserInfo WHERE discID = %s)", (discID,))
-        print (str(self.mycursor[0]) + "this is the return")
         for x in self.mycursor:
             if(x[0] == 1):
                 print("User Found")
