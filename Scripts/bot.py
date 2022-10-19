@@ -219,6 +219,7 @@ async def create(ctx: commands.Context, name : str):
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def invite(ctx: commands.Context, member : Member):
     try:
+        disabled = False
         if ():
             raise Exception("User already in league!")
         disc_id = str(ctx.author.id)
@@ -229,17 +230,14 @@ async def invite(ctx: commands.Context, member : Member):
         view = View()
         view.add_item (yesButton)
         view.add_item (noButton)
-        disabled = False
         async def yesButton_callback (interaction):
             if interaction.user == member and disabled == False:
                 disabled = True
                 leaguebase.inviteLeague(disc_id, member.id)
-                await interaction.edit_original_response(view=view)
                 await interaction.response.send_message("Invite Accepted!")
         async def noButton_callback(interaction):
             if interaction.user == member and disabled == False:
                 disabled = True
-                await interaction.edit_original_response(view=view)
                 await interaction.response.send_message("Invite Declined!")
 
         yesButton.callback = yesButton_callback
