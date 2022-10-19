@@ -175,8 +175,8 @@ class Userbase():
     # SETTER METHODS #
     ##################
 
-    def addPlayer(self, player_name: str, discID: str):
-        roster = self.uTeamGetLeagueRoster1(discID)
+    def addPlayer(self, player_name: str, discID: str, league: int):
+        roster = exec(f"self.uTeamGetLeagueRoster{league}(discID)")
 
         if ("Missing" not in roster):
             return "Roster full"
@@ -196,25 +196,15 @@ class Userbase():
         self.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discID,))
         for x in self.mycursor:
             uref = x[0]
-        self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (roster,uref))
-
+        
+        if (league == 1):
+            self.mycursor.execute("UPDATE UserGameData SET leagueRoster1 = %s WHERE userID = %s", (roster,uref))
+        elif (league == 2):
+            self.mycursor.execute("UPDATE UserGameData SET leagueRoster2 = %s WHERE userID = %s", (roster,uref))
+        elif (league == 3):
+            self.mycursor.execute("UPDATE UserGameData SET leagueRoster3 = %s WHERE userID = %s", (roster,uref))
         print("Proceeding...")
         self.db.commit()
-
-        '''if(self.uTeamGetPlayerOne(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerOne = %s WHERE discordID = %s", (pname, discID,))
-
-        elif(self.uTeamGetPlayerTwo(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerTwo = %s WHERE discordID = %s", (pname, discID,))
-            
-        elif(self.uTeamGetPlayerThree(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerThree = %s WHERE discordID = %s", (pname, discID,))
-            
-        elif(self.uTeamGetPlayerFour(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerFour = %s WHERE discordID = %s", (pname, discID,))
-            
-        elif(self.uTeamGetPlayerFive(discID) == "Missing"):
-            self.mycursor.execute("UPDATE UserTeam SET playerFive = %s WHERE discordID = %s", (pname, discID,))'''
         
 
 

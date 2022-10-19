@@ -164,19 +164,6 @@ async def roster(ctx: commands.Context, member: Member = None):
     view.add_item(page_3_button)
     await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
 
-    # while True:
-    #     try:
-    #         reaction = await client.wait_for("reaction_add", check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
-    #     except asyncio.TimeoutError:
-    #         embed = embedRosterInfo(member_ref, current_page)
-    #         embed.set_footer(text="Timed Out.")
-    #         await msg.clear_reactions()
-
-    #     else:
-    #         previous_page = current_page
-
-    #         if current_page != previous_page:
-    #             await msg.edit(embed=embedRosterInfo(member_ref, current_page))
 
 # Adds a player to user's roster
 @client.hybrid_command(name = "draft", with_app_command = True, description = "Adds the selected player to your roster",aliases = ['d'])
@@ -184,12 +171,12 @@ async def roster(ctx: commands.Context, member: Member = None):
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
 # Params: ctx is defined as the command's context, player_name is the selected player
-async def draft(ctx: commands.Context, player_name : str):
+async def draft(ctx: commands.Context, player_name : str, league: int):
     disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    x = userbase.addPlayer(player_name, disc_id)
+    x = userbase.addPlayer(player_name, disc_id, league)
     if x == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
@@ -197,6 +184,41 @@ async def draft(ctx: commands.Context, player_name : str):
         await  ctx.reply("Roster filled!")
         return None
     await ctx.reply("Player added")
+    
+
+# Removes player from user's roster
+@client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def drop(ctx: commands.Context, player_name : str):
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    if userbase.dropPlayer(player_name, disc_id) == "No player found":
+        await ctx.reply("No player has been found under that name in your roster. Are you sure you typed it correctly?")
+        return None
+    await ctx.reply("Player dropped")
+
+
+# Removes player from user's roster
+@client.hybrid_command(name = "drop-all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
+# Works only on selected server (guild)
+@app_commands.guilds(discord.Object(id=1020055030247727155))
+# Defining add command
+# Params: ctx is defined as the command's context, player_name is the selected player
+async def drop_all(ctx: commands.Context):
+    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
+    userbase.addNewUser(disc_id)
+    # Reply with a private message (command) or public message (using prefix)                   implement database
+    await ctx.defer(ephemeral=True)
+    for player in userbase.uTeamGetLeagueRoster1(disc_id):
+        userbase.dropPlayer(player, disc_id)
+
+    await ctx.reply("Roster has been dropped")
+
 
 # Creates a league
 @client.hybrid_command(name = "create", with_app_command = True, description = "Creates a league")
@@ -246,7 +268,6 @@ async def invite(ctx: commands.Context, member : Member):
                 view.remove_item(yesButton)
                 view.remove_item(noButton)
                 await sent_msg.edit(content= member.mention + " Invite Declined!", view=view)
-
         yesButton.callback = yesButton_callback
         noButton.callback = noButton_callback
 
@@ -257,41 +278,6 @@ async def invite(ctx: commands.Context, member : Member):
 
     except Exception as e:
         await ctx.reply(e)
-    
-# Removes player from user's roster
-@client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
-# Works only on selected server (guild)
-@app_commands.guilds(discord.Object(id=1020055030247727155))
-# Defining add command
-# Params: ctx is defined as the command's context, player_name is the selected player
-async def drop(ctx: commands.Context, player_name : str):
-    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(disc_id)
-    # Reply with a private message (command) or public message (using prefix)                   implement database
-    await ctx.defer(ephemeral=True)
-    if userbase.dropPlayer(player_name, disc_id) == "No player found":
-        await ctx.reply("No player has been found under that name in your roster. Are you sure you typed it correctly?")
-        return None
-    await ctx.reply("Player dropped")
-
-# Removes player from user's roster
-@client.hybrid_command(name = "drop-all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
-# Works only on selected server (guild)
-@app_commands.guilds(discord.Object(id=1020055030247727155))
-# Defining add command
-# Params: ctx is defined as the command's context, player_name is the selected player
-async def drop_all(ctx: commands.Context):
-    disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
-    userbase.addNewUser(disc_id)
-    # Reply with a private message (command) or public message (using prefix)                   implement database
-    await ctx.defer(ephemeral=True)
-    for player in userbase.uTeamGetLeagueRoster1(disc_id):
-        userbase.dropPlayer(player, disc_id)
-
-    await ctx.reply("Roster has been dropped")
-
-
-
 
 ''' #### to be implemented, add an index query too
     if (member == None):
