@@ -18,7 +18,7 @@ class Database():
             database="FantasyValorant"
         )
 
-        self.mycursor = self.db.cursor()
+        self.mycursor = self.db.cursor(buffered=True)
         self.logging = logging.basicConfig(filename = 'logging.log', format = '`%(asctime)s %(message)s' , level = logging.INFO)
 
         file_dir = os.path.dirname(__file__)
