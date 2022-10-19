@@ -1,4 +1,3 @@
-from stat import SF_SNAPSHOT
 from discord import User
 import mysql.connector
 import logging
@@ -79,6 +78,22 @@ class LeagueBase():
                 return (name)
         else:
             return None
+
+    def getPlayers(self, disc_id):
+        players = []
+        user_id = 0
+        userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (disc_id,))
+        for x in userbase.mycursor:
+            user_id = x[0]
+        self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+        for x in self.mycursor:
+            players = x[0].split(",")
+        print("These players belong to league owned by: " + str(user_id) + " | " + str(players))
+        return(players)
+
+    
+    def initDraft(self, disc_id):
+        print("a")
     
     def inviteLeague(self, disc_id : str, odisc_id : str):
         if (self.checkOwnership(disc_id)):
