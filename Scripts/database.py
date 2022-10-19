@@ -65,8 +65,9 @@ class Database():
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Coaches (userName VARCHAR(30) DEFAULT 'noname' NOT NULL,
                         realName VARCHAR(30) DEFAULT 'noname' NOT NULL,
                         team VARCHAR(20) DEFAULT 'noname' NOT NULL,
-                        country VARCHAR(25) DEFAULT 'noname' NOT NULL)
-                        """)
+                        country VARCHAR(25) DEFAULT 'noname' NOT NULL,
+                        flag VARCHAR(15) DEFAULT ':pirate_flag:' NOT NULL,
+                        coachImg VARCHAR(50) DEFAULT 'https://www.vlr.gg/img/base/ph/sil.png' NOT NULL)""")
         self.db.commit()
 
     def fillNames (self):
