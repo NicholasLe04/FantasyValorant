@@ -233,11 +233,15 @@ async def invite(ctx: commands.Context, member : Member):
             if interaction.user == member:
                 nonlocal sent_msg
                 leaguebase.inviteLeague(disc_id, member.id)
-                await sent_msg.edit(content="Invite Accepted!")
+                view.remove_item(yesButton)
+                view.remove_item(noButton)
+                await sent_msg.edit(content="Invite Accepted!", view=view)
         async def noButton_callback(interaction):
             if interaction.user == member:
                 nonlocal sent_msg
-                await sent_msg.edit(content="Invite Declined!")
+                view.remove_item(yesButton)
+                view.remove_item(noButton)
+                await sent_msg.edit(content="Invite Declined!", view=view)
 
         yesButton.callback = yesButton_callback
         noButton.callback = noButton_callback
