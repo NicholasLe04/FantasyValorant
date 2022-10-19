@@ -219,7 +219,7 @@ async def create(ctx: commands.Context, name : str):
 async def invite(ctx: commands.Context, member : Member):
     disc_id = str(ctx.author.id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
-    await ctx.defer(ephemeral=True)
+    await ctx.defer(ephemeral=False)
     yesButton = Button (label = "Accept", style = discord.ButtonStyle.green)
     noButton = Button (label = "Decline", style = discord.ButtonStyle.red)
     view = View()
