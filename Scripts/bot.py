@@ -371,7 +371,7 @@ async def shutdown(ctx):
     exit() # Ends the program, bot will go offline
 
 # Runs bot
-# client.run(TOKEN)
+client.run(TOKEN)
 
 
 
