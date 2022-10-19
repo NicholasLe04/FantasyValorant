@@ -1,5 +1,3 @@
-from dis import disco
-from tkinter import E
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import ButtonStyle, app_commands
