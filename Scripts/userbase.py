@@ -56,7 +56,7 @@ class Userbase():
             if(x[0] == 1):
                 print("User Found")
                 return False
-            else:
+            elif (x[0] == 0):
                 print("Proceeding...")
                 logging.info("User not found creating a table entry...")
                 return True
