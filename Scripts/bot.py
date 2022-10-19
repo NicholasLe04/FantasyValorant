@@ -162,7 +162,7 @@ async def roster(ctx: commands.Context, member: Member = None):
     view.add_item(page_1_button)
     view.add_item(page_2_button)
     view.add_item(page_3_button)
-    await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
+    await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view, delete_after=90.0)
 
 
 # Adds a player to user's roster
@@ -171,12 +171,12 @@ async def roster(ctx: commands.Context, member: Member = None):
 @app_commands.guilds(discord.Object(id=1020055030247727155))
 # Defining add command
 # Params: ctx is defined as the command's context, player_name is the selected player
-async def draft(ctx: commands.Context, player_name : str, league: int):
+async def draft(ctx: commands.Context, player_name : str, league_number: int):
     disc_id = str(ctx.author.id) # This obtains the user's id who sent the command
     userbase.addNewUser(disc_id)
     # Reply with a private message (command) or public message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    x = userbase.addPlayer(player_name, disc_id, league)
+    x = userbase.addPlayer(player_name, disc_id, league_number)
     if x == "No player found":
         await ctx.reply("No player has been found under that name. Are you sure you typed it correctly?")
         return None
@@ -203,7 +203,7 @@ async def drop(ctx: commands.Context, player_name : str):
     await ctx.reply("Player dropped")
 
 
-# Removes player from user's roster
+# Removes all players from user's roster
 @client.hybrid_command(name = "drop-all", with_app_command = True, description = "Removes all players from your roster",aliases = ['da'])
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
@@ -232,12 +232,12 @@ async def create(ctx: commands.Context, name : str):
     await ctx.defer(ephemeral=True)
     try:
         leaguebase.createLeague(name, disc_id)
-        await ctx.send(embed=embedLeagueInfo(ctx.author, name))
+        await ctx.send(embed=embedLeagueInfo(ctx.author, name), delete_after=90.0)
     except:
         await ctx.reply("Unable to create league. Perhaps the name is too long.")
 
 
-# Invites a player to a league
+# Invites a player to the league the user owns
 @client.hybrid_command(name = "invite", with_app_command = True, description = "Invites a player to a league")
 # Works only on selected server (guild)
 @app_commands.guilds(discord.Object(id=1020055030247727155))
@@ -349,7 +349,7 @@ def embedRosterInfo(member: Member, league: int):
 
 
 def embedLeagueInfo(member: Member, name: str):
-    embed = discord.Embed(title=name, description=f"Owned by: {member.name}\nOwner ID: {member.id}")
+    embed = discord.Embed(title=name, description=f"Owned by: {member.name}\nOwner ID: {member.id}\n")
     return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
@@ -371,7 +371,7 @@ async def shutdown(ctx):
     exit() # Ends the program, bot will go offline
 
 # Runs bot
-client.run(TOKEN)
+# client.run(TOKEN)
 
 
 

@@ -1,4 +1,5 @@
 import mysql.connector
+from Scripts.bot import team
 from VCTDataScraper.scrape import Scraper
 import json
 import os
@@ -73,7 +74,11 @@ class Database():
         for pName in self.playerNames:
             Q1 = "INSERT INTO Players (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (pName,))
-            self.db.commit()
+        for cName in self.coachesNames:
+            Q1 = "INSERT INTO Coaches (userName) VALUES (%s)"
+            self.mycursor.execute(Q1, (cName,))
+        
+        self.db.commit()
 
     #db.commit()'''
     #Opening playerlist.json to be accessed
@@ -84,9 +89,9 @@ class Database():
     def updateTable(self):
         for pName in self.playerNames:
 
-            realname = self.scraper.scrapePlayerName(pName)
+            realName = self.scraper.scrapePlayerName(pName)
             I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
-            self.mycursor.execute(I1, (realname, pName,))
+            self.mycursor.execute(I1, (realName, pName,))
 
             teamName = self.scraper.scrapePlayerTeam(pName)
             I2 = "UPDATE Players SET team = %s WHERE userName = %s"
@@ -127,8 +132,21 @@ class Database():
             else:
                 self.mycursor.execute(I10, (flg, pName))
 
+        for cName in self.coachesNames:
+            
+            realName = self.scraper.scrapePlayerName(cName)
+            I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
+            self.mycursor.execute(I1, (realName, cName,))
 
-            self.db.commit()
+            team = self.scraper.scrapePlayerTeam(cName)
+            I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
+            self.mycursor.execute(I1, (team, cName,))
+
+            country = self.scraper.scrapePlayerRegion(cName)
+            I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
+            self.mycursor.execute(I1, (country, cName,))
+        
+        self.db.commit()
 
     def printTable(self):
         self.mycursor.execute("SELECT * FROM Players")
