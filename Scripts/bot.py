@@ -1,6 +1,6 @@
 import discord #pip install discord.py
 from discord.ext import commands, tasks
-from discord import ButtonStyle, InteractionResponse, app_commands
+from discord import ButtonStyle, app_commands
 from discord import Member
 from database import Database
 from VCTDataScraper.scrape import Scraper
@@ -137,19 +137,19 @@ async def roster(ctx: commands.Context, member: Member = None):
     current_page = 1
 
     async def page_1_callback(interaction):
-        nonlocal current_page, sent_msg
+        nonlocal current_page
         current_page = 1
-        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+        await interaction.response.edit_message(embed=embedRosterInfo(member_ref, current_page))
 
     async def page_2_callback(interaction):
-        nonlocal current_page, sent_msg
+        nonlocal current_page
         current_page = 2
-        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+        await interaction.response.edit_message(embed=embedRosterInfo(member_ref, current_page))
 
     async def page_3_callback(interaction):
-        nonlocal current_page, sent_msg
+        nonlocal current_page
         current_page = 3
-        sent_msg.edit(embed=embedRosterInfo(member_ref, current_page))
+        await interaction.response.edit_message(embed=embedRosterInfo(member_ref, current_page))
 
     page_1_button = Button(label="1", style=ButtonStyle.blurple)
     page_1_button.callback = page_1_callback
@@ -162,7 +162,7 @@ async def roster(ctx: commands.Context, member: Member = None):
     view.add_item(page_1_button)
     view.add_item(page_2_button)
     view.add_item(page_3_button)
-    sent_msg = await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
+    await ctx.send(embed=embedRosterInfo(member_ref, 1), view=view)
 
     # while True:
     #     try:
@@ -210,6 +210,7 @@ async def create(ctx: commands.Context, name : str):
     await ctx.defer(ephemeral=True)
     await ctx.reply(leaguebase.createLeague(name, disc_id))
 
+
 # Invites a player to a league
 @client.hybrid_command(name = "invite", with_app_command = True, description = "Invites a player to a league")
 # Works only on selected server (guild)
@@ -217,29 +218,37 @@ async def create(ctx: commands.Context, name : str):
 # Defining invite command
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def invite(ctx: commands.Context, member : Member):
-    disc_id = str(ctx.author.id)
-    # Reply with a private message (command) or public message (using prefix)                   implement database
-    await ctx.defer(ephemeral=False)
-    yesButton = Button (label = "Accept", style = discord.ButtonStyle.green)
-    noButton = Button (label = "Decline", style = discord.ButtonStyle.red)
-    view = View()
-    view.add_item (yesButton)
-    view.add_item (noButton)
-    async def yesButton_callback (interaction):
-        if interaction.user == member:
-            leaguebase.inviteLeague(disc_id, member.id)
-            await interaction.response.send_message("Invite Accepted!")
-    async def noButton_callback(interaction):
-        if interaction.user == member:
-            await interaction.response.send_message("Invite Declined!")
+    try:
+        if ():
+            raise Exception("User already in league!")
+        disc_id = str(ctx.author.id)
+        # Reply with a private message (command) or public message (using prefix)                   implement database
+        await ctx.defer(ephemeral=False)
+        yesButton = Button (label = "Accept", style = discord.ButtonStyle.green)
+        noButton = Button (label = "Decline", style = discord.ButtonStyle.red)
+        view = View()
+        view.add_item (yesButton)
+        view.add_item (noButton)
+        async def yesButton_callback (interaction):
+            yesButton.disabled = noButton.disabled = True
+            if interaction.user == member:
+                leaguebase.inviteLeague(disc_id, member.id)
+                await interaction.response.send_message("Invite Accepted!")
+        async def noButton_callback(interaction):
+            yesButton.disabled = noButton.disabled = True
+            if interaction.user == member:
+                await interaction.response.send_message("Invite Declined!")
 
-    yesButton.callback = yesButton_callback
-    noButton.callback = noButton_callback
+        yesButton.callback = yesButton_callback
+        noButton.callback = noButton_callback
 
-    if (leaguebase.checkOwnership(disc_id)):
-        await ctx.send (member.mention + "Do you want to accept the invite from League " + leaguebase.getOwnedLeague(disc_id) + "?", view=view)
-    else:
-        await ctx.reply ("You are not the owner of a league.")
+        if (leaguebase.checkOwnership(disc_id)):
+            await ctx.send(f"{member.mention} Do you want to accept the invite from League \"{leaguebase.getOwnedLeague(disc_id)}\"?", view=view)
+        else:
+            raise Exception("You are not the owner of a league!")
+
+    except Exception as e:
+        await ctx.reply(e)
     
 # Removes player from user's roster
 @client.hybrid_command(name = "drop", with_app_command = True, description = "Removes the selected player from your roster",aliases = ['dr'])
