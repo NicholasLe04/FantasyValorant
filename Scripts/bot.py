@@ -210,7 +210,7 @@ async def create(ctx: commands.Context, name : str):
     await ctx.defer(ephemeral=True)
     try:
         leaguebase.createLeague(name, disc_id)
-        await ctx.reply(embedLeagueInfo(ctx.author, name))
+        await ctx.send(embed=embedLeagueInfo(ctx.author, name))
     except:
         await ctx.reply("Unable to create league. Perhaps the name is too long.")
 
