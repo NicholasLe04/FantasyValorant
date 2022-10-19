@@ -232,14 +232,14 @@ async def invite(ctx: commands.Context, member : Member):
         async def yesButton_callback (interaction):
             if interaction.user == member:
                 nonlocal sent_msg
-                sent_msg.delete()
                 leaguebase.inviteLeague(disc_id, member.id)
+                await sent_msg.delete()
                 await interaction.message.edit(view=view)
                 await interaction.response.send_message("Invite Accepted!")
         async def noButton_callback(interaction):
             if interaction.user == member:
                 nonlocal sent_msg
-                sent_msg.delete()
+                await sent_msg.delete()
                 await interaction.edit_original_response(view=view)
                 await interaction.response.send_message("Invite Declined!")
 
@@ -247,7 +247,7 @@ async def invite(ctx: commands.Context, member : Member):
         noButton.callback = noButton_callback
 
         if (leaguebase.checkOwnership(disc_id)):
-            sent_msg = await ctx.send(f"{member.mention} Do you want to accept the invite from League \"{leaguebase.getOwnedLeague(disc_id)}\"?", view=view)
+            sent_msg = await ctx.send(f"{member.mention} Do you want to accept the invite from league \"{leaguebase.getOwnedLeague(disc_id)}\"?", view=view)
         else:
             raise Exception("You are not the owner of a league!")
 
