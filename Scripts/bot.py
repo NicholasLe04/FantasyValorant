@@ -230,12 +230,14 @@ async def invite(ctx: commands.Context, member : Member):
         view.add_item (yesButton)
         view.add_item (noButton)
         async def yesButton_callback (interaction):
-            yesButton.disabled, noButton.disabled = True
+            yesButton.disabled = True
+            noButton.disabled = True
             if interaction.user == member:
                 leaguebase.inviteLeague(disc_id, member.id)
                 await interaction.response.send_message("Invite Accepted!")
         async def noButton_callback(interaction):
-            yesButton.disabled, noButton.disabled = True
+            yesButton.disabled = True
+            noButton.disabled = True
             if interaction.user == member:
                 await interaction.response.send_message("Invite Declined!")
 
