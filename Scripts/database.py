@@ -1,5 +1,4 @@
 import mysql.connector
-from Scripts.bot import team
 from VCTDataScraper.scrape import Scraper
 import json
 import os
