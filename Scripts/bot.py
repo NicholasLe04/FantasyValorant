@@ -1,3 +1,4 @@
+from dis import disco
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import ButtonStyle, app_commands
@@ -120,12 +121,12 @@ async def team(ctx: commands.Context, *, team_name):
 
 @client.hybrid_command(name = "league", with_app_command= True, description = "Returns league info",aliases = ['l'])
 @app_commands.guilds(discord.Object(id=1020055030247727155))
-async def team(ctx: commands.Context, *, league_id):
+async def league(ctx: commands.Context, league_id):
     disc_id = str(ctx.author.id)
     userbase.addNewUser(disc_id)
     await ctx.defer(ephemeral=True)
     
-    if embedLeagueInfo(league_id) == "No league found":
+    if leaguebase.leagueExist(league_id) or embedLeagueInfo(league_id) == "No league found":
         await ctx.reply("No league has been found under that ID. Are you sure you typed it correctly?")
         return None
     await ctx.reply(embed=embedLeagueInfo(league_id))
@@ -356,10 +357,11 @@ def embedRosterInfo(member: Member, league: int):
     return (embed)
 
 
-def embedLeagueInfo(league_id):
+def embedLeagueInfo(league_id): 
     try:
         league_name = leaguebase.leagueGetName(league_id)
-        embed = discord.Embed(title=league_name, description=f"League ID:{league_id}\n")
+        league_owner_id = leaguebase.leagueGetOwnerID(league_id)
+        embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
         return (embed)
     except:
         return "No league found"

@@ -130,6 +130,9 @@ class Database():
                 self.mycursor.execute(I10, (":pirate_flag:", pName))
             else:
                 self.mycursor.execute(I10, (flg, pName))
+            
+            self.db.commit()
+
 
         for cName in self.coachesNames:
             
@@ -144,8 +147,9 @@ class Database():
             country = self.scraper.scrapePlayerRegion(cName)
             I3 = "UPDATE Players SET realName = %s WHERE userName = %s"
             self.mycursor.execute(I3, (country, cName,))
+
+            self.db.commit()
         
-        self.db.commit()
 
     def printTable(self):
         self.mycursor.execute("SELECT * FROM Players")
