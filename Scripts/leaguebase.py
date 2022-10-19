@@ -44,12 +44,11 @@ class LeagueBase():
         userbase.addNewUser(discord_id)
         user_id = 0
         output = []
-        print("Command initiated by: " + discord_id)
+
         userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (discord_id,))
-        print(userbase.mycursor)
         for x in userbase.mycursor:
             user_id = x[0]
-            print("This is at L46: " + str(user_id))
+
         self.mycursor.execute("INSERT into LeagueInfo (ownerID, ownerdisc_id, leagueName) VALUES(%s,%s,%s)", (user_id,discord_id,name))
         self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
         for x in self.mycursor:
@@ -57,11 +56,10 @@ class LeagueBase():
         emptyIndex = output.index("Missing")
         output[emptyIndex] = str(user_id)
         output = ",".join(output)
+
         self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE leagueName = %s", (output,name))
-        print("Owner: " + str(user_id) + " | " + discord_id + " named league " + name)
         self.db.commit()
-        print("This is at L59: "+ str(user_id))
-        return("League Created; Owner: " + str(user_id) + ", " + discord_id + " league name: " + name)
+        # return("League Created; Owner: " + str(user_id) + ", " + discord_id + " league name: " + name)
 
     def checkOwnership (self, disc_id : str):
         self.mycursor.execute ("SELECT EXISTS (SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s)", (disc_id,))

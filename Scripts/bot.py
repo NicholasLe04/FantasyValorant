@@ -1,3 +1,5 @@
+from dis import disco
+from tkinter import E
 import discord #pip install discord.py
 from discord.ext import commands, tasks
 from discord import ButtonStyle, app_commands
@@ -206,9 +208,13 @@ async def draft(ctx: commands.Context, player_name : str):
 # Params: ctx is defined as the command's context, player_name is the selected player
 async def create(ctx: commands.Context, name : str):
     disc_id = str(ctx.author.id)
-    # Reply with a private message (command) or public message (using prefix)                   implement database
+    # Reply with a private message (command) or publåic message (using prefix)                   implement database
     await ctx.defer(ephemeral=True)
-    await ctx.reply(leaguebase.createLeague(name, disc_id))
+    try:
+        leaguebase.createLeague(name, disc_id)
+        await ctx.reply(embedLeagueInfo(ctx.author, name))
+    except:
+        await ctx.reply("Unable to create league. Perhaps the name is too long.")
 
 
 # Invites a player to a league
@@ -356,9 +362,9 @@ def embedRosterInfo(member: Member, league: int):
     return (embed)
 
 
-
-
-
+def embedLeagueInfo(member: Member, name: str):
+    embed = discord.Embed(title=name, description=f"Owned by: {member.name}\nOwner ID: {member.id}")
+    return (embed)
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
