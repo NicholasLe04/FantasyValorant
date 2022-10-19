@@ -119,7 +119,7 @@ class LeagueBase():
     def leagueExist(self, league_id):
         self.mycursor.execute("SELECT EXISTS(SELECT * from LeagueInfo WHERE leagueID = %s)", (league_id,))
         for x in self.mycursor:
-            if (x[0] == '0'):
+            if (x[0] == 0):
                 return False
             else:
                 return True
