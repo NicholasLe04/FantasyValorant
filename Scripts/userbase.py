@@ -176,7 +176,12 @@ class Userbase():
     ##################
 
     def addPlayer(self, player_name: str, discID: str, league: int):
-        roster = exec(f"self.uTeamGetLeagueRoster{league}(discID)")
+        if (league == 1):
+            roster = self.uTeamGetLeagueRoster1(discID)
+        elif (league == 2):
+            roster = self.uTeamGetLeagueRoster2(discID)
+        elif (league == 3):
+            roster = self.uTeamGetLeagueRoster3(discID)
 
         if ("Missing" not in roster):
             return "Roster full"
