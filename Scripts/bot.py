@@ -243,12 +243,12 @@ async def drop_all(ctx: commands.Context):
 async def create(ctx: commands.Context, name : str):
     disc_id = str(ctx.author.id)
     # Reply with a private message (command) or publåic message (using prefix)                   implement database
-    await ctx.defer(ephemeral=True)
-    try:
-        leaguebase.createLeague(name, disc_id)
-        await ctx.send(embed=embedLeagueInfo(ctx.author, name), delete_after=90.0)
-    except:
-        await ctx.reply("Unable to create league. Perhaps the name is too long.")
+    # await ctx.defer(ephemeral=True)
+    # try:
+    leaguebase.createLeague(name, disc_id)
+    await ctx.send(embed=embedLeagueInfo(ctx.author, name), delete_after=90.0)
+    # except:
+    #     await ctx.reply("Unable to create league. Perhaps the name is too long.")
 
 
 # Invites a player to the league the user owns
@@ -358,10 +358,13 @@ def embedRosterInfo(member: Member, league: int):
 
 
 def embedLeagueInfo(league_id): 
-    league_name = leaguebase.leagueGetName(league_id)
-    league_owner_id = leaguebase.leagueGetOwnerID(league_id)
-    embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
-    return (embed)
+    try:
+        league_name = leaguebase.leagueGetName(league_id)
+        league_owner_id = leaguebase.leagueGetOwnerID(league_id)
+        embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
+        return (embed)
+    except:
+        return "No league found"
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
