@@ -342,7 +342,9 @@ def embedRosterInfo(member: Member, league: int):
     else:
         return ("Invalid league")
 
-    embed.add_field(name="Players", value=f"• {roster[0]}\n• {roster[1]}\n• {roster[2]}\n• {roster[3]}\n• {roster[4]}\n", inline=False)
+    embed.add_field(name="Coach", value=f"• {roster[0]}", inline=False)
+    embed.add_field(name="Players", value=f"• {roster[1]}\n• {roster[2]}\n• {roster[3]}\n• {roster[4]}\n• {roster[5]}\n", inline=False)
+    embed.add_field(name="Bench", value=f"• {roster[6]}\n• {roster[7]}\n• {roster[8]}\n", inline=False)
     return (embed)
 
 
