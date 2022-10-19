@@ -244,11 +244,11 @@ async def create(ctx: commands.Context, name : str):
     disc_id = str(ctx.author.id)
     # Reply with a private message (command) or publåic message (using prefix)                   implement database
     # await ctx.defer(ephemeral=True)
-    # try:
-    leaguebase.createLeague(name, disc_id)
-    await ctx.send(embed=embedLeagueInfo(ctx.author, name), delete_after=90.0)
-    # except:
-    #     await ctx.reply("Unable to create league. Perhaps the name is too long.")
+    try:
+        leaguebase.createLeague(name, disc_id)
+        await ctx.send(embed=embedLeagueInfo(leaguebase.getOwnedLeague(disc_id)), delete_after=90.0)
+    except:
+        await ctx.reply("Unable to create league. Perhaps the name is too long.")
 
 
 # Invites a player to the league the user owns

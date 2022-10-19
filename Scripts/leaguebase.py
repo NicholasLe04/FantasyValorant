@@ -72,10 +72,9 @@ class LeagueBase():
     
     def getOwnedLeague (self, disc_id : str):
         if (self.checkOwnership(disc_id)):
-            self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
+            self.mycursor.execute("SELECT leagueID FROM LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
             for x in self.mycursor:
-                name = x[0]
-                return (name)
+                return x[0]
         else:
             return None
 
