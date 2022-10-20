@@ -330,7 +330,9 @@ def embedTeamInfo (team_name: str):
         
         for player in team_roster:
             pname = player.lower()
-            embed.add_field(name=f"{player}", value=f"**ACS** {database.playerGetGlobalACS(pname)} | **K/D** {database.playerGetGlobalKD(pname)}\n{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRegion(pname).lower().title()}", inline=False) ## Make an element for each player & display team
+            embed.add_field(name=f"{player}", value=f"{scraper.flagEmojis.get(database.playerGetRegion(pname))} {database.playerGetRealName(pname)}\n**ACS** {database.playerGetGlobalACS(pname)} |\
+                 **K/D** {database.playerGetGlobalKD(pname)}",\
+                     inline=False) ## Make an element for each player & display team
 
         
         return (embed)
@@ -364,7 +366,7 @@ def embedLeagueInfo(league_id):
         embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
         return (embed)
     except:
-        return "No league found"
+        return "No league found."
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
