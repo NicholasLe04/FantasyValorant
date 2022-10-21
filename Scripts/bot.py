@@ -353,9 +353,9 @@ def embedRosterInfo(member: Member, league: int):
     else:
         return ("Invalid league")
 
-    embed.add_field(name="Coach", value=f"• {roster[0]}", inline=False)
-    embed.add_field(name="Players", value=f"• {roster[1]}\n• {roster[2]}\n• {roster[3]}\n• {roster[4]}\n• {roster[5]}\n", inline=False)
-    embed.add_field(name="Bench", value=f"• {roster[6]}\n• {roster[7]}\n• {roster[8]}\n", inline=False)
+    embed.add_field(name="STARTERS", value=f"**C**\t{roster[0]}\n**P**\t{roster[1]}\n**P**\t{roster[2]}\n**P**\t\
+        {roster[3]}\n**P**\t{roster[4]}\n**P**\t{roster[5]}\n", inline=False)
+    embed.add_field(name="BENCH", value=f"\n**BE**\t{roster[6]}\n**BE**\t{roster[7]}\n**BE**\t{roster[8]}\n", inline=False)
     return (embed)
 
 
@@ -363,10 +363,11 @@ def embedLeagueInfo(league_id):
     try:
         league_name = leaguebase.leagueGetName(league_id)
         league_owner_id = leaguebase.leagueGetOwnerID(league_id)
-        embed = discord.Embed(title=f"\"{league_name}\"", description=f"Owner ID: {league_owner_id}")
+        embed = discord.Embed(title=f"\"{league_name}\"", description=f"**Owner ID:** {league_owner_id}")
+        embed.add_field(name="Leauge ID:", value=f"{league_id}", inline=False)
         return (embed)
     except:
-        return "No league found."
+        return "No league found with that ID. Are you sure you typed it correctly?"
 
 ### Getter Methods                                                                                                          ***TO BE ADDED TO DB.PY***
 
