@@ -69,6 +69,22 @@ class LeagueBase():
             return True
         else:
             return False
+    #################################################################################################################
+    # IN PROCESS OF REVAMP
+
+    ##Checks if a user is in a league by searching for leagueID
+    def checkInLeague(self, disc_id : str):
+        for i in range (3):
+            self.mycursor.execute ("SELECT EXISTS (SELECT leagueID%s WHERE discID = %s", (str(i+1),disc_id))
+            for x in self.mycursor:
+                if x[0] == 1:
+                    print("Leagueid" + str(i+1) + " found iterating to second position")
+                elif x[0] == 0:
+                    print("Leaugeid" + str(i+1) + " has no id assigning an id")
+                    return i+1
+        print("Since stage reached user is in 3 leagues and cannot join")
+        return "Full"
+
     
     def getOwnedLeague (self, disc_id : str):
         if (self.checkOwnership(disc_id)):
@@ -81,18 +97,31 @@ class LeagueBase():
     def getPlayers(self, disc_id):
         players = []
         user_id = 0
-        userbase.mycursor.execute("SELECT userID FROM UserInfo WHERE discID = %s", (disc_id,))
+        userbase.mycursor.execute("SELECT leagueName FROM UserInfo WHERE discID = %s", (disc_id,))
         for x in userbase.mycursor:
             user_id = x[0]
-        self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+        self.mycursor.execute("SELECT users FROM LeagueInfo WHERE discID = %s", (disc_id,))
         for x in self.mycursor:
             players = x[0].split(",")
-        print("These players belong to league owned by: " + str(user_id) + " | " + str(players))
+        print("These players belong to league: " + str(user_id) + " | " + str(players))
         return(players)
 
     
     def initDraft(self, disc_id):
-        print("a")
+        if(self.checkOwnership(disc_id)):
+            lgID = self.getOwnedLeague(disc_id)
+
+        else:
+            return "No league owned"
+    
+    def getUsers(self, disc_id):
+        
+        self.mycursor.execute("SELECT ownerID From LeagueInfo WHERE leagueID = %s", (disc_id,))
+        user_id = 0
+        for x in self.mycursor:
+                user_id = x[0]
+        self.mycursor.execute("SELECT users FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+        
     
     def inviteLeague(self, disc_id : str, odisc_id : str):
         if (self.checkOwnership(disc_id)):
@@ -101,6 +130,7 @@ class LeagueBase():
             self.mycursor.execute("SELECT ownerID From LeagueInfo WHERE ownerdisc_id = %s", (disc_id,))
             user_id = 0
             ouser_id = 0
+            lgId = 0
             output = []
             for x in self.mycursor:
                 user_id = x[0]
@@ -116,9 +146,21 @@ class LeagueBase():
             print(user_id)
             output[emptyIndex] = str(ouser_id)
             output = ",".join(output)
-            self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
-            self.db.commit()
-            self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+            checkLg = self.checkInLeague(odisc_id)
+            if(checkLg != "Full"):
+                print("This user is in the max amount of leagues")
+                return "Full"
+            else:
+                self.mycursor.execute("SELECT leagueID FROM LeagueInfo WHERE ownerID = %s", (user_id,))
+                for x in self.mycursor:
+                    lgId = x[0]
+                self.mycursor.execute("UPDATE UserGameData SET leagueID%s = %s WHERE discID = %s", (str(checkLg), lgId, odisc_id))
+                self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output, user_id))
+                self.db.commit()
+            #self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
+    
+    # IN PROGRESS
+    #################################################################################################################
         
     def leagueGetName (self, league_id):
         self.mycursor.execute("SELECT leagueName FROM LeagueInfo WHERE leagueID = %s", (league_id,))
