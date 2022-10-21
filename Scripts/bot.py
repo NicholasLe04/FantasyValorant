@@ -286,7 +286,7 @@ async def invite(ctx: commands.Context, member : Member):
         noButton.callback = noButton_callback
 
         if (leaguebase.checkOwnership(disc_id)):
-            sent_msg = await ctx.send(f"{member.mention} Do you want to accept the invite from league \"{leaguebase.getOwnedLeague(disc_id)}\"?", view=view)
+            sent_msg = await ctx.send(f"{member.mention} Do you want to accept the invite from league \"{leaguebase.leagueGetName(leaguebase.getOwnedLeague(disc_id))}\"?", view=view)
         else:
             raise Exception("You are not the owner of a league!")
 
