@@ -6,6 +6,7 @@ from userbase import Userbase
 
 database = Database()
 userbase = Userbase()
+userbase.createTable()
 
 class LeagueBase():
 
@@ -75,11 +76,16 @@ class LeagueBase():
     ##Checks if a user is in a league by searching for leagueID
     def checkInLeague(self, disc_id : str):
         for i in range (3):
-            self.mycursor.execute ("SELECT EXISTS (SELECT leagueID%s WHERE discID = %s", (str(i+1),disc_id))
-            for x in self.mycursor:
-                if x[0] == 1:
-                    print("Leagueid" + str(i+1) + " found iterating to second position")
-                elif x[0] == 0:
+            userbase.mycursor.execute("SELECT leagueID" + str(i+1) + " FROM UserGameData WHERE discID = %s", (disc_id,))
+            for x in userbase.mycursor:
+                print(x[0])
+            userbase.mycursor.execute ("SELECT EXISTS (SELECT leagueID" + str(i+1) + " FROM UserGameData WHERE discID = %s)", (disc_id,))
+            userbase.mycursor.execute("SELECT leagueID" + str(i+1) + " FROM UserGameData WHERE discID = %s", (disc_id,))
+            for x in userbase.mycursor:
+                print("This was found " + str(x[0]))
+                if x[0] != None:
+                    print("Leagueid" + str(i+1) + " found iterating to next position")
+                else:
                     print("Leaugeid" + str(i+1) + " has no id assigning an id")
                     return i+1
         print("Since stage reached user is in 3 leagues and cannot join")
@@ -141,22 +147,25 @@ class LeagueBase():
             for x in self.mycursor:
                 output = x[0].split(",")
             emptyIndex = output.index("Missing")
-            print(emptyIndex)
-            print(ouser_id)
-            print(user_id)
             output[emptyIndex] = str(ouser_id)
             output = ",".join(output)
             checkLg = self.checkInLeague(odisc_id)
-            if(checkLg != "Full"):
+            if(checkLg == "Full"):
                 print("This user is in the max amount of leagues")
-                return "Full"
+                return checkLg
             else:
                 self.mycursor.execute("SELECT leagueID FROM LeagueInfo WHERE ownerID = %s", (user_id,))
                 for x in self.mycursor:
                     lgId = x[0]
-                self.mycursor.execute("UPDATE UserGameData SET leagueID%s = %s WHERE discID = %s", (str(checkLg), lgId, odisc_id))
+                print("Adding League " + str(lgId) + " disc ID: " + str(odisc_id))
+                userbase.mycursor.execute("UPDATE UserGameData SET leagueID" + str(checkLg) + " = %s WHERE discID = %s", (lgId, odisc_id,))
                 self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output, user_id))
                 self.db.commit()
+                userbase.mycursor.execute("SELECT leagueID" + str(checkLg) + " FROM UserGameData WHERE discID = %s", (odisc_id,))
+                for x in userbase.mycursor:
+                    print(x[0])
+                print("League Added to position " + str(checkLg))
+                userbase.db.commit()
             #self.mycursor.execute("UPDATE LeagueInfo SET users = %s WHERE ownerID = %s", (output,user_id))
     
     # IN PROGRESS
@@ -182,3 +191,19 @@ class LeagueBase():
 
 leg = LeagueBase()
 leg.createTable()
+
+'''userbase.addNewUser("1111")
+userbase.addNewUser("2222")
+userbase.addNewUser("3333")
+userbase.addNewUser("4444")'''
+leg.createLeague("somebody", "1111")
+leg.createLeague("nobody", "3333")
+leg.createLeague("howbody", "4444")
+leg.createLeague("sexybody", "5555")
+leg.inviteLeague("1111", "2222")
+leg.inviteLeague("3333", "2222")
+leg.inviteLeague("4444", "2222")
+leg.inviteLeague("5555", "2222")
+userbase.addPlayer("stellar", "2222", 1)
+userbase.addPlayer("bang", "2222", 2)
+userbase.addPlayer("Will", "2222", 3)

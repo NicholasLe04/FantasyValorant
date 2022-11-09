@@ -228,7 +228,7 @@ class Database():
 
 #TESTING
 datab = Database()
-datab.fillNames()
+#datab.teamGetPlayers("Cloud9")
 #datab.addNewUser("283407511133093889")
 #datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
 #datab.addNewUser(34351351)
