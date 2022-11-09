@@ -190,9 +190,7 @@ class LeagueBase():
                 return True
 
 leg = LeagueBase()
-<<<<<<< Updated upstream
-leg.createTable()
-=======
+
 leg.createTable()
 
 '''userbase.addNewUser("1111")
@@ -210,4 +208,4 @@ leg.inviteLeague("5555", "2222")
 userbase.addPlayer("stellar", "2222", 1)
 userbase.addPlayer("bang", "2222", 2)
 userbase.addPlayer("Will", "2222", 3)'''
->>>>>>> Stashed changes
+
