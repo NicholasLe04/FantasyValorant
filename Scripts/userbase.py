@@ -34,7 +34,9 @@ class Userbase():
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS UserGameData (
                         userID int,
                         discID VARCHAR(20) UNIQUE KEY,
-                        leagueID VARCHAR(30) DEFAULT '-1' NOT NULL,
+                        leagueID1 int,
+                        leagueID2 int,
+                        leagueID3 int,
                         leagueRoster1 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
                         leagueRoster2 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
                         leagueRoster3 VARCHAR(125) DEFAULT 'CoachSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,PlayerSlot,BenchSlot,BenchSlot,BenchSlot' NOT NULL,
