@@ -11,10 +11,6 @@ from userbase import Userbase
 from discord.ui import Button, View
 from leaguebase import LeagueBase
 
-# NOTES ABOUT PROGRAM:
-# NEVER LEAK TOKEN, THIS ALLOWS CODE TO BE RUN ON THE BOT
-# IF TOKEN LEAKED, GENERATE NEW ONE
-
 # Creates necessary objects
 database = Database()
 scraper = Scraper()
