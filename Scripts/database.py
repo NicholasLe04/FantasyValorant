@@ -4,13 +4,14 @@ import json
 import os
 import logging
 
+
 class Database():
 
-    ##CONNECTING TO LOCALLY HOSTED SQL SERVER
-    ##AVOID RUNNING CODE UNTIL SQL SERVER SORTED OUT
+    # CONNECTING TO LOCALLY HOSTED SQL SERVER
+    # AVOID RUNNING CODE UNTIL SQL SERVER SORTED OUT
 
     def __init__(self) -> None:
-        
+
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -19,17 +20,20 @@ class Database():
         )
 
         self.mycursor = self.db.cursor(buffered=True)
-        self.logging = logging.basicConfig(filename = 'logging.log', format = '`%(asctime)s %(message)s' , level = logging.INFO)
+        self.logging = logging.basicConfig(
+            filename='logging.log', format='`%(asctime)s %(message)s', level=logging.INFO)
 
         file_dir = os.path.dirname(__file__)
-        playerlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/playerlist.json')
-        teamlist_dir = os.path.join(file_dir, 'VCTDataScraper/JsonFiles/teamlist.json')
+        playerlist_dir = os.path.join(
+            file_dir, 'VCTDataScraper/JsonFiles/playerlist.json')
+        teamlist_dir = os.path.join(
+            file_dir, 'VCTDataScraper/JsonFiles/teamlist.json')
         with open(playerlist_dir) as playerList:
             self.players = json.load(playerList)
         with open(teamlist_dir) as teamList:
-            self.teams = json.load(teamList) 
+            self.teams = json.load(teamList)
 
-        self.playerNames = [] 
+        self.playerNames = []
         self.coachesNames = []
         self.teamNames = []
 
@@ -39,15 +43,13 @@ class Database():
             self.coachesNames.append(coach)
         for team in self.teams.get('teams'):
             self.teamNames.append(team)
-        
-        self.scraper = Scraper() #Declaring Scrapper object
 
-    
+        self.scraper = Scraper()  # Declaring Scrapper object
 
     def APOCALYPSE(self):
         self.mycursor.execute("DROP TABLE Players")
 
-    ## CREATING A DATA TABLE NAMED PLAYERS
+    # CREATING A DATA TABLE NAMED PLAYERS
     # Commented out as datatable has already been created locally on Joshua's Laptop
     def createTable(self):
         self.mycursor.execute("""CREATE TABLE IF NOT EXISTS Players (userName VARCHAR(25) DEFAULT 'noname' NOT NULL,
@@ -70,21 +72,21 @@ class Database():
                         coachImg VARCHAR(50) DEFAULT 'https://www.vlr.gg/img/base/ph/sil.png' NOT NULL)""")
         self.db.commit()
 
-    def fillNames (self):
+    def fillNames(self):
         # for pName in self.playerNames:
         #     Q1 = "INSERT INTO Players (userName) VALUES (%s)"
         #     self.mycursor.execute(Q1, (pName,))
         for cName in self.coachesNames:
             Q1 = "INSERT INTO Coaches (userName) VALUES (%s)"
             self.mycursor.execute(Q1, (cName,))
-        
+
         self.db.commit()
 
-    #db.commit()'''
-    #Opening playerlist.json to be accessed
+    # db.commit()'''
+    # Opening playerlist.json to be accessed
 
-    ##PULLING PLAYER NAMES FROM playerlist.json AND SCRAPPING DATA ACCORDING TO NAME
-    ##THEN FILLING THE DATA TABLE WITH THE APPROPIATE VALUES
+    # PULLING PLAYER NAMES FROM playerlist.json AND SCRAPPING DATA ACCORDING TO NAME
+    # THEN FILLING THE DATA TABLE WITH THE APPROPIATE VALUES
 
     def updateTable(self):
         for pName in self.playerNames:
@@ -104,7 +106,7 @@ class Database():
             acs = self.scraper.scrapePlayerGlobalACS(pName)
             I4 = "UPDATE Players SET globalACS = %s WHERE userName = %s"
             self.mycursor.execute(I4, (acs, pName,))
-            
+
             kd = self.scraper.scrapePlayerGlobalKD(pName)
             I5 = "UPDATE Players SET globalKD = %s WHERE userName = %s"
             self.mycursor.execute(I5, (kd, pName,))
@@ -125,18 +127,18 @@ class Database():
             I9 = "UPDATE Players SET playerImg = %s WHERE userName = %s"
             self.mycursor.execute(I9, (img, pName,))
 
-            flg = self.scraper.flagEmojis.get(self.scraper.scrapePlayerRegion(pName).upper())
+            flg = self.scraper.flagEmojis.get(
+                self.scraper.scrapePlayerRegion(pName).upper())
             I10 = "UPDATE Players SET flag = %s WHERE userName = %s"
             if (flg == None):
                 self.mycursor.execute(I10, (":pirate_flag:", pName))
             else:
                 self.mycursor.execute(I10, (flg, pName))
-            
+
             self.db.commit()
 
-
         for cName in self.coachesNames:
-            
+
             realName = self.scraper.scrapePlayerName(cName)
             I1 = "UPDATE Players SET realName = %s WHERE userName = %s"
             self.mycursor.execute(I1, (realName, cName,))
@@ -150,7 +152,6 @@ class Database():
             self.mycursor.execute(I3, (country, cName,))
 
             self.db.commit()
-        
 
     def printTable(self):
         self.mycursor.execute("SELECT * FROM Players")
@@ -158,52 +159,62 @@ class Database():
             print(x)
 
     def playerGetRealName(self, name: str):
-        self.mycursor.execute("SELECT realName FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT realName FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetUserName(self, name: str):
-        self.mycursor.execute("SELECT userName FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT userName FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetTeam(self, name: str):
-        self.mycursor.execute("SELECT team FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT team FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetRegion(self, name: str):
-        self.mycursor.execute("SELECT country FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT country FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetGlobalACS(self, name: str):
-        self.mycursor.execute("SELECT globalACS FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT globalACS FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetGlobalKD(self, name: str):
-        self.mycursor.execute("SELECT globalKD FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT globalKD FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetGlobalKPR(self, name: str):
-        self.mycursor.execute("SELECT globalKPR FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT globalKPR FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetGlobalAPR(self, name: str):
-        self.mycursor.execute("SELECT globalAPR FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT globalAPR FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetAgent(self, name: str):
-        self.mycursor.execute("SELECT agent FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT agent FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
     def playerGetPicture(self, name: str):
-        self.mycursor.execute("SELECT playerImg FROM Players WHERE userName = %s", (name,))
+        self.mycursor.execute(
+            "SELECT playerImg FROM Players WHERE userName = %s", (name,))
         for x in self.mycursor:
             return x[0]
 
@@ -212,37 +223,30 @@ class Database():
             if (team_name.lower() == team.lower()):
                 team_name = team
                 break
-        self.mycursor.execute("SELECT username FROM Players WHERE team = %s", (team_name,))
+        self.mycursor.execute(
+            "SELECT username FROM Players WHERE team = %s", (team_name,))
         team = self.mycursor.fetchall()
         output = []
         for player in team:
             output.append(player[0])
         return output
 
-
-
-    #updateTable()
-    #closing playerlist.json file
-    ## DATABASE COMMIT, DO NOT COMMIT UNLESS YOU KNOW WHAT YOU ARE DOING 
-    #mycursor.execute("DROP TABLE users")
-
-#TESTING
+    # updateTable()
+    # closing playerlist.json file
+    # DATABASE COMMIT, DO NOT COMMIT UNLESS YOU KNOW WHAT YOU ARE DOING
+    # mycursor.execute("DROP TABLE users")
+# TESTING
 datab = Database()
-#datab.teamGetPlayers("Cloud9")
-#datab.addNewUser("283407511133093889")
-#datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
-#datab.addNewUser(34351351)
+# datab.teamGetPlayers("Cloud9")
+# datab.addNewUser("283407511133093889")
+# datab.mycursor.execute("ALTER TABLE Users ADD COLUMN discordID varChar(20)")
+# datab.addNewUser(34351351)
 
-### THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
+# THESE ARE COMMENTED OUT BECAUSE SQL DATABASE ALREADY EXISTS ON AWS SERVERS!!! ONLY USE IF NECESSARY!!!!
 # datab.APOCALYPSE()
 '''print(datab.getPlayersFromTeam("100 Thieves"))'''
 
-
-
-
-
-
-    #Junk Example Code
+# Junk Example Code
 '''#mycursor.execute("DESCRIBE Players")
     #mycursor.execute("SELECT userName, realName FROM Players WHERE userName = 'Magni'")
     #mycursor.execute("ALTER TABLE Players ADD COLUMN globalKDR smallint NOT NULL")
